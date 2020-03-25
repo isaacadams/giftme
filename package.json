@@ -4,7 +4,8 @@
   "description": "A place to create a list of gifts, share it with your friends and family, and find out what gifts have yet to be bought",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "parcel src/index.html"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,14 @@
   "bugs": {
     "url": "https://github.com/isaacadams/giftme/issues"
   },
-  "homepage": "https://github.com/isaacadams/giftme#readme"
+  "homepage": "https://github.com/isaacadams/giftme#readme",
+  "dependencies": {
+  },
+  "devDependencies": {    
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "@types/react": "16.9.25",
+    "@types/react-dom": "16.9.5",
+    "typescript": "^3.8.3"
+  }
 }
