@@ -1,0 +1,19 @@
+{
+  "name": "giftme",
+  "version": "1.0.0",
+  "description": "A place to create a list of gifts, share it with your friends and family, and find out what gifts have yet to be bought",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaacadams/giftme.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/isaacadams/giftme/issues"
+  },
+  "homepage": "https://github.com/isaacadams/giftme#readme"
+}
