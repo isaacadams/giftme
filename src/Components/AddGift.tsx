@@ -34,7 +34,7 @@ export function Gifts(props: IProp) {
     function onSubmit(e) {
         e.preventDefault();
         if(newGift.isNullOrWhitespace()) return;
-        setGifts([ newGift, ...gifts ]);
+        setGifts([ newGift.trim(), ...gifts ]);
     }
 }
 
