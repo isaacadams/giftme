@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {useState} from 'react';
 import '@isaacadams/extensions';
+import {Form, List, TextInput} from 'grommet';
 
 interface IProp {
   addGift: (gift: string) => void;
@@ -12,20 +13,14 @@ export function Gifts(props: IProp) {
 
   return (
     <div>
-      <form style={{display: 'flex'}} onSubmit={onSubmit}>
-        <input
-          style={{flex: 1}}
-          type="text"
+      <Form onSubmit={onSubmit}>
+        <TextInput
+          placeholder="add your gift"
           value={newGift}
-          onChange={(e) => setNewGift(e.target.value)}
+          onChange={(event) => setNewGift(event.target.value)}
         />
-      </form>
-
-      <ul>
-        {gifts.map((g, i) => (
-          <li key={i}>{g}</li>
-        ))}
-      </ul>
+      </Form>
+      <List primaryKey="name" data={gifts.map((g) => ({name: g}))} />
     </div>
   );
 
