@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import {Box, Grid, Grommet, Header, Main} from 'grommet';
 import {grommet} from 'grommet/themes';
 import {Gifts} from './Components/AddGift';
+import {DisplayFooter} from './DisplayFooter';
 
 function App(props) {
   return (
@@ -20,7 +21,9 @@ function App(props) {
           {/* <Routes /> */}
           <Gifts addGift={(s) => console.log(s)} />
         </Main>
-        <Box>{/* <DisplayFooter /> */}</Box>
+        <Box>
+          <DisplayFooter />
+        </Box>
       </Grid>
     </Grommet>
   );
