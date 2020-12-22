@@ -4,33 +4,58 @@ import {
   Route,
   Redirect,
   BrowserRouter as Router,
+  RouteProps,
 } from 'react-router-dom';
-import {WrappedComponentProps} from 'react-with-firebase-auth';
-import createWithAuth from './auth/createWithAuth';
+import {Gifts} from './AddGift';
 import SignInPage from './auth/SignInPage';
+import {useAuth} from './auth/useAuth';
 
-function MainRouter({
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signInWithGoogle,
-  signInWithFacebook,
-  signInWithGithub,
-  signInWithTwitter,
-  signInAnonymously,
-  signOut,
-  setError,
-  user,
-  error,
-  loading,
-}: WrappedComponentProps) {
+function MainRouter(props) {
+  let {user} = useAuth();
   return (
     <Router>
       <Switch>
-        <Route path="/signin" component={SignInPage} />
-        {!user && <Redirect to="/signin" />}
+        <Route
+          path="/login"
+          render={({location}) =>
+            !user ? (
+              <SignInPage />
+            ) : (
+              <Redirect
+                to={{
+                  pathname: '/',
+                  state: {from: location},
+                }}
+              />
+            )
+          }
+        />
+        <AuthenticatedRoute path="/" exact component={Gifts} />
       </Switch>
     </Router>
   );
 }
 
-export default createWithAuth(MainRouter);
+function AuthenticatedRoute({children, component, ...rest}: RouteProps) {
+  let {user} = useAuth();
+  let ChildComponent = component;
+  return (
+    <Route
+      {...rest}
+      render={(routerProps) =>
+        !!user ? (
+          <ChildComponent {...routerProps} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/login',
+              state: {from: routerProps.location},
+            }}
+          />
+        )
+      }
+    />
+  );
+}
+
+export default MainRouter;

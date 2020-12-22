@@ -24,6 +24,8 @@ Group. an array of emails (registered or non registered users)
     - [ ] family view
     - [ ] wishlist view
     - [ ] sign in / sign out
+- [ ] styling
+    - [ ] thin main content
 
 
 #### feature requests

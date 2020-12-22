@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Box, Grid, Grommet, Header, Main} from 'grommet';
 import {grommet} from 'grommet/themes';
-import {Gifts} from './Components/AddGift';
 import {DisplayFooter} from './DisplayFooter';
 import NavigationBar from './NavigationBar';
 import Router from './Router';
@@ -28,9 +27,6 @@ function App(props) {
           alignSelf="center"
           pad={{vertical: 'medium', horizontal: 'medium'}}
         >
-          {/* <Routes /> */}
-          {/* <Gifts addGift={(s) => console.log(s)} /> */}
-          {/* <SignInPage /> */}
           <Router />
         </Main>
         <Box>
