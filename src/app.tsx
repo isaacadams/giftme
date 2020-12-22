@@ -23,12 +23,7 @@ function App(props) {
           >
             <NavigationBar />
           </Header>
-          <Main
-            align="center"
-            alignContent="center"
-            alignSelf="center"
-            pad={{vertical: 'medium', horizontal: 'medium'}}
-          >
+          <Main align="center" pad={{vertical: 'medium', horizontal: 'medium'}}>
             <Router />
           </Main>
           <Box>
