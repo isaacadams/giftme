@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - master
+    paths:
+    - 'src/**'
+    - 'package.json'
+    - 'package-lock.json'
 
 jobs:
   build:
