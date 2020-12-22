@@ -8,10 +8,12 @@ import {
 } from 'react-router-dom';
 import {Gifts} from './AddGift';
 import SignInPage from './auth/SignInPage';
-import {useAuth} from './auth/useAuth';
+import Loader from './shared/Loader';
+import {FirebaseAppContext} from '.';
+import {useContext} from 'react';
 
 function MainRouter(props) {
-  let {user} = useAuth();
+  let {user} = useContext(FirebaseAppContext).authState;
   return (
     <Router>
       <Switch>
@@ -37,13 +39,15 @@ function MainRouter(props) {
 }
 
 function AuthenticatedRoute({children, component, ...rest}: RouteProps) {
-  let {user} = useAuth();
+  let {isAuthenticated, initializing} = useContext(FirebaseAppContext).authState;
+  if (initializing) return <Loader />;
+
   let ChildComponent = component;
   return (
     <Route
       {...rest}
       render={(routerProps) =>
-        !!user ? (
+        isAuthenticated ? (
           <ChildComponent {...routerProps} />
         ) : (
           <Redirect

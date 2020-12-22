@@ -1,6 +1,4 @@
 import {useState} from 'react';
-import {getFirebaseApp} from '../FirebaseApp';
-import {useAuth} from './useAuth';
 
 export type FirebaseAuthAPI = {
   signInWithGoogle: () => void;
@@ -30,16 +28,19 @@ export type AuthProviders = {
   githubProvider?: firebase.auth.GithubAuthProvider;
 };
 
-export type AuthSetupParameters = {
-  firebaseAppAuth: firebase.auth.Auth;
+export type AuthProviderDependencies = {
+  auth: firebase.auth.Auth;
   providers?: AuthProviders;
+  user: firebase.User;
 };
 
-export default function useAuthProviders(): FirebaseAuthAPI {
-  let {auth, providers} = getFirebaseApp();
+export default function useAuthProviders({
+  auth,
+  providers,
+  user,
+}: AuthProviderDependencies): FirebaseAuthAPI {
   let [loading, setLoading] = useState<boolean>(false);
   let [error, setError] = useState<string>(null);
-  let {user} = useAuth();
   return {
     signInWithGithub: () => {
       tryToSignInWithProvider('githubProvider');

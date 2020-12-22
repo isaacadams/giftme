@@ -2,10 +2,11 @@ import * as React from 'react';
 import {Google} from 'grommet-icons';
 import {Box, Button, Grid, Heading} from 'grommet';
 import Loader from '../shared/Loader';
-import useAuthProviders from './useAuthProviders';
+import {useContext} from 'react';
+import {FirebaseAppContext} from '..';
 
 function SignInPage(props) {
-  let {signInWithGoogle, loading} = useAuthProviders();
+  let {signInWithGoogle, loading} = useContext(FirebaseAppContext).authProviders;
   if (loading) return <Loader />;
 
   return (

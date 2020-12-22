@@ -1,10 +1,10 @@
 import {Anchor, Text} from 'grommet';
-import React from 'react';
+import React, {useContext} from 'react';
 import {Logout} from 'grommet-icons';
-import useAuthProviders from './auth/useAuthProviders';
+import {FirebaseAppContext} from '.';
 
 function NavigationBar(props) {
-  let {signOut, user} = useAuthProviders();
+  let {signOut, user} = useContext(FirebaseAppContext).authProviders;
   return (
     <>
       {user && <Text>Welcome {user.displayName}</Text>}

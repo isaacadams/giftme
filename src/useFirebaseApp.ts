@@ -1,7 +1,11 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import {AuthProviders} from './auth/useAuthProviders';
+import {FirebaseAuthState, useAuthState} from './auth/useAuthState';
+import useAuthProviders, {
+  AuthProviders,
+  FirebaseAuthAPI,
+} from './auth/useAuthProviders';
 import {apiKey, projectId} from './fbConfig.json';
 
 /// it is safe to expose the apiKey used here
@@ -23,18 +27,26 @@ export type FirebaseApp = {
   app: firebase.app.App;
   auth: firebase.auth.Auth;
   database: firebase.database.Database;
-  providers?: AuthProviders;
+  authProviders: FirebaseAuthAPI;
+  authState: FirebaseAuthState;
 };
 
-export function getFirebaseApp(): FirebaseApp {
+export function useFirebaseApp(): FirebaseApp {
   let app = firebase.app();
+  let auth = app.auth();
+  let authState = useAuthState(auth);
 
   return {
     app,
-    auth: app.auth(),
     database: app.database(),
-    providers: {
-      googleProvider: new firebase.auth.GoogleAuthProvider(),
-    },
+    auth,
+    authProviders: useAuthProviders({
+      auth,
+      providers: {
+        googleProvider: new firebase.auth.GoogleAuthProvider(),
+      },
+      user: authState.user,
+    }),
+    authState,
   };
 }
