@@ -11,8 +11,8 @@ website is live @ [here](https://giftme.isaacadams.me/)
 
 ## concepts
 
-List. a itemized list of text that describes a gift
-Group. an array of emails (registered or non registered users)
+- List. a itemized list of text that describes a gift
+- Group. an array of emails (registered or non registered users)
 
 ### mvp
 

@@ -24,7 +24,8 @@
   "homepage": "https://github.com/isaacadams/giftme#readme",
   "alias": {
     "@firebase": "./src/firebase/index.ts",
-    "@shared": "./src/shared/index.ts"
+    "@shared": "./src/shared/index.ts",
+    "@pages": "./src/pages/index.ts"
   },
   "dependencies": {
     "grommet": "^2.16.2",

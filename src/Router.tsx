@@ -6,10 +6,10 @@ import {
   BrowserRouter as Router,
   RouteProps,
 } from 'react-router-dom';
-import {Gifts} from './AddGift';
 import {Loader} from '@shared';
-import {FirebaseAppContext, SignInPage} from '@firebase';
+import {FirebaseAppContext} from '@firebase';
 import {useContext} from 'react';
+import {WishlistPage, SignInPage} from '@pages';
 
 function MainRouter(props) {
   let {user} = useContext(FirebaseAppContext).authState;
@@ -31,7 +31,7 @@ function MainRouter(props) {
             )
           }
         />
-        <AuthenticatedRoute path="/" exact component={Gifts} />
+        <AuthenticatedRoute path="/" exact component={WishlistPage} />
       </Switch>
     </Router>
   );
