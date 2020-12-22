@@ -4,9 +4,9 @@ on:
     branches:
       - master
     paths:
-    - 'src/**'
-    - 'package.json'
-    - 'package-lock.json'
+      - 'src/**'
+      - 'package.json'
+      - 'package-lock.json'
 
 jobs:
   build:
@@ -22,7 +22,7 @@ jobs:
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
-          name: build
+          name: app
           path: build
   deploy:
     name: Deploy
@@ -34,7 +34,7 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@master
         with:
-          name: build
+          name: app
           path: build
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master

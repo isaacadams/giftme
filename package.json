@@ -1,7 +1,7 @@
 {
   "name": "giftme",
   "version": "1.0.0",
-  "description": "A place to create a list of gifts, share it with your friends and family, and find out what gifts have yet to be bought",
+  "description": "create a wishlist of gifts, share it with your friends and family, and coordinate with them",
   "main": "build/index.html",
   "source": "src/index.html",
   "scripts": {
