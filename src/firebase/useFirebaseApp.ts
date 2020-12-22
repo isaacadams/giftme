@@ -3,18 +3,17 @@ import 'firebase/auth';
 import 'firebase/database';
 import {FirebaseAuthState, useAuthState} from './useAuthState';
 import useAuthProviders, {FirebaseAuthProviders} from './useAuthProviders';
-import {apiKey, projectId} from './fbConfig.json';
 
 /// it is safe to expose the apiKey used here
 /// https://stackoverflow.com/questions/37482366/is-it-safe-to-expose-firebase-apikey-to-the-public
-export const config = createConfig(apiKey, projectId);
+export const config = createConfig(process.env.API_KEY, process.env.PROJECT_ID);
 
-function createConfig(ak, pid) {
+function createConfig(apiKey, projectId) {
   return {
-    apiKey: ak,
-    authDomain: `${pid}.firebaseapp.com`,
-    databaseURL: `https://${pid}.firebaseio.com`,
-    storageBucket: `${pid}.appspot.com`,
+    apiKey,
+    authDomain: `${projectId}.firebaseapp.com`,
+    databaseURL: `https://${projectId}.firebaseio.com`,
+    storageBucket: `${projectId}.appspot.com`,
   };
 }
 

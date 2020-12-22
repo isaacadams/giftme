@@ -19,12 +19,12 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
-      - name: create-env-json
-        uses: schdck/create-env-json@v2
-        with:
-          file-name: src/firebase/fbConfig.json
-          apiKey: ${{ secrets.FIREBASE_APIKEY }}
-          projectID: ${{ env.FIREBASE_PROJECTID }}
+      - name: create env file
+        run: |
+          touch .env
+          echo API_KEY=${{ secrets.FIREBASE_APIKEY }} >> .env
+          echo PROJECT_ID=${{ env.FIREBASE_PROJECTID }} >> .env
+          cat .env
       - name: Install Dependencies
         run: npm ci
       - name: Build
