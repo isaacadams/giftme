@@ -17,7 +17,7 @@ Group. an array of emails (registered or non registered users)
 ### mvp
 
 - [ ] functionality
-    - [ ] auth
+    - [x] auth
     - [ ] add text gift wish
     - [ ] create family
 - [ ] pages
