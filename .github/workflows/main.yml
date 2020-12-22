@@ -4,7 +4,7 @@ on:
     branches:
       - master
     paths:
-      - '.github/workflow/*'
+      - '.github/workflows/*'
       - 'src/**'
       - 'package.json'
       - 'package-lock.json'
