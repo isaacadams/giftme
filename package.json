@@ -2,6 +2,7 @@
   "name": "giftme",
   "version": "1.0.0",
   "description": "create a wishlist of gifts, share it with your friends and family, and coordinate with them",
+  "author": "Isaac Adams",
   "main": "build/index.html",
   "source": "src/index.html",
   "scripts": {
@@ -16,7 +17,6 @@
     "type": "git",
     "url": "git+https://github.com/isaacadams/giftme.git"
   },
-  "author": "Isaac Adams",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/isaacadams/giftme/issues"
