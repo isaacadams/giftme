@@ -16,18 +16,17 @@ Group. an array of emails (registered or non registered users)
 
 ### mvp
 
-- functionality
-    - auth
-    - add text gift wish
-    - create family
-- pages
-    - family view
-    - wishlist view
-    - sign in / sign out
+- [ ] functionality
+    - [ ] auth
+    - [ ] add text gift wish
+    - [ ] create family
+- [ ] pages
+    - [ ] family view
+    - [ ] wishlist view
+    - [ ] sign in / sign out
 
 
 #### feature requests
 
 - chat room
 - themes for birthdays/christmas season
-- 
