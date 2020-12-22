@@ -39,7 +39,9 @@ function MainRouter(props) {
 }
 
 function AuthenticatedRoute({children, component, ...rest}: RouteProps) {
-  let {isAuthenticated, initializing} = useContext(FirebaseAppContext).authState;
+  let {isAuthenticated, initializing} = useContext(
+    FirebaseAppContext
+  ).authState;
   if (initializing) return <Loader />;
 
   let ChildComponent = component;

@@ -2,19 +2,14 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 import {FirebaseAuthState, useAuthState} from './auth/useAuthState';
-import useAuthProviders, {
-  AuthProviders,
-  FirebaseAuthAPI,
-} from './auth/useAuthProviders';
+import useAuthProviders, {FirebaseAuthProviders} from './auth/useAuthProviders';
 import {apiKey, projectId} from './fbConfig.json';
 
 /// it is safe to expose the apiKey used here
 /// https://stackoverflow.com/questions/37482366/is-it-safe-to-expose-firebase-apikey-to-the-public
 export const config = createConfig(apiKey, projectId);
 
-firebase.initializeApp(config);
-
-export function createConfig(ak, pid) {
+function createConfig(ak, pid) {
   return {
     apiKey: ak,
     authDomain: `${pid}.firebaseapp.com`,
@@ -23,11 +18,13 @@ export function createConfig(ak, pid) {
   };
 }
 
+firebase.initializeApp(config);
+
 export type FirebaseApp = {
   app: firebase.app.App;
   auth: firebase.auth.Auth;
   database: firebase.database.Database;
-  authProviders: FirebaseAuthAPI;
+  authProviders: FirebaseAuthProviders;
   authState: FirebaseAuthState;
 };
 

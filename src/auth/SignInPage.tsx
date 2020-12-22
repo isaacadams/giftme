@@ -6,7 +6,9 @@ import {useContext} from 'react';
 import {FirebaseAppContext} from '..';
 
 function SignInPage(props) {
-  let {signInWithGoogle, loading} = useContext(FirebaseAppContext).authProviders;
+  let {signInWithGoogle, loading} = useContext(
+    FirebaseAppContext
+  ).authProviders;
   if (loading) return <Loader />;
 
   return (

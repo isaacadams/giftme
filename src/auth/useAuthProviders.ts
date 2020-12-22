@@ -1,6 +1,6 @@
 import {useState} from 'react';
 
-export type FirebaseAuthAPI = {
+export type FirebaseAuthProviders = {
   signInWithGoogle: () => void;
   signInWithFacebook: () => void;
   signInWithGithub: () => void;
@@ -38,7 +38,7 @@ export default function useAuthProviders({
   auth,
   providers,
   user,
-}: AuthProviderDependencies): FirebaseAuthAPI {
+}: AuthProviderDependencies): FirebaseAuthProviders {
   let [loading, setLoading] = useState<boolean>(false);
   let [error, setError] = useState<string>(null);
   return {
