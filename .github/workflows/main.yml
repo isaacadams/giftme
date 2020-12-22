@@ -8,6 +8,9 @@ on:
       - 'package.json'
       - 'package-lock.json'
 
+env:
+  FIREBASE_PROJECTID: giftme-8e917
+
 jobs:
   build:
     name: Build
@@ -15,6 +18,15 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
+      - name: Snap Config
+        uses: antfu/action-write-config
+        with:
+          # the file path to be saved, yaml is also supported
+          path: 'src/fbConfig.json'
+          # can be an object
+          data: 
+            apiKey: ${{ secrets.FIREBASE_APIKEY }}
+            projectId: ${{ env.FIREBASE_PROJECTID }}
       - name: Install Dependencies
         run: npm ci
       - name: Build
@@ -42,4 +54,4 @@ jobs:
           args: deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          PROJECT_ID: giftme-8e917
+          PROJECT_ID: ${{ env.FIREBASE_PROJECTID }}
