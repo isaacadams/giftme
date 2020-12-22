@@ -1,8 +1,8 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import {FirebaseAuthState, useAuthState} from './auth/useAuthState';
-import useAuthProviders, {FirebaseAuthProviders} from './auth/useAuthProviders';
+import {FirebaseAuthState, useAuthState} from './useAuthState';
+import useAuthProviders, {FirebaseAuthProviders} from './useAuthProviders';
 import {apiKey, projectId} from './fbConfig.json';
 
 /// it is safe to expose the apiKey used here

@@ -1,7 +1,7 @@
 import {Anchor, Text} from 'grommet';
 import React, {useContext} from 'react';
 import {Logout} from 'grommet-icons';
-import {FirebaseAppContext} from '.';
+import {FirebaseAppContext} from '@firebase';
 
 function NavigationBar(props) {
   let {signOut, user} = useContext(FirebaseAppContext).authProviders;

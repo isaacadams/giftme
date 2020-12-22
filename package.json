@@ -22,6 +22,10 @@
     "url": "https://github.com/isaacadams/giftme/issues"
   },
   "homepage": "https://github.com/isaacadams/giftme#readme",
+  "alias": {
+    "@firebase": "./src/firebase/index.ts",
+    "@shared": "./src/shared/index.ts"
+  },
   "dependencies": {
     "grommet": "^2.16.2",
     "grommet-icons": "^4.5.0",

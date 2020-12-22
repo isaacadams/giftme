@@ -7,9 +7,8 @@ import {
   RouteProps,
 } from 'react-router-dom';
 import {Gifts} from './AddGift';
-import SignInPage from './auth/SignInPage';
-import Loader from './shared/Loader';
-import {FirebaseAppContext} from '.';
+import {Loader} from '@shared';
+import {FirebaseAppContext, SignInPage} from '@firebase';
 import {useContext} from 'react';
 
 function MainRouter(props) {

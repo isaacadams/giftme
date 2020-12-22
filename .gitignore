@@ -4,4 +4,4 @@ dist/
 build/
 .firebase
 .firebaserc*
-src/fbConfig.json
+src/firebase/fbConfig.json

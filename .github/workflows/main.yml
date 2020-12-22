@@ -22,7 +22,7 @@ jobs:
         uses: antfu/action-write-config
         with:
           # the file path to be saved, yaml is also supported
-          path: 'src/fbConfig.json'
+          path: 'src/firebase/fbConfig.json'
           # can be an object
           data: 
             apiKey: ${{ secrets.FIREBASE_APIKEY }}

@@ -5,9 +5,7 @@ import {grommet} from 'grommet/themes';
 import {DisplayFooter} from './DisplayFooter';
 import NavigationBar from './NavigationBar';
 import Router from './Router';
-import {FirebaseApp, useFirebaseApp} from './useFirebaseApp';
-
-export const FirebaseAppContext = React.createContext<FirebaseApp | null>(null);
+import {FirebaseAppContext, useFirebaseApp} from '@firebase';
 
 function App(props) {
   return (
