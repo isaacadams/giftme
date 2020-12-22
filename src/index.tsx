@@ -4,8 +4,8 @@ import {Box, Grid, Grommet, Header, Main} from 'grommet';
 import {grommet} from 'grommet/themes';
 import {Gifts} from './Components/AddGift';
 import {DisplayFooter} from './DisplayFooter';
-import SignInPage from './auth/SignInPage';
 import NavigationBar from './NavigationBar';
+import Router from './Router';
 
 function App(props) {
   return (
@@ -30,7 +30,8 @@ function App(props) {
         >
           {/* <Routes /> */}
           {/* <Gifts addGift={(s) => console.log(s)} /> */}
-          <SignInPage />
+          {/* <SignInPage /> */}
+          <Router />
         </Main>
         <Box>
           <DisplayFooter />
