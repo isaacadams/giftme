@@ -2,11 +2,15 @@
   "name": "giftme",
   "version": "1.0.0",
   "description": "A place to create a list of gifts, share it with your friends and family, and find out what gifts have yet to be bought",
-  "main": "index.js",
+  "main": "build/index.html",
+  "source": "src/index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write src/**/*",
-    "start": "parcel src/index.html"
+    "prestart": "rimraf dist",
+    "start": "parcel src/index.html",
+    "preprod": "rimraf build",
+    "prod": "parcel build src/index.html"
   },
   "repository": {
     "type": "git",
@@ -22,6 +26,7 @@
     "grommet": "^2.16.2",
     "grommet-icons": "^4.5.0",
     "react-is": "^17.0.1",
+    "rimraf": "^3.0.2",
     "styled-components": "^5.2.1"
   },
   "devDependencies": {
