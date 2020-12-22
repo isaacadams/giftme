@@ -4,6 +4,7 @@ on:
     branches:
       - master
     paths:
+      - '.github/workflow/*'
       - 'src/**'
       - 'package.json'
       - 'package-lock.json'
@@ -18,15 +19,12 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
-      - name: Snap Config
-        uses: antfu/action-write-config
+      - name: create-env-json
+        uses: schdck/create-env-json@v2
         with:
-          # the file path to be saved, yaml is also supported
-          path: 'src/firebase/fbConfig.json'
-          # can be an object
-          data: 
-            apiKey: '${{ secrets.FIREBASE_APIKEY }}'
-            projectId: '${{ env.FIREBASE_PROJECTID }}'
+          file-name: src/firebase/fbConfig.json
+          apiKey: ${{ secrets.FIREBASE_APIKEY }}
+          projectID: ${{ env.FIREBASE_PROJECTID }}
       - name: Install Dependencies
         run: npm ci
       - name: Build
