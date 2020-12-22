@@ -11,22 +11,25 @@ website is live @ [here](https://giftme.isaacadams.me/)
 
 ## concepts
 
-List. a itemized list of text that describes a gift
-Group. an array of emails (registered or non registered users)
+- List. a itemized list of text that describes a gift
+- Group. an array of emails (registered or non registered users)
 
 ### mvp
 
 - [ ] functionality
-    - [ ] auth
+    - [x] auth
     - [ ] add text gift wish
     - [ ] create family
 - [ ] pages
     - [ ] family view
     - [ ] wishlist view
-    - [ ] sign in / sign out
+    - [x] sign in / sign out
+- [ ] styling
+    - [ ] thin main content
 
 
 #### feature requests
 
+- add email/pass option for sign in
 - chat room
 - themes for birthdays/christmas season

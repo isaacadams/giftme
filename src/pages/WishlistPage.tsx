@@ -7,7 +7,7 @@ interface IProp {
   addGift: (gift: string) => void;
 }
 
-export function Gifts(props: IProp) {
+export function WishlistPage(props: IProp) {
   let [gifts, setGifts] = useState([]);
   let [newGift, setNewGift] = useState('');
 
