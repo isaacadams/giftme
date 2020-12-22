@@ -6,7 +6,7 @@ import {FirebaseAppContext} from '@firebase';
 function NavigationBar(props) {
   let {signOut, user} = useContext(FirebaseAppContext).authProviders;
   if (!user) return <></>;
-  console.log(user.photoURL);
+
   return (
     <>
       <Box direction="row" gap="small" align='center'>
