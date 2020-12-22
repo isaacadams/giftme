@@ -23,12 +23,13 @@ website is live @ [here](https://giftme.isaacadams.me/)
 - [ ] pages
     - [ ] family view
     - [ ] wishlist view
-    - [ ] sign in / sign out
+    - [x] sign in / sign out
 - [ ] styling
     - [ ] thin main content
 
 
 #### feature requests
 
+- add email/pass option for sign in
 - chat room
 - themes for birthdays/christmas season
