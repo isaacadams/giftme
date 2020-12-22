@@ -1,16 +1,19 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {getFirebaseApp} from '../FirebaseApp';
 
-export function useAuth(): {
-  user: firebase.User;
+export type FirebaseAuthState = {
   loading: boolean;
-  error: string;
-} {
+  user?: firebase.User | null;
+  error?: string;
+};
+
+export function useAuth(): FirebaseAuthState {
   let {auth} = getFirebaseApp();
 
   let [user, setUser] = useState<firebase.User>(auth.currentUser);
-  let [loading, setLoading] = useState<boolean>(undefined);
-  let [error, setError] = useState<string>(undefined);
+
+  let [loading, setLoading] = useState<boolean>(false);
+  let [error, setError] = useState<string>(null);
 
   useEffect(() => {
     let unsubscribe = auth.onAuthStateChanged((u) => {

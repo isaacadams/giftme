@@ -1,24 +1,10 @@
-import {Anchor, Nav, Text} from 'grommet';
+import {Anchor, Text} from 'grommet';
 import React from 'react';
-import {WrappedComponentProps} from 'react-with-firebase-auth';
-import createWithAuth from './auth/createWithAuth';
-import Loader from './shared/Loader';
 import {Logout} from 'grommet-icons';
+import useAuthProviders from './auth/useAuthProviders';
 
-function NavigationBar({
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signInWithGoogle,
-  signInWithFacebook,
-  signInWithGithub,
-  signInWithTwitter,
-  signInAnonymously,
-  signOut,
-  setError,
-  user,
-  error,
-  loading,
-}: WrappedComponentProps) {
+function NavigationBar(props) {
+  let {signOut, user} = useAuthProviders();
   return (
     <>
       {user && <Text>Welcome {user.displayName}</Text>}
@@ -27,4 +13,4 @@ function NavigationBar({
   );
 }
 
-export default createWithAuth(NavigationBar);
+export default NavigationBar;

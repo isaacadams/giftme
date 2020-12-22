@@ -1,24 +1,11 @@
 import * as React from 'react';
-import {WrappedComponentProps} from 'react-with-firebase-auth';
 import {Google} from 'grommet-icons';
 import {Box, Button, Grid, Heading} from 'grommet';
-import createWithAuth from './createWithAuth';
 import Loader from '../shared/Loader';
+import useAuthProviders from './useAuthProviders';
 
-function SignInPage({
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signInWithGoogle,
-  signInWithFacebook,
-  signInWithGithub,
-  signInWithTwitter,
-  signInAnonymously,
-  signOut,
-  setError,
-  user,
-  error,
-  loading,
-}: WrappedComponentProps) {
+function SignInPage(props) {
+  let {signInWithGoogle, loading} = useAuthProviders();
   if (loading) return <Loader />;
 
   return (
@@ -36,4 +23,4 @@ function SignInPage({
   );
 }
 
-export default createWithAuth(SignInPage);
+export default SignInPage;
