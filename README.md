@@ -24,7 +24,7 @@ website is live @ [here](https://giftme.isaacadams.me/)
     - [ ] family view
     - [ ] wishlist view
     - [x] sign in / sign out
-- [ ] mobile friendly
+- [x] mobile friendly
 
 
 #### feature requests
@@ -32,3 +32,6 @@ website is live @ [here](https://giftme.isaacadams.me/)
 - add email/pass option for sign in
 - chat room
 - themes for birthdays/christmas season
+- give gift items properties
+    - add a link
+    - add an image
