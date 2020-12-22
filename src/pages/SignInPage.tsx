@@ -12,16 +12,18 @@ export function SignInPage(props) {
   if (loading) return <Loader />;
 
   return (
-    <Box>
-      <Grid align="center" fill>
-        <Heading size={'30'}>Sign In</Heading>
+    <Grid align="center" alignContent="around" fill="vertical">
+      <Box gap="small">
+        <Heading size={'30'} textAlign="center">
+          Sign In
+        </Heading>
         <Button
           label={'Sign in with Google'}
           icon={<Google />}
           onClick={signInWithGoogle}
           color="dark"
         />
-      </Grid>
-    </Box>
+      </Box>
+    </Grid>
   );
 }

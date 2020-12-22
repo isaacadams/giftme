@@ -24,8 +24,7 @@ website is live @ [here](https://giftme.isaacadams.me/)
     - [ ] family view
     - [ ] wishlist view
     - [x] sign in / sign out
-- [ ] styling
-    - [ ] thin main content
+- [ ] mobile friendly
 
 
 #### feature requests
