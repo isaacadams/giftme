@@ -6,8 +6,10 @@ export class Gift {
   link?: string;
   description?: string;
   image?: string;
-  claimed?: boolean;
-  claimedBy?: string;
+  claimed?: {
+    by: string,
+    date: Date,
+  };
 }
 
 export class GiftRepository extends Repository<Gift> {
