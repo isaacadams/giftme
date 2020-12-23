@@ -26,10 +26,8 @@ export function useDataApi<T>(repo: IRepository<T>): IDataService<T> {
   let [loading, setLoading] = React.useState(true);
   let [feed, setFeed] = React.useState<any>(null);
 
-
-
   useEffect(() => {
-    if(!repo) return;
+    if (!repo) return;
 
     repo.getAll().once(
       'value',

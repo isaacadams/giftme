@@ -30,9 +30,10 @@ export function WishlistPage(props: IProp) {
         />
       </Form>
       <Box gap="medium" margin={{top: 'small'}}>
-        {api && api.items.map((g, i) => (
-          <GiftItem key={i} name={g.value.name} remove={g.remove} />
-        ))}
+        {api &&
+          api.items.map((g, i) => (
+            <GiftItem key={i} name={g.value.name} remove={g.remove} />
+          ))}
       </Box>
     </div>
   );
@@ -46,7 +47,7 @@ export function WishlistPage(props: IProp) {
   function addGift(gift: string) {
     gift = gift.trim();
     if (gift.isNullOrWhitespace()) return;
-    if(api) api.add({name: gift});
+    if (api) api.add({name: gift});
   }
 }
 
