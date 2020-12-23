@@ -4,33 +4,35 @@ import {Box, Grid, Grommet, Header, Main} from 'grommet';
 import {grommet} from 'grommet/themes';
 import {DisplayFooter} from './DisplayFooter';
 import NavigationBar from './NavigationBar';
-import Router from './Router';
+import RouterContent from './RouterContent';
 import {FirebaseAppContext, useFirebaseApp} from '@firebase';
+import {BrowserRouter as Router} from 'react-router-dom';
 
 function App(props) {
   return (
     <FirebaseAppContext.Provider value={useFirebaseApp()}>
-      <Grommet full theme={grommet}>
-        <Grid
-          fill="vertical"
-          style={{gridTemplateRows: 'min-content 1fr'}}
-          gap="small"
-        >
-          <Header
-            fill="horizontal"
-            alignContent="between"
-            pad={{vertical: 'medium', horizontal: 'medium'}}
+      <Router>
+        <Grommet full theme={grommet}>
+          <Grid
+            fill="vertical"
+            style={{gridTemplateRows: 'min-content 1fr'}}
+            gap="small"
           >
-            <NavigationBar />
-          </Header>
-          <Main align="center" pad={{vertical: 'medium', horizontal: 'medium'}}>
-            <Router />
-          </Main>
-          <Box>
-            <DisplayFooter />
-          </Box>
-        </Grid>
-      </Grommet>
+            <Box>
+              <NavigationBar />
+            </Box>
+            <Main
+              align="center"
+              pad={{vertical: 'medium', horizontal: 'medium'}}
+            >
+              <RouterContent />
+            </Main>
+            <Box>
+              <DisplayFooter />
+            </Box>
+          </Grid>
+        </Grommet>
+      </Router>
     </FirebaseAppContext.Provider>
   );
 }

@@ -1,38 +1,42 @@
 import * as React from 'react';
 import {useState} from 'react';
 import '@isaacadams/extensions';
-import {Form, List, TextInput} from 'grommet';
+import {Box, Text} from 'grommet';
+import {FirebaseAppContext, GiftRepository, useDataApi} from '@firebase';
+import {Gift} from 'grommet-icons';
 
-interface IProp {
-  addGift: (gift: string) => void;
-}
+export function WishlistPage(props) {
+  let [repo, setRepo] = useState<GiftRepository | null>(null);
+  let api = useDataApi(repo);
 
-export function WishlistPage(props: IProp) {
-  let [gifts, setGifts] = useState([]);
-  let [newGift, setNewGift] = useState('');
+  let {database, authState} = React.useContext(FirebaseAppContext);
+  React.useEffect(() => {
+    setRepo(new GiftRepository(database, authState.user));
+  }, [database, authState]);
 
   return (
-    <div>
-      <Form onSubmit={onSubmit}>
-        <TextInput
-          placeholder="add your gift"
-          value={newGift}
-          onChange={(event) => setNewGift(event.target.value)}
-        />
-      </Form>
-      <List primaryKey="name" data={gifts.map((g) => ({name: g}))} />
-    </div>
+    <Box>
+      <Box direction="row" gap="small">
+        <Gift />
+        <Text>My Wishlist</Text>
+      </Box>
+      <Box
+        gap="medium"
+        margin={{top: 'small'}}
+        pad="medium"
+        border={{color: 'dark-2', size: 'xsmall'}}
+      >
+        {api &&
+          api.items.map((g, i) => <GiftItemView key={i} name={g.value.name} />)}
+      </Box>
+    </Box>
   );
+}
 
-  function onSubmit(e) {
-    e.preventDefault();
-    addGift(newGift);
-    setNewGift('');
-  }
-
-  function addGift(gift) {
-    if (gift.isNullOrWhitespace()) return;
-
-    setGifts([gift.trim(), ...gifts]);
-  }
+export function GiftItemView({name}) {
+  return (
+    <Box direction="row" fill="horizontal" justify="between">
+      <Text>{name}</Text>
+    </Box>
+  );
 }

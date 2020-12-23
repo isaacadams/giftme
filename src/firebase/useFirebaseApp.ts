@@ -12,7 +12,7 @@ function createConfig(apiKey, projectId) {
   return {
     apiKey,
     authDomain: `${projectId}.firebaseapp.com`,
-    databaseURL: `https://${projectId}.firebaseio.com`,
+    databaseURL: `https://giftme-8e917-default-rtdb.firebaseio.com`,
     storageBucket: `${projectId}.appspot.com`,
   };
 }

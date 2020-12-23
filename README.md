@@ -18,13 +18,23 @@ website is live @ [here](https://giftme-8e917.web.app/)
 
 - [ ] functionality
     - [x] auth
-    - [ ] add text gift wish
+    - [x] add text gift wish
     - [ ] create family
 - [ ] pages
-    - [ ] family view
-    - [ ] wishlist view
+    - [ ] family wishlist view
+    - [x] wishlist view
+    - [x] edit wishlist view
     - [x] sign in / sign out
 - [x] mobile friendly
+- [ ] cleanup
+    - [ ] get rid of footer
+    - [ ] give header more utility
+    - [ ] make login page more appealing
+    - [ ] customize theme
+- [ ] require username during sign up process
+- [ ] validation
+    - [ ] gift items cannot be empty
+    - [ ] cannot choose username that already exists
 
 
 #### feature requests

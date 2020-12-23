@@ -1,20 +1,63 @@
-import {Anchor, Avatar, Box, Text} from 'grommet';
+import {Anchor, Avatar, Box, Header, Menu, Text} from 'grommet';
 import React, {useContext} from 'react';
-import {Logout, User} from 'grommet-icons';
+import {Edit, Home, Logout, User} from 'grommet-icons';
 import {FirebaseAppContext} from '@firebase';
+import {Link} from 'react-router-dom';
 
 function NavigationBar(props) {
   let {signOut, user} = useContext(FirebaseAppContext).authProviders;
   if (!user) return <></>;
 
   return (
-    <>
-      <Box direction="row" gap="small" align='center'>
-        <ShowAvatar photoUrl={user.photoURL} />
-        <Text>{user.displayName}</Text>
-      </Box>
-      <Anchor icon={<Logout />} label="Logout" onClick={signOut} />
-    </>
+    <Header
+      fill="horizontal"
+      alignContent="center"
+      justify="end"
+      pad={{vertical: 'medium', horizontal: 'medium'}}
+    >
+      <Menu
+        label={<ShowAvatar photoUrl={user.photoURL} />}
+        margin={{horizontal: 'small'}}
+        dropAlign={{top: 'bottom', right: 'right'}}
+        dropBackground="light-2"
+        items={[
+          {
+            label: (
+              <Link to={`/${user.uid}`}>
+                <Anchor
+                  icon={<Home />}
+                  label={user.displayName}
+                  color="dark-2"
+                  as="div"
+                />
+              </Link>
+            ),
+          },
+          {
+            label: (
+              <Link to={`/`}>
+                <Anchor
+                  icon={<Edit />}
+                  label="Edit Wishlist"
+                  color="dark-2"
+                  as="div"
+                />
+              </Link>
+            ),
+          },
+          {
+            label: (
+              <Anchor
+                icon={<Logout />}
+                label="Logout"
+                color="dark-2"
+                onClick={signOut}
+              />
+            ),
+          },
+        ]}
+      />
+    </Header>
   );
 }
 
