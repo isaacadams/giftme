@@ -49,8 +49,10 @@ export function WishlistEditPage(props) {
 }
 
 export function EditGiftItem({value, remove, update}: IDataItems<Gift>) {
+  let [gift, setGift] = useState<Gift>(value);
+
   let {setShow, Modal} = useModal({
-    prompt: `Are you sure about deleting '${value.name}'?`,
+    prompt: `Are you sure about deleting '${gift.name}'?`,
     confirmation: remove,
   });
   return (
@@ -62,8 +64,8 @@ export function EditGiftItem({value, remove, update}: IDataItems<Gift>) {
       gap="small"
     >
       <Box fill="horizontal">
-        <Form>
-          <TextInput value={value.name} />
+        <Form onSubmit={onSubmit} onBlur={onSubmit}>
+          <TextInput value={gift.name} onChange={(e) => setGift({name: e.currentTarget.value})} />
         </Form>
       </Box>
       <Trash
@@ -74,4 +76,8 @@ export function EditGiftItem({value, remove, update}: IDataItems<Gift>) {
       {Modal}
     </Box>
   );
+
+  function onSubmit() {
+    update(gift);
+  }
 }
