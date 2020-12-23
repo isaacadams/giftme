@@ -7,8 +7,8 @@ export class Gift {
   description?: string;
   image?: string;
   claimed?: {
-    by: string,
-    date: Date,
+    by: string;
+    date: Date;
   };
 }
 
