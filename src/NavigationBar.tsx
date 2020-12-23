@@ -9,7 +9,7 @@ function NavigationBar(props) {
 
   return (
     <>
-      <Box direction="row" gap="small" align='center'>
+      <Box direction="row" gap="small" align="center">
         <ShowAvatar photoUrl={user.photoURL} />
         <Text>{user.displayName}</Text>
       </Box>
