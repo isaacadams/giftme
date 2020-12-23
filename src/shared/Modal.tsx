@@ -4,9 +4,10 @@ import {Layer, Grid, Box, Heading, Button, Text} from 'grommet';
 interface IProps {
   title?: string;
   prompt: string;
+  confirmation?: Promise<void>;
 }
 
-export function useModal({title, prompt}: IProps) {
+export function useModal({title, prompt, confirmation}: IProps) {
   let [show, setShow] = useState(false);
 
   return {
@@ -30,7 +31,9 @@ export function useModal({title, prompt}: IProps) {
               <Button label="cancel" onClick={() => setShow(false)} />
             </Box>
             <Box margin="small">
-              <Button label="ok" onClick={() => setShow(false)} />
+              <Button label="ok" onClick={(e) => {
+                  confirmation.catch(console.error);
+              }} />
             </Box>
           </Box>
         </Grid>
