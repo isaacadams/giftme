@@ -18,11 +18,12 @@ website is live @ [here](https://giftme-8e917.web.app/)
 
 - [ ] functionality
     - [x] auth
-    - [ ] add text gift wish
+    - [x] add text gift wish
     - [ ] create family
 - [ ] pages
-    - [ ] family view
+    - [ ] family wishlist view
     - [ ] wishlist view
+    - [ ] edit wishlist view
     - [x] sign in / sign out
 - [x] mobile friendly
 
