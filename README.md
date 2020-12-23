@@ -22,10 +22,13 @@ website is live @ [here](https://giftme-8e917.web.app/)
     - [ ] create family
 - [ ] pages
     - [ ] family wishlist view
-    - [ ] wishlist view
+    - [x] wishlist view
     - [ ] edit wishlist view
     - [x] sign in / sign out
 - [x] mobile friendly
+- [ ] footer/header
+    - [ ] get rid of footer
+    - [ ] give header more utility
 
 
 #### feature requests
