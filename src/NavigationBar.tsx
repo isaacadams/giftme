@@ -23,19 +23,25 @@ function NavigationBar(props) {
         items={[
           {
             label: (
-              <Link to={`/${user.uid}`} is="button">
+              <Link to={`/${user.uid}`}>
                 <Anchor
                   icon={<Home />}
                   label={user.displayName}
                   color="dark-2"
+                  as="div"
                 />
               </Link>
             ),
           },
           {
             label: (
-              <Link to={`/`} is="button">
-                <Anchor icon={<Edit />} label="Edit Wishlist" color="dark-2" />
+              <Link to={`/`}>
+                <Anchor
+                  icon={<Edit />}
+                  label="Edit Wishlist"
+                  color="dark-2"
+                  as="div"
+                />
               </Link>
             ),
           },
