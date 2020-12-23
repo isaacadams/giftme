@@ -31,9 +31,12 @@ export function useModal({title, prompt, confirmation}: IProps) {
               <Button label="cancel" onClick={() => setShow(false)} />
             </Box>
             <Box margin="small">
-              <Button label="ok" onClick={(e) => {
+              <Button
+                label="ok"
+                onClick={(e) => {
                   confirmation.catch(console.error);
-              }} />
+                }}
+              />
             </Box>
           </Box>
         </Grid>
