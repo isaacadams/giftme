@@ -1,4 +1,4 @@
-import {Repository} from './Repository';
+import {Repository} from './database/Repository';
 import '@isaacadams/extensions';
 
 export class Gift {
@@ -12,7 +12,7 @@ export class Gift {
 
 export class GiftRepository extends Repository<Gift> {
   constructor(database: firebase.database.Database, user: firebase.User) {
-    super(database, `gifts/${user.uid}`, [
+    super(database.ref(`gifts/${user.uid}`), [
       (data) => {
         if (!stringIsValid(data?.name))
           return Promise.reject(

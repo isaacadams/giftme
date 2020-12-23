@@ -14,11 +14,10 @@ export class Repository<T> implements IRepository<T> {
   table: firebase.database.Reference;
   rules: Rule<T>[];
   constructor(
-    database: firebase.database.Database,
-    name: string,
+    table: firebase.database.Reference,
     rules?: Rule<T>[]
   ) {
-    this.table = database.ref(name);
+    this.table = table;
     console.log(this.table);
     this.rules = rules;
   }
