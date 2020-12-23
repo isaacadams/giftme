@@ -18,7 +18,9 @@ function App(props) {
             style={{gridTemplateRows: 'min-content 1fr'}}
             gap="small"
           >
-            <NavigationBar />
+            <Box>
+              <NavigationBar />
+            </Box>
             <Main
               align="center"
               pad={{vertical: 'medium', horizontal: 'medium'}}
