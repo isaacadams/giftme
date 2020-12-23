@@ -10,7 +10,7 @@ function NavigationBar(props) {
 
   return (
     <>
-      <Link to={`/${user.uid}`} is='button'>
+      <Link to={`/${user.uid}`} is="button">
         <Box direction="row" gap="small" align="center">
           <ShowAvatar photoUrl={user.photoURL} />
           <Text>{user.displayName}</Text>
