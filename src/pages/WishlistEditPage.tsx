@@ -1,12 +1,18 @@
 import * as React from 'react';
 import {useState} from 'react';
 import {Box, Form, TextInput, Text} from 'grommet';
-import {FirebaseAppContext, GiftRepository, useDataApi} from '@firebase';
+import {
+  FirebaseAppContext,
+  Gift,
+  GiftRepository,
+  IDataItems,
+  useDataApi,
+} from '@firebase';
 import {useModal} from '@shared';
 import {Trash} from 'grommet-icons';
 
 export function WishlistEditPage(props) {
-  let [newGift, setNewGift] = useState('');
+  let [newGift, setNewGift] = useState<string>('');
   let [repo, setRepo] = useState<GiftRepository | null>(null);
   let api = useDataApi(repo);
 
@@ -16,49 +22,50 @@ export function WishlistEditPage(props) {
   }, [database, authState]);
 
   return (
-    <div>
-      <Form onSubmit={onSubmit}>
+    <Box
+      gap="medium"
+      margin={{top: 'small'}}
+      pad="small"
+      border={{color: 'dark-2', size: 'xsmall'}}
+    >
+      <Form onSubmit={(e) => addGift()}>
         <TextInput
+          name="newgift"
           placeholder="add a gift"
           value={newGift}
-          onChange={(event) => setNewGift(event.target.value)}
+          onChange={(e) => setNewGift(e.currentTarget.value)}
         />
       </Form>
-      <Box
-        gap="medium"
-        margin={{top: 'small'}}
-        pad="small"
-        border={{color: 'dark-2', size: 'xsmall'}}
-      >
-        {api &&
-          api.items.map((g, i) => (
-            <EditGiftItem key={i} name={g.value.name} remove={g.remove} />
-          ))}
-      </Box>
-    </div>
+      {api && api.items.map((g, i) => <EditGiftItem key={i} {...g} />)}
+    </Box>
   );
 
-  function onSubmit(e) {
-    e.preventDefault();
-    addGift(newGift);
-    setNewGift('');
-  }
-
-  function addGift(gift: string) {
-    gift = gift.trim();
+  function addGift() {
+    let gift = newGift.trim();
     if (gift.isNullOrWhitespace()) return;
     if (api) api.add({name: gift});
+    setNewGift('');
   }
 }
 
-export function EditGiftItem({name, remove}) {
+export function EditGiftItem({value, remove, update}: IDataItems<Gift>) {
   let {setShow, Modal} = useModal({
-    prompt: `Are you sure about deleting '${name}'?`,
+    prompt: `Are you sure about deleting '${value.name}'?`,
     confirmation: remove,
   });
   return (
-    <Box direction="row" fill="horizontal" justify="between">
-      <Text>{name}</Text>
+    <Box
+      direction="row"
+      fill="horizontal"
+      justify="between"
+      align="center"
+      gap="small"
+    >
+      <Box fill="horizontal">
+        <Form>
+          <TextInput value={value.name} />
+        </Form>
+      </Box>
       <Trash
         onClick={(e) => {
           setShow(true);
