@@ -16,8 +16,9 @@ export function WishlistPage(props) {
 
   return (
     <Box>
-      <Box direction="row" gap='small'>
-        <Gift /><Text>My Wishlist</Text>
+      <Box direction="row" gap="small">
+        <Gift />
+        <Text>My Wishlist</Text>
       </Box>
       <Box
         gap="medium"
