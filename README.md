@@ -32,6 +32,10 @@ website is live @ [here](https://giftme-8e917.web.app/)
 - add email/pass option for sign in
 - chat room
 - themes for birthdays/christmas season
+- privacy settings
+- claim gifts on wishlists
 - give gift items properties
     - add a link
     - add an image
+    - add description / instructions
+- spruce up sign in page with logo
