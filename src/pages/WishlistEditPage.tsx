@@ -56,28 +56,30 @@ export function EditGiftItem({value, remove, update}: IDataItems<Gift>) {
     confirmation: remove,
   });
   return (
-    <Box
-      direction="row"
-      fill="horizontal"
-      justify="between"
-      align="center"
-      gap="small"
-    >
-      <Box fill="horizontal">
-        <Form onSubmit={onSubmit} onBlur={onSubmit}>
-          <TextInput
-            value={gift.name}
-            onChange={(e) => setGift({name: e.currentTarget.value})}
-          />
-        </Form>
+    <>
+      <Box
+        direction="row"
+        fill="horizontal"
+        justify="between"
+        align="center"
+        gap="small"
+      >
+        <Box fill="horizontal">
+          <Form onSubmit={onSubmit} onBlur={onSubmit}>
+            <TextInput
+              value={gift.name}
+              onChange={(e) => setGift({name: e.currentTarget.value})}
+            />
+          </Form>
+        </Box>
+        <Trash
+          onClick={(e) => {
+            setShow(true);
+          }}
+        />
       </Box>
-      <Trash
-        onClick={(e) => {
-          setShow(true);
-        }}
-      />
       {Modal}
-    </Box>
+    </>
   );
 
   function onSubmit() {
