@@ -33,6 +33,7 @@ function RouterContent(props) {
         />
       )}
       <AuthenticatedRoute path="/" exact component={WishlistEditPage} />
+      {!user && <Redirect to="/login" />}
     </Switch>
   );
 }
