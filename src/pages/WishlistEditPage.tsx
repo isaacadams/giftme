@@ -65,7 +65,10 @@ export function EditGiftItem({value, remove, update}: IDataItems<Gift>) {
     >
       <Box fill="horizontal">
         <Form onSubmit={onSubmit} onBlur={onSubmit}>
-          <TextInput value={gift.name} onChange={(e) => setGift({name: e.currentTarget.value})} />
+          <TextInput
+            value={gift.name}
+            onChange={(e) => setGift({name: e.currentTarget.value})}
+          />
         </Form>
       </Box>
       <Trash
