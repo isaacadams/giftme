@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useState} from 'react';
 import '@isaacadams/extensions';
 import {Box, Form, TextInput, Text} from 'grommet';
-import {FirebaseAppContext, GiftRepository} from '@firebase';
+import {FirebaseAppContext, Gift, GiftRepository, useDataApi} from '@firebase';
 import {Close, Trash} from 'grommet-icons';
 import {useModal} from '@shared';
 
@@ -11,22 +11,14 @@ interface IProp {
 }
 
 export function WishlistPage(props: IProp) {
-  let [gifts, setGifts] = useState([]);
   let [newGift, setNewGift] = useState('');
-  let [giftRepo, setGiftRepo] = useState<GiftRepository | null>(null);
-  let {database, authState} = React.useContext(FirebaseAppContext);
+  let [repo, setRepo] = useState<GiftRepository | null>(null);
+  let api = useDataApi(repo);
 
+  let {database, authState} = React.useContext(FirebaseAppContext);
   React.useEffect(() => {
-    let repo = new GiftRepository(database, authState.user);
-    setGiftRepo(repo);
-    repo.getAll().once(
-      'value',
-      (snapShot) => {
-        setGifts(Object.values(snapShot.val()).map((g) => g['name']));
-      },
-      console.error
-    );
-  }, [database]);
+    setRepo(new GiftRepository(database, authState.user));
+  }, [database, authState]);
 
   return (
     <div>
@@ -38,8 +30,8 @@ export function WishlistPage(props: IProp) {
         />
       </Form>
       <Box gap="medium" margin={{top: 'small'}}>
-        {gifts.map((g, i) => (
-          <GiftItem key={i} name={g} />
+        {api && api.items.map((g, i) => (
+          <GiftItem key={i} name={g.value.name} remove={g.remove} />
         ))}
       </Box>
     </div>
@@ -48,20 +40,20 @@ export function WishlistPage(props: IProp) {
   function onSubmit(e) {
     e.preventDefault();
     addGift(newGift);
-    if (giftRepo) giftRepo.create({name: newGift}).catch(console.error);
     setNewGift('');
   }
 
-  function addGift(gift) {
+  function addGift(gift: string) {
+    gift = gift.trim();
     if (gift.isNullOrWhitespace()) return;
-
-    setGifts([gift.trim(), ...gifts]);
+    if(api) api.add({name: gift});
   }
 }
 
-function GiftItem({name}) {
+function GiftItem({name, remove}) {
   let {setShow, Modal} = useModal({
     prompt: 'Are you sure about deleting this gift?',
+    confirmation: remove,
   });
   return (
     <Box direction="row" fill="horizontal" justify="between">
