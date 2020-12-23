@@ -17,7 +17,6 @@ export class Repository<T> implements IRepository<T> {
   rules: Rule<T>[];
   constructor(table: firebase.database.Reference, rules?: Rule<T>[]) {
     this.table = table;
-    console.log(this.table);
     this.rules = rules;
   }
 
