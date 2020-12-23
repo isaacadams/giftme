@@ -1,39 +1,39 @@
 import * as React from 'react';
-import {
-  Switch,
-  Route,
-  Redirect,
-  BrowserRouter as Router,
-  RouteProps,
-} from 'react-router-dom';
+import {Switch, Route, Redirect, RouteProps} from 'react-router-dom';
 import {Loader} from '@shared';
 import {FirebaseAppContext} from '@firebase';
 import {useContext} from 'react';
-import {WishlistPage, SignInPage} from '@pages';
+import {WishlistPage, SignInPage, WishlistEditPage} from '@pages';
 
-function MainRouter(props) {
+function RouterContent(props) {
   let {user} = useContext(FirebaseAppContext).authState;
+
   return (
-    <Router>
-      <Switch>
-        <Route
-          path="/login"
-          render={({location}) =>
-            !user ? (
-              <SignInPage />
-            ) : (
-              <Redirect
-                to={{
-                  pathname: '/',
-                  state: {from: location},
-                }}
-              />
-            )
-          }
+    <Switch>
+      <Route
+        path="/login"
+        render={({location}) =>
+          !user ? (
+            <SignInPage />
+          ) : (
+            <Redirect
+              to={{
+                pathname: '/',
+                state: {from: location},
+              }}
+            />
+          )
+        }
+      />
+      {user && (
+        <AuthenticatedRoute
+          path={`/${user.uid}`}
+          exact
+          component={WishlistPage}
         />
-        <AuthenticatedRoute path="/" exact component={WishlistPage} />
-      </Switch>
-    </Router>
+      )}
+      <AuthenticatedRoute path="/" exact component={WishlistEditPage} />
+    </Switch>
   );
 }
 
@@ -63,4 +63,4 @@ function AuthenticatedRoute({children, component, ...rest}: RouteProps) {
   );
 }
 
-export default MainRouter;
+export default RouterContent;

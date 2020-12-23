@@ -1,17 +1,10 @@
 import * as React from 'react';
 import {useState} from 'react';
 import '@isaacadams/extensions';
-import {Box, Form, TextInput, Text} from 'grommet';
-import {FirebaseAppContext, Gift, GiftRepository, useDataApi} from '@firebase';
-import {Close, Trash} from 'grommet-icons';
-import {useModal} from '@shared';
+import {Box, Text} from 'grommet';
+import {FirebaseAppContext, GiftRepository, useDataApi} from '@firebase';
 
-interface IProp {
-  addGift: (gift: string) => void;
-}
-
-export function WishlistPage(props: IProp) {
-  let [newGift, setNewGift] = useState('');
+export function WishlistPage(props) {
   let [repo, setRepo] = useState<GiftRepository | null>(null);
   let api = useDataApi(repo);
 
@@ -21,50 +14,22 @@ export function WishlistPage(props: IProp) {
   }, [database, authState]);
 
   return (
-    <div>
-      <Form onSubmit={onSubmit}>
-        <TextInput
-          placeholder="add your gift"
-          value={newGift}
-          onChange={(event) => setNewGift(event.target.value)}
-        />
-      </Form>
-      <Box gap="medium" margin={{top: 'small'}}>
-        {api &&
-          api.items.map((g, i) => (
-            <GiftItem key={i} name={g.value.name} remove={g.remove} />
-          ))}
-      </Box>
-    </div>
+    <Box
+      gap="medium"
+      margin={{top: 'small'}}
+      pad="small"
+      border={{color: 'dark-2', size: 'xsmall'}}
+    >
+      {api &&
+        api.items.map((g, i) => <GiftItemView key={i} name={g.value.name} />)}
+    </Box>
   );
-
-  function onSubmit(e) {
-    e.preventDefault();
-    addGift(newGift);
-    setNewGift('');
-  }
-
-  function addGift(gift: string) {
-    gift = gift.trim();
-    if (gift.isNullOrWhitespace()) return;
-    if (api) api.add({name: gift});
-  }
 }
 
-function GiftItem({name, remove}) {
-  let {setShow, Modal} = useModal({
-    prompt: `Are you sure about deleting '${name}'?`,
-    confirmation: remove,
-  });
+export function GiftItemView({name}) {
   return (
     <Box direction="row" fill="horizontal" justify="between">
       <Text>{name}</Text>
-      <Trash
-        onClick={(e) => {
-          setShow(true);
-        }}
-      />
-      {Modal}
     </Box>
   );
 }

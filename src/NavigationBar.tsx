@@ -2,6 +2,7 @@ import {Anchor, Avatar, Box, Text} from 'grommet';
 import React, {useContext} from 'react';
 import {Logout, User} from 'grommet-icons';
 import {FirebaseAppContext} from '@firebase';
+import {Link} from 'react-router-dom';
 
 function NavigationBar(props) {
   let {signOut, user} = useContext(FirebaseAppContext).authProviders;
@@ -9,10 +10,12 @@ function NavigationBar(props) {
 
   return (
     <>
-      <Box direction="row" gap="small" align="center">
-        <ShowAvatar photoUrl={user.photoURL} />
-        <Text>{user.displayName}</Text>
-      </Box>
+      <Link to={`/${user.uid}`} is='button'>
+        <Box direction="row" gap="small" align="center">
+          <ShowAvatar photoUrl={user.photoURL} />
+          <Text>{user.displayName}</Text>
+        </Box>
+      </Link>
       <Anchor icon={<Logout />} label="Logout" onClick={signOut} />
     </>
   );
