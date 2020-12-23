@@ -53,7 +53,7 @@ export function WishlistPage(props: IProp) {
 
 function GiftItem({name, remove}) {
   let {setShow, Modal} = useModal({
-    prompt: 'Are you sure about deleting this gift?',
+    prompt: `Are you sure about deleting '${name}'?`,
     confirmation: remove,
   });
   return (
