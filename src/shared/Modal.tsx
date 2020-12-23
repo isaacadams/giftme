@@ -4,7 +4,7 @@ import {Layer, Grid, Box, Heading, Button, Text} from 'grommet';
 interface IProps {
   title?: string;
   prompt: string;
-  confirmation?: Promise<void>;
+  confirmation?: () => void;
 }
 
 export function useModal({title, prompt, confirmation}: IProps) {
@@ -34,7 +34,8 @@ export function useModal({title, prompt, confirmation}: IProps) {
               <Button
                 label="ok"
                 onClick={(e) => {
-                  confirmation.catch(console.error);
+                  confirmation();
+                  setShow(false);
                 }}
               />
             </Box>
