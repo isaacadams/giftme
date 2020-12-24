@@ -12,10 +12,14 @@ interface IUrlParams {
 
 export function WishlistPage(props) {
   let {uid} = useParams<IUrlParams>();
+  let {database} = React.useContext(FirebaseAppContext);
+
+  return <Wishlist uid={uid} database={database} />;
+}
+
+export function Wishlist({uid, database}) {
   let [repo, setRepo] = useState<GiftRepository | null>(null);
   let api = useDataApi(repo);
-
-  let {database} = React.useContext(FirebaseAppContext);
   React.useEffect(() => {
     setRepo(new GiftRepository(database, uid));
   }, [database]);
