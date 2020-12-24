@@ -4,15 +4,21 @@ import '@isaacadams/extensions';
 import {Box, Text} from 'grommet';
 import {FirebaseAppContext, GiftRepository, useDataApi} from '@firebase';
 import {Gift} from 'grommet-icons';
+import {useParams} from 'react-router-dom';
+
+interface IUrlParams {
+  uid: string;
+}
 
 export function WishlistPage(props) {
+  let {uid} = useParams<IUrlParams>();
   let [repo, setRepo] = useState<GiftRepository | null>(null);
   let api = useDataApi(repo);
 
-  let {database, authState} = React.useContext(FirebaseAppContext);
+  let {database} = React.useContext(FirebaseAppContext);
   React.useEffect(() => {
-    setRepo(new GiftRepository(database, authState.user));
-  }, [database, authState]);
+    setRepo(new GiftRepository(database, uid));
+  }, [database]);
 
   return (
     <Box>
