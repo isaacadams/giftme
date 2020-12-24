@@ -1,4 +1,4 @@
-import {Repository} from './database/Repository';
+import {Repository} from './Repository';
 import '@isaacadams/extensions';
 
 export class Gift {
