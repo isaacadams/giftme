@@ -33,7 +33,7 @@ function RouterContent(props) {
 }
 
 function AuthenticatedRoute({children, component, ...rest}: RouteProps) {
-  let {isAuthenticated, initializing} = useContext(
+  let {isAuthenticated, loading: initializing} = useContext(
     FirebaseAppContext
   ).authState;
   if (initializing) return <Loader />;

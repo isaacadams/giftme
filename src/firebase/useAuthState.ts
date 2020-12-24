@@ -1,21 +1,22 @@
 import React, {useEffect, useState} from 'react';
 
 export type FirebaseAuthState = {
-  initializing: boolean;
+  loading: boolean;
   isAuthenticated: boolean;
   user?: firebase.User | null;
-  error?: string;
+  error?: firebase.auth.Error;
 };
 
 export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
   let [user, setUser] = useState<firebase.User>(null);
-  let [initializing, setInitializing] = useState<boolean>(true);
-  let [error, setError] = useState<string>(null);
+  let [loading, setLoading] = useState<boolean>(true);
+  let [error, setError] = useState<firebase.auth.Error>(null);
+
   useEffect(() => {
     let unsubscribe = auth.onAuthStateChanged((u) => {
       setUser(u);
-      setInitializing(false);
-    });
+      setLoading(false);
+    }, setError);
     return () => {
       unsubscribe();
     };
@@ -23,8 +24,8 @@ export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
 
   return {
     user,
-    initializing,
-    isAuthenticated: !initializing && !!user,
+    loading,
+    isAuthenticated: !loading && !!user,
     error,
   };
 }
