@@ -13,8 +13,8 @@ export class Gift {
 }
 
 export class GiftRepository extends Repository<Gift> {
-  constructor(database: firebase.database.Database, user: firebase.User) {
-    super(database.ref(`gifts/${user.uid}`), [
+  constructor(database: firebase.database.Database, uid: string) {
+    super(database.ref(`gifts/${uid}`), [
       (data) => {
         if (!stringIsValid(data?.name))
           return Promise.reject(

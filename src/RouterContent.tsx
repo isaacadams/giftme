@@ -25,13 +25,7 @@ function RouterContent(props) {
           )
         }
       />
-      {user && (
-        <AuthenticatedRoute
-          path={`/${user.uid}`}
-          exact
-          component={WishlistPage}
-        />
-      )}
+      <AuthenticatedRoute path={`/:uid`} exact component={WishlistPage} />
       <AuthenticatedRoute path="/" exact component={WishlistEditPage} />
       {!user && <Redirect to="/login" />}
     </Switch>

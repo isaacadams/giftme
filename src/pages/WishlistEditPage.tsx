@@ -18,7 +18,7 @@ export function WishlistEditPage(props) {
 
   let {database, authState} = React.useContext(FirebaseAppContext);
   React.useEffect(() => {
-    setRepo(new GiftRepository(database, authState.user));
+    setRepo(new GiftRepository(database, authState.user.uid));
   }, [database, authState]);
 
   return (
