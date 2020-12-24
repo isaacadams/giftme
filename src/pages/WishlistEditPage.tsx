@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useState} from 'react';
-import {Box, Form, TextInput, Text} from 'grommet';
+import {Box, Form, TextInput, Text, Button} from 'grommet';
 import {
   FirebaseAppContext,
   Gift,
@@ -72,7 +72,9 @@ export function EditGiftItem({value, remove, update}: IDataItems<Gift>) {
             />
           </Form>
         </Box>
-        <Trash
+        <Button
+          icon={<Trash />}
+          hoverIndicator
           onClick={(e) => {
             setShow(true);
           }}
