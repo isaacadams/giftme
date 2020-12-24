@@ -25,10 +25,10 @@ function RouterContent(props) {
           )
         }
       />
-      {!user && <Redirect to="/login" />}
       <Route path="/family" component={FamilyPage} />
       <AuthenticatedRoute path="/" exact component={WishlistEditPage} />
       <AuthenticatedRoute path="/:uid" component={WishlistPage} />
+      {!user && <Redirect to="/login" />}
     </Switch>
   );
 }
