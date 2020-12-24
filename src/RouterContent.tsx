@@ -3,7 +3,7 @@ import {Switch, Route, Redirect, RouteProps} from 'react-router-dom';
 import {Loader} from '@shared';
 import {FirebaseAppContext} from '@firebase';
 import {useContext} from 'react';
-import {WishlistPage, SignInPage, WishlistEditPage} from '@pages';
+import {WishlistPage, SignInPage, WishlistEditPage, FamilyPage} from '@pages';
 
 function RouterContent(props) {
   let {user} = useContext(FirebaseAppContext).authState;
@@ -25,9 +25,10 @@ function RouterContent(props) {
           )
         }
       />
-      <AuthenticatedRoute path={`/:uid`} exact component={WishlistPage} />
-      <AuthenticatedRoute path="/" exact component={WishlistEditPage} />
       {!user && <Redirect to="/login" />}
+      <Route path="/family" component={FamilyPage} />
+      <AuthenticatedRoute path="/" exact component={WishlistEditPage} />
+      <AuthenticatedRoute path="/:uid" component={WishlistPage} />
     </Switch>
   );
 }
