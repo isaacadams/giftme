@@ -31,6 +31,9 @@ website is live @ [here](https://giftme-8e917.web.app/)
     - [ ] give header more utility
     - [ ] make login page more appealing
     - [ ] customize theme
+- [ ] various mobile bugs
+    - [ ] inputs squish when keyboard appears during wishlist editing
+    - [ ] was getting an odd error when trying to sign up on mobile phone
 - [ ] require username during sign up process
 - [ ] validation
     - [ ] gift items cannot be empty
