@@ -34,6 +34,7 @@ website is live @ [here](https://giftme-8e917.web.app/)
 - [ ] various mobile bugs
     - [ ] inputs squish when keyboard appears during wishlist editing
     - [ ] was getting an odd error when trying to sign up on mobile phone
+    - [ ] make navbar menu stretch across width and it pushes content down
 - [ ] require username during sign up process
 - [ ] validation
     - [ ] gift items cannot be empty
