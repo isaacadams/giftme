@@ -92,32 +92,28 @@ export class UserGroupRepository {
     }
 
     let rootRef = FirebaseApp.database();
-    let usersRef = rootRef.ref('users');
-    let groupsRef = rootRef.ref('groups');
+    let refs: firebase.database.Reference[] = [];
 
-    usersRef
-      .child(userid)
-      .once('value')
-      .then((s) => s.val())
-      .then((user) => {
-        if (!user || !user['groups'] || user['groups']?.length < 1)
-          return Promise.reject('no groups assigned');
-        let {groups} = user;
-        let groupKeys = Object.keys(groups);
-        return Promise.all(groupKeys.map(getGroup)).then(cb);
-      })
-      .catch(console.error);
+    let usersRef = rootRef.ref(`users/${userid}/groups`);
+    refs.push(usersRef);
+
+    usersRef.on('value', (s) => {
+      let newUserGroup = s.val();
+      if (!newUserGroup) return;
+
+      Promise.all(Object.keys(newUserGroup).map(getGroup)).then(cb);
+      console.log('adding another group');
+    });
 
     return () => {
-      usersRef.off();
-      groupsRef.off();
+      refs.forEach((r) => r.off());
     };
 
-    function getGroup(gKey): Promise<GroupModel> {
-      return groupsRef
-        .child(gKey)
+    function getGroup(gKey: string): Promise<GroupModel> {
+      return rootRef
+        .ref(`groups/${gKey}`)
         .once('value')
-        .then((d) => d.val());
+        .then((s) => s.val());
     }
   }
 }

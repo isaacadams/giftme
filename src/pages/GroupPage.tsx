@@ -28,8 +28,11 @@ export function FamilyPage(props) {
   React.useEffect(() => {
     if (!user) return () => {};
     repo.getIsGroupnameValid().then(setGroupnames);
+    console.log('running effect');
     return repo.getUserGroups(user?.uid, setGroups);
   }, [user]);
+
+  console.log('rerendering group page');
 
   return (
     <Box direction="row" gap="small">
@@ -46,7 +49,7 @@ export function FamilyPage(props) {
             <Box fill pad="small" align="center">
               <Group size="large" />
             </Box>
-            <Text>{g['displayName']}</Text>
+            <Text>{g['displayName'] ?? '@' + g['name']}</Text>
           </Box>
         ))}
     </Box>
