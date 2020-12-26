@@ -18,23 +18,27 @@ export class GroupRepository extends Repository<GroupModel> {
   }
 }
 
+export type GroupNamesModel = {
+  groupnames: string[];
+  isValid: (name: string) => boolean;
+};
+
 export class UserGroupRepository {
   constructor() {}
 
-  getIsGroupnameValid(): Promise<{
-    groupnames: string[];
-    isValid: (name: string) => boolean;
-  }> {
-    return FirebaseApp.database()
-      .ref(`groupnames`)
-      .once('value')
-      .then((s) => {
-        let groupnames = Object.keys(s.val() ?? []);
-        return {
-          groupnames,
-          isValid: (name) => !groupnames.includes(name),
-        };
+  getIsGroupnameValid(cb: (groupnames: GroupNamesModel) => void): () => void {
+    let groupNamesRef = FirebaseApp.database().ref(`groupnames`);
+    groupNamesRef.on('value', (s) => {
+      let groupnames = Object.keys(s.val() ?? {});
+      cb({
+        groupnames,
+        isValid: (name) => !groupnames.includes(name),
       });
+    });
+
+    return () => {
+      groupNamesRef.off();
+    };
   }
 
   getGroupByName(name: string): Promise<GroupModel> {

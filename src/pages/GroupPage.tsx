@@ -5,6 +5,7 @@ import {
   isUrlSafe,
   GroupModel,
   GroupModelForm,
+  GroupNamesModel,
 } from '@firebase';
 import {
   Box,
@@ -23,15 +24,23 @@ const repo = new UserGroupRepository();
 
 export function GroupPage(props) {
   let [groups, setGroups] = React.useState<GroupModel[]>([]);
-  let [groupnames, setGroupnames] = React.useState(null);
+  let [groupnames, setGroupnames] = React.useState<GroupNamesModel>(null);
   let [loading, setLoading] = React.useState(true);
   let {user} = React.useContext(FirebaseAppContext).authState;
 
   React.useEffect(() => {
-    if (!user) return () => {};
-    repo.getIsGroupnameValid().then(setGroupnames);
     console.log('running effect');
-    return repo.getUserGroups(user?.uid, setGroups, () => setLoading(false));
+    if (!user) return () => {};
+
+    let unsubFromGroupnames = repo.getIsGroupnameValid(setGroupnames);
+    let unsubFromGroups = repo.getUserGroups(user?.uid, setGroups, () =>
+      setLoading(false)
+    );
+
+    return () => {
+      unsubFromGroupnames();
+      unsubFromGroups();
+    };
   }, [user]);
 
   if (!user || loading) return <Loader />;
