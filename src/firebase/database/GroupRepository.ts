@@ -57,7 +57,10 @@ export class UserGroupRepository {
       .child(this.user.uid)
       .once('value')
       .then((s) => s.val())
-      .then(({groups}) => {
+      .then((user) => {
+        if (!user || user['groups']?.length < 1)
+          return Promise.reject('no groups assigned');
+        let {groups} = user;
         let groupKeys = Object.keys(groups);
         return Promise.all(groupKeys.map(getGroup)).then(cb);
       })
