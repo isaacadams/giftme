@@ -1,5 +1,10 @@
 import * as React from 'react';
-import {FirebaseAppContext, UserGroupRepository} from '@firebase';
+import {
+  FirebaseAppContext,
+  UserGroupRepository,
+  isUrlSafe,
+  GroupModel,
+} from '@firebase';
 import {
   Box,
   Button,
@@ -27,7 +32,7 @@ export function FamilyPage(props) {
 
   return (
     <Box direction="row" gap="small">
-      <AddFamilyButton onAddGroup={createGroup} />
+      <AddGroupButton onAddGroup={createGroup} />
       {groups &&
         groups.map((g, i) => (
           <Box
@@ -52,9 +57,11 @@ export function FamilyPage(props) {
   }
 }
 
-function AddFamilyButton({onAddGroup}) {
+const defaultFormValue: GroupModel = {name: ''};
+
+function AddGroupButton({onAddGroup}) {
   let [show, setShow] = React.useState(false);
-  let [value, setValue] = React.useState({});
+  let [value, setValue] = React.useState<GroupModel>(defaultFormValue);
   return (
     <>
       <Box
@@ -76,20 +83,52 @@ function AddFamilyButton({onAddGroup}) {
           <Box pad="medium" fill="vertical" justify="center">
             <Form
               value={value}
-              onChange={(nextValue) => setValue(nextValue)}
-              onReset={() => setValue({})}
+              onChange={({name, displayName}) => {
+                setValue({name, displayName});
+              }}
+              onReset={resetForm}
               onSubmit={({value}) => {
                 onAddGroup(value);
+                resetForm();
                 closeModal();
               }}
+              validate="blur"
             >
-              <FormField label="Name">
-                <TextInput name="name" value={value['name'] ?? ''} />
+              <FormField
+                label="Name"
+                required
+                validate={[
+                  //{ regexp: /^[a-z]/i },
+                  (name) => {
+                    if (name && name.length > 16)
+                      return 'must be <=16 characters';
+                    return undefined;
+                  },
+                  (name) => {
+                    if (isUrlSafe(name)) return undefined;
+                    return 'invalid name';
+                  },
+                  /* name => {
+                if (name === 'good')
+                  return {
+                    message: (
+                      <Box align="end">
+                        <StatusGood />
+                      </Box>
+                    ),
+                    status: 'info',
+                  };
+                return undefined;
+              }, */
+                ]}
+                name="name"
+              >
+                <TextInput id="name-id" name="name" value={value.name} />
               </FormField>
-              <FormField label="Display Name (optional)">
+              <FormField label="Display Name (optional)" name="displayName">
                 <TextInput
                   name="displayName"
-                  value={value['displayName'] ?? ''}
+                  value={value?.displayName ?? ''}
                 />
               </FormField>
               <Box direction="row" justify="between">
@@ -108,5 +147,9 @@ function AddFamilyButton({onAddGroup}) {
 
   function closeModal() {
     setShow(false);
+  }
+
+  function resetForm() {
+    setValue(defaultFormValue);
   }
 }
