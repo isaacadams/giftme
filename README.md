@@ -27,6 +27,8 @@ website is live @ [here](https://giftme-8e917.web.app/)
     - [x] sign in / sign out
 - [x] mobile friendly
 - [ ] cleanup
+    - [ ] remove border from wishlist and turn them into lists
+    - [ ] add displayName, username, avatar to profile view
     - [ ] get rid of footer
     - [ ] give header more utility
     - [ ] make login page more appealing
@@ -52,3 +54,7 @@ website is live @ [here](https://giftme-8e917.web.app/)
     - add an image
     - add description / instructions
 - spruce up sign in page with logo
+
+#### 📚 For Further Reading
+
+[help with usernames](https://fireship.io/lessons/custom-usernames-with-firebase-authentication-and-angular/)
