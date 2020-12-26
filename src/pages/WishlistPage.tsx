@@ -2,9 +2,10 @@ import * as React from 'react';
 import {useState} from 'react';
 import '@isaacadams/extensions';
 import {Box, Text} from 'grommet';
-import {FirebaseAppContext, GiftRepository, useDataApi} from '@firebase';
+import {GiftRepository, useDataApi} from '@firebase';
 import {Gift} from 'grommet-icons';
 import {useParams} from 'react-router-dom';
+import { Loader } from '@shared';
 
 interface IUrlParams {
   uid: string;
@@ -12,17 +13,12 @@ interface IUrlParams {
 
 export function WishlistPage(props) {
   let {uid} = useParams<IUrlParams>();
-  let {database} = React.useContext(FirebaseAppContext);
-
-  return <Wishlist uid={uid} database={database} />;
+  return <Wishlist uid={uid} />;
 }
 
-export function Wishlist({uid, database}) {
-  let [repo, setRepo] = useState<GiftRepository | null>(null);
-  let api = useDataApi(repo);
-  React.useEffect(() => {
-    setRepo(new GiftRepository(database, uid));
-  }, [database]);
+export function Wishlist({uid}) {
+  if(!uid) return <Loader />;
+  let api = useDataApi(new GiftRepository(uid));
 
   return (
     <Box>

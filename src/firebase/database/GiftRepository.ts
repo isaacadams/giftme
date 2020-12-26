@@ -1,5 +1,7 @@
 import {Repository} from './Repository';
 import '@isaacadams/extensions';
+import FirebaseApp from '../FirebaseApp';
+const rootRef = FirebaseApp.database();
 
 export class Gift {
   name: string;
@@ -13,8 +15,8 @@ export class Gift {
 }
 
 export class GiftRepository extends Repository<Gift> {
-  constructor(database: firebase.database.Database, uid: string) {
-    super(database.ref(`gifts/${uid}`), [
+  constructor(uid: string) {
+    super(rootRef.ref(`gifts/${uid}`), [
       (data) => {
         if (!stringIsValid(data?.name))
           return Promise.reject(
