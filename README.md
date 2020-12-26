@@ -26,6 +26,8 @@ website is live @ [here](https://giftme-8e917.web.app/)
     - [x] edit wishlist view
     - [x] sign in / sign out
 - [x] mobile friendly
+- [ ] group feature
+    - [ ] cannot add duplicate groupnames
 - [ ] cleanup
     - [ ] remove border from wishlist and turn them into lists
     - [ ] add displayName, username, avatar to profile view
