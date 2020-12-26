@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { UserRepository } from './database/UserRepository';
+import {UserRepository} from './database/UserRepository';
 
 export type FirebaseAuthState = {
   loading: boolean;
