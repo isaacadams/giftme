@@ -1,9 +1,13 @@
 import {Repository} from './Repository';
 import FirebaseApp from '../FirebaseApp';
 
-export class GroupModel {
+export class GroupModelForm {
   name: string;
   displayName?: string;
+}
+
+export class GroupModel extends GroupModelForm {
+  owner: string;
   members?: string[];
   inviteLink?: string;
 }
@@ -25,7 +29,7 @@ export class UserGroupRepository {
       .ref(`groupnames`)
       .once('value')
       .then((s) => {
-        let groupnames = Object.keys(s.val());
+        let groupnames = Object.keys(s.val() ?? []);
         return {
           groupnames,
           isValid: (name) => !groupnames.includes(name),
@@ -60,9 +64,12 @@ export class UserGroupRepository {
     name = name.trim().toLowerCase();
     displayName = displayName?.trim();
 
+    let data: GroupModel = {name, owner: userid};
+    if (displayName) data.displayName = displayName;
+
     FirebaseApp.database()
       .ref(`groups`)
-      .push({name, displayName})
+      .push(data)
       .then(({key, root}) => {
         let routes = [userid, ...members].reduce((p, uid) => {
           p[`groups/${key}/members/${uid}`] = true;
@@ -93,7 +100,7 @@ export class UserGroupRepository {
       .once('value')
       .then((s) => s.val())
       .then((user) => {
-        if (!user['groups'] || user['groups']?.length < 1)
+        if (!user || !user['groups'] || user['groups']?.length < 1)
           return Promise.reject('no groups assigned');
         let {groups} = user;
         let groupKeys = Object.keys(groups);

@@ -4,6 +4,7 @@ import {
   UserGroupRepository,
   isUrlSafe,
   GroupModel,
+  GroupModelForm,
 } from '@firebase';
 import {
   Box,
@@ -27,7 +28,7 @@ export function FamilyPage(props) {
   React.useEffect(() => {
     if (!user) return () => {};
     repo.getIsGroupnameValid().then(setGroupnames);
-    return repo.getUserGroups(user.uid, setGroups);
+    return repo.getUserGroups(user?.uid, setGroups);
   }, [user]);
 
   return (
@@ -53,15 +54,15 @@ export function FamilyPage(props) {
 
   function createGroup({name, displayName}) {
     if (!repo) return;
-    repo.addGroup(user.uid, name, displayName);
+    repo.addGroup(user?.uid, name, displayName);
   }
 }
 
-const defaultFormValue: GroupModel = {name: ''};
+const defaultFormValue: GroupModelForm = {name: ''};
 
 function AddGroupButton({onAddGroup, groupnames}) {
   let [show, setShow] = React.useState(false);
-  let [value, setValue] = React.useState<GroupModel>(defaultFormValue);
+  let [value, setValue] = React.useState<GroupModelForm>(defaultFormValue);
 
   return (
     <>
