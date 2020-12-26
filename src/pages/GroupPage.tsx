@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-  GroupModel,
-  GroupRepository,
-  FirebaseAppContext,
-  UserRepository,
-  UserGroupRepository,
-} from '@firebase';
+import {FirebaseAppContext, UserGroupRepository} from '@firebase';
 import {
   Box,
   Button,
@@ -23,16 +17,13 @@ export function FamilyPage(props) {
   let [repo, setRepo] = React.useState<UserGroupRepository | null>(null);
   let {user} = React.useContext(FirebaseAppContext).authState;
 
-
   React.useEffect(() => {
-    if(!user) return () => {};
+    if (!user) return () => {};
 
     let r = new UserGroupRepository(user);
     setRepo(r);
     return r.getUserGroups(setGroups);
   }, [user]);
-
-  console.log('rendering main');
 
   return (
     <Box direction="row" gap="small">

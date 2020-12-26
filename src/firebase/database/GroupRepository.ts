@@ -20,7 +20,7 @@ export class UserGroupRepository {
   userRepo: UserRepository;
   user: firebase.User;
   constructor(user: firebase.User) {
-    if(!user) {
+    if (!user) {
       console.error('failed to create repo');
       return;
     }
@@ -53,9 +53,10 @@ export class UserGroupRepository {
     let usersRef = rootRef.ref('users');
     let groupsRef = rootRef.ref('groups');
 
-    usersRef.child(this.user.uid)
+    usersRef
+      .child(this.user.uid)
       .once('value')
-      .then(s => s.val())
+      .then((s) => s.val())
       .then(({groups}) => {
         let groupKeys = Object.keys(groups);
         return Promise.all(groupKeys.map(getGroup)).then(cb);
