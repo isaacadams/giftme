@@ -2,10 +2,10 @@ import * as React from 'react';
 import {useState} from 'react';
 import '@isaacadams/extensions';
 import {Box, Text} from 'grommet';
-import {GiftRepository, useDataApi} from '@firebase';
-import {Gift} from 'grommet-icons';
+import {GiftModel, GiftRepository, useDataApi} from '@firebase';
 import {useParams} from 'react-router-dom';
-import { Loader } from '@shared';
+import {Loader} from '@shared';
+import {Gift} from 'grommet-icons';
 
 interface IUrlParams {
   uid: string;
@@ -17,14 +17,23 @@ export function WishlistPage(props) {
 }
 
 export function Wishlist({uid}) {
-  if(!uid) return <Loader />;
+  if (!uid) return <Loader />;
   let api = useDataApi(new GiftRepository(uid));
 
+  return <WishlistView name="My" gifts={api?.items.map((i) => i.value)} />;
+}
+
+interface IProps {
+  name: string;
+  gifts: GiftModel[];
+}
+
+export function WishlistView({name, gifts}: IProps) {
   return (
     <Box>
       <Box direction="row" gap="small">
         <Gift />
-        <Text>My Wishlist</Text>
+        <Text>{name} Wishlist</Text>
       </Box>
       <Box
         gap="medium"
@@ -32,8 +41,7 @@ export function Wishlist({uid}) {
         pad="medium"
         border={{color: 'dark-2', size: 'xsmall'}}
       >
-        {api &&
-          api.items.map((g, i) => <GiftItemView key={i} name={g.value.name} />)}
+        {gifts && gifts.map((g, i) => <GiftItemView key={i} name={g.name} />)}
       </Box>
     </Box>
   );

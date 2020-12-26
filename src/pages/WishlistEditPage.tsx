@@ -3,7 +3,7 @@ import {useState} from 'react';
 import {Box, Form, TextInput, Text, Button} from 'grommet';
 import {
   FirebaseAppContext,
-  Gift,
+  GiftModel,
   GiftRepository,
   IDataItems,
   useDataApi,
@@ -16,10 +16,10 @@ export function WishlistEditPage(props) {
   let [repo, setRepo] = useState<GiftRepository | null>(null);
   let api = useDataApi(repo);
 
-  let {database, authState} = React.useContext(FirebaseAppContext);
+  let {authState} = React.useContext(FirebaseAppContext);
   React.useEffect(() => {
-    setRepo(new GiftRepository(database, authState.user.uid));
-  }, [database, authState]);
+    setRepo(new GiftRepository(authState.user.uid));
+  }, [authState]);
 
   return (
     <Box
@@ -48,8 +48,8 @@ export function WishlistEditPage(props) {
   }
 }
 
-export function EditGiftItem({value, remove, update}: IDataItems<Gift>) {
-  let [gift, setGift] = useState<Gift>(value);
+export function EditGiftItem({value, remove, update}: IDataItems<GiftModel>) {
+  let [gift, setGift] = useState<GiftModel>(value);
 
   let {setShow, Modal} = useModal({
     prompt: `Are you sure about deleting '${gift.name}'?`,
