@@ -43,17 +43,20 @@ export class UserGroupRepository {
     displayName = displayName.trim();
 
     let rootRef = FirebaseApp.database();
-    let {key} = rootRef.ref(`groups`).push({name, displayName});
+    rootRef.ref(`groups`)
+      .push({name, displayName})
+      .then(({key}) => {
 
-    let routes = [this.user.uid, ...members].reduce((p, uid) => {
-      p[`groups/${key}/members/${uid}`] = true;
-      p[`users/${uid}/groups/${key}`] = true;
-      return p;
-    }, {});
-
-    routes[`groupnames/${name}`] = key;
-
-    rootRef.ref().update(routes);
+        let routes = [this.user.uid, ...members].reduce((p, uid) => {
+          p[`groups/${key}/members/${uid}`] = true;
+          p[`users/${uid}/groups/${key}`] = true;
+          return p;
+        }, {});
+    
+        routes[`groupnames/${name}`] = key;
+    
+        return rootRef.ref().update(routes);
+      }, console.error);
   }
 
   getUserGroups(cb: (groups: GroupModel[]) => void): () => void {
