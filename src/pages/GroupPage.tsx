@@ -19,37 +19,45 @@ import {
 import {Add, Group} from 'grommet-icons';
 
 export function FamilyPage(props) {
-  let [userRepo, setUserRepo] = React.useState<UserRepository | null>(null);
-  let [
-    userGroupRepo,
-    setUserGroupRepo,
-  ] = React.useState<UserGroupRepository | null>(null);
-  let [familyRepo, setFamilyRepo] = React.useState<GroupRepository | null>(
-    null
-  );
+  let [groups, setGroups] = React.useState([]);
+  let [repo, setRepo] = React.useState<UserGroupRepository | null>(null);
+  let {user} = React.useContext(FirebaseAppContext).authState;
 
-  let {database, authState} = React.useContext(FirebaseAppContext);
-  let {user} = authState;
 
   React.useEffect(() => {
-    setUserRepo(new UserRepository(database));
-    setFamilyRepo(new GroupRepository(database));
-    setUserGroupRepo(new UserGroupRepository());
-  }, [database, user]);
+    if(!user) return () => {};
 
-  //let u = usersRepo.getOne(user.uid);
+    let r = new UserGroupRepository(user);
+    setRepo(r);
+    return r.getUserGroups(setGroups);
+  }, [user]);
+
+  console.log('rendering main');
 
   return (
-    <Box direction="row">
+    <Box direction="row" gap="small">
       <AddFamilyButton onAddGroup={createGroup} />
+      {groups &&
+        groups.map((g, i) => (
+          <Box
+            key={i}
+            pad="small"
+            align="center"
+            hoverIndicator
+            onClick={() => {}}
+          >
+            <Box fill pad="small" align="center">
+              <Group size="large" />
+            </Box>
+            <Text>{g['displayName']}</Text>
+          </Box>
+        ))}
     </Box>
   );
 
   function createGroup({name, displayName}) {
-    if (!userGroupRepo) return;
-    userGroupRepo.addGroup(name, displayName);
-    //if(!familyRepo) return;
-    //familyRepo.create({name, members: [user.uid]});
+    if (!repo) return;
+    repo.addGroup(name, displayName);
   }
 }
 
@@ -60,13 +68,12 @@ function AddFamilyButton({onAddGroup}) {
     <>
       <Box
         pad="small"
-        border={{color: 'dark-1', size: 'xsmall'}}
         align="center"
         hoverIndicator
         onClick={() => setShow(true)}
       >
         <Stack anchor="top-right">
-          <Box fill pad="medium">
+          <Box fill pad="small">
             <Group size="large" />
           </Box>
           <Add color="brand" />
@@ -89,7 +96,10 @@ function AddFamilyButton({onAddGroup}) {
                 <TextInput name="name" value={value['name'] ?? ''} />
               </FormField>
               <FormField label="Display Name (optional)">
-                <TextInput name="displayName" value={value['displayName'] ?? ''} />
+                <TextInput
+                  name="displayName"
+                  value={value['displayName'] ?? ''}
+                />
               </FormField>
               <Box direction="row" justify="between">
                 <Button label="Close" onClick={closeModal} />

@@ -1,6 +1,6 @@
 import {Repository} from './Repository';
 import FirebaseApp from '../FirebaseApp';
-import {UserRepository} from './UserRepository';
+import {User, UserRepository} from './UserRepository';
 
 export class GroupModel {
   name: string;
@@ -19,10 +19,14 @@ export class UserGroupRepository {
   groupRepo: GroupRepository;
   userRepo: UserRepository;
   user: firebase.User;
-  constructor() {
+  constructor(user: firebase.User) {
+    if(!user) {
+      console.error('failed to create repo');
+      return;
+    }
+
     let db = FirebaseApp.database();
-    this.user = FirebaseApp.auth().currentUser;
-    FirebaseApp.auth().onAuthStateChanged((u) => (this.user = u));
+    this.user = user;
     this.groupRepo = new GroupRepository(db);
     this.userRepo = new UserRepository(db);
   }
@@ -37,5 +41,37 @@ export class UserGroupRepository {
     }, {});
 
     this.groupRepo.table.root.update(routes);
+  }
+
+  getUserGroups(cb: (groups: GroupModel[]) => void): () => void {
+    if (!this.user) {
+      console.error('no user');
+      return;
+    }
+
+    let rootRef = FirebaseApp.database();
+    let usersRef = rootRef.ref('users');
+    let groupsRef = rootRef.ref('groups');
+
+    usersRef.child(this.user.uid)
+      .once('value')
+      .then(s => s.val())
+      .then(({groups}) => {
+        let groupKeys = Object.keys(groups);
+        return Promise.all(groupKeys.map(getGroup)).then(cb);
+      })
+      .catch(console.error);
+
+    return () => {
+      usersRef.off();
+      groupsRef.off();
+    };
+
+    function getGroup(gKey): Promise<GroupModel> {
+      return groupsRef
+        .child(gKey)
+        .once('value')
+        .then((d) => d.val());
+    }
   }
 }
