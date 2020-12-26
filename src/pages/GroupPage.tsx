@@ -20,7 +20,7 @@ import {Add, Group} from 'grommet-icons';
 
 const repo = new UserGroupRepository();
 
-export function FamilyPage(props) {
+export function GroupPage(props) {
   let [groups, setGroups] = React.useState([]);
   let [groupnames, setGroupnames] = React.useState(null);
   let {user} = React.useContext(FirebaseAppContext).authState;
