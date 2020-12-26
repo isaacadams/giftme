@@ -25,7 +25,7 @@ function RouterContent(props) {
           )
         }
       />
-      <Route path="/family" component={GroupPage} />
+      <Route path="/groups" component={GroupPage} />
       <AuthenticatedRoute path="/" exact component={WishlistEditPage} />
       <AuthenticatedRoute path="/:uid" component={WishlistPage} />
       {!user && <Redirect to="/login" />}
