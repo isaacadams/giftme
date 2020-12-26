@@ -24,11 +24,20 @@ export class UserGroupRepository {
     this.user = user;
   }
 
-  isGroupnameValid(name: string): Promise<boolean> {
+  getIsGroupnameValid(): Promise<{
+    groupnames: string[];
+    isValid: (name: string) => boolean;
+  }> {
     return FirebaseApp.database()
-      .ref(`groupnames/${name}`)
+      .ref(`groupnames`)
       .once('value')
-      .then((s) => !s.val());
+      .then((s) => {
+        let groupnames = Object.keys(s.val());
+        return {
+          groupnames,
+          isValid: (name) => !groupnames.includes(name),
+        };
+      });
   }
 
   getGroupByName(name: string): Promise<GroupModel> {
@@ -45,25 +54,28 @@ export class UserGroupRepository {
       });
   }
 
-  async addGroup(name: string, displayName: string, members: string[] = []) {
+  addGroup(name: string, displayName: string, members: string[] = []): void {
     name = name.trim().toLowerCase();
-    displayName = displayName.trim();
+    displayName = displayName?.trim();
+    let userid = this.user?.uid;
+    if (!userid) {
+      console.error('no userid');
+      return;
+    }
 
-    let rootRef = FirebaseApp.database();
-    rootRef
+    FirebaseApp.database()
       .ref(`groups`)
       .push({name, displayName})
-      .then(({key}) => {
-        let routes = [this.user.uid, ...members].reduce((p, uid) => {
+      .then(({key, root}) => {
+        let routes = [userid, ...members].reduce((p, uid) => {
           p[`groups/${key}/members/${uid}`] = true;
           p[`users/${uid}/groups/${key}`] = true;
           return p;
         }, {});
-
         routes[`groupnames/${name}`] = key;
-
-        return rootRef.ref().update(routes);
-      }, console.error);
+        return root.update(routes);
+      })
+      .catch(console.error);
   }
 
   getUserGroups(cb: (groups: GroupModel[]) => void): () => void {
@@ -81,7 +93,7 @@ export class UserGroupRepository {
       .once('value')
       .then((s) => s.val())
       .then((user) => {
-        if (!user || user['groups']?.length < 1)
+        if (!user['groups'] || user['groups']?.length < 1)
           return Promise.reject('no groups assigned');
         let {groups} = user;
         let groupKeys = Object.keys(groups);
