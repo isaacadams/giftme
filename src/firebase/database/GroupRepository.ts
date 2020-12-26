@@ -1,10 +1,9 @@
 import {Repository} from './Repository';
 import FirebaseApp from '../FirebaseApp';
-import {User, UserRepository} from './UserRepository';
 
 export class GroupModel {
   name: string;
-  displayName: string;
+  displayName?: string;
   members?: string[];
   inviteLink?: string;
 }
@@ -16,23 +15,35 @@ export class GroupRepository extends Repository<GroupModel> {
 }
 
 export class UserGroupRepository {
-  groupRepo: GroupRepository;
-  userRepo: UserRepository;
   user: firebase.User;
   constructor(user: firebase.User) {
     if (!user) {
       console.error('failed to create repo');
       return;
     }
-
-    let db = FirebaseApp.database();
     this.user = user;
-    this.groupRepo = new GroupRepository(db);
-    this.userRepo = new UserRepository(db);
+  }
+
+  getGroupByName(name: string): Promise<GroupModel> {
+    let rootRef = FirebaseApp.database();
+    return rootRef
+      .ref(`groupnames/${name}`)
+      .once('value')
+      .then((s) => s.val())
+      .then((k) => {
+        return rootRef
+          .ref(`groups/${k}`)
+          .once('value')
+          .then((s) => s.val());
+      });
   }
 
   async addGroup(name: string, displayName: string, members: string[] = []) {
-    let {key} = await this.groupRepo.create({name, displayName});
+    name = name.trim().toLowerCase();
+    displayName = displayName.trim();
+
+    let rootRef = FirebaseApp.database();
+    let {key} = rootRef.ref(`groups`).push({name, displayName});
 
     let routes = [this.user.uid, ...members].reduce((p, uid) => {
       p[`groups/${key}/members/${uid}`] = true;
@@ -40,7 +51,9 @@ export class UserGroupRepository {
       return p;
     }, {});
 
-    this.groupRepo.table.root.update(routes);
+    routes[`groupnames/${name}`] = key;
+
+    rootRef.ref().update(routes);
   }
 
   getUserGroups(cb: (groups: GroupModel[]) => void): () => void {
