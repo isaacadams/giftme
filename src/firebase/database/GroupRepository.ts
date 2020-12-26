@@ -24,6 +24,13 @@ export class UserGroupRepository {
     this.user = user;
   }
 
+  isGroupnameValid(name: string): Promise<boolean> {
+    return FirebaseApp.database()
+      .ref(`groupnames/${name}`)
+      .once('value')
+      .then((s) => !s.val());
+  }
+
   getGroupByName(name: string): Promise<GroupModel> {
     let rootRef = FirebaseApp.database();
     return rootRef
@@ -43,18 +50,18 @@ export class UserGroupRepository {
     displayName = displayName.trim();
 
     let rootRef = FirebaseApp.database();
-    rootRef.ref(`groups`)
+    rootRef
+      .ref(`groups`)
       .push({name, displayName})
       .then(({key}) => {
-
         let routes = [this.user.uid, ...members].reduce((p, uid) => {
           p[`groups/${key}/members/${uid}`] = true;
           p[`users/${uid}/groups/${key}`] = true;
           return p;
         }, {});
-    
+
         routes[`groupnames/${name}`] = key;
-    
+
         return rootRef.ref().update(routes);
       }, console.error);
   }

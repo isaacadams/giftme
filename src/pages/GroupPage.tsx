@@ -32,7 +32,10 @@ export function FamilyPage(props) {
 
   return (
     <Box direction="row" gap="small">
-      <AddGroupButton onAddGroup={createGroup} />
+      <AddGroupButton
+        onAddGroup={createGroup}
+        isGroupnameValid={repo?.isGroupnameValid}
+      />
       {groups &&
         groups.map((g, i) => (
           <Box
@@ -59,9 +62,16 @@ export function FamilyPage(props) {
 
 const defaultFormValue: GroupModel = {name: ''};
 
-function AddGroupButton({onAddGroup}) {
+function AddGroupButton({onAddGroup, isGroupnameValid}) {
   let [show, setShow] = React.useState(false);
+  let [isValidGroupname, setIsValidGroupname] = React.useState(true);
   let [value, setValue] = React.useState<GroupModel>(defaultFormValue);
+
+  React.useEffect(() => {
+    if (isGroupnameValid)
+      isGroupnameValid(value.name).then(setIsValidGroupname);
+  }, [value.name]);
+
   return (
     <>
       <Box
@@ -100,13 +110,20 @@ function AddGroupButton({onAddGroup}) {
                 validate={[
                   //{ regexp: /^[a-z]/i },
                   (name) => {
-                    if (name && name.length > 16)
-                      return 'must be <=16 characters';
+                    if (!name) return undefined;
+
+                    if (name.length > 16) return 'must be <=16 characters';
+                    if (name.length < 4) return 'must be >=4 characters';
+
                     return undefined;
                   },
                   (name) => {
                     if (isUrlSafe(name)) return undefined;
                     return 'invalid name';
+                  },
+                  (name) => {
+                    if (isValidGroupname) return undefined;
+                    return `@${name} is taken`;
                   },
                   /* name => {
                 if (name === 'good')
@@ -123,7 +140,12 @@ function AddGroupButton({onAddGroup}) {
                 ]}
                 name="name"
               >
-                <TextInput id="name-id" name="name" value={value.name} />
+                <TextInput
+                  icon={<Text>@</Text>}
+                  id="name-id"
+                  name="name"
+                  value={value.name}
+                />
               </FormField>
               <FormField label="Display Name (optional)" name="displayName">
                 <TextInput
