@@ -17,19 +17,17 @@ import {
 } from 'grommet';
 import {Add, Group} from 'grommet-icons';
 
+const repo = new UserGroupRepository();
+
 export function FamilyPage(props) {
   let [groups, setGroups] = React.useState([]);
   let [groupnames, setGroupnames] = React.useState(null);
-  let [repo, setRepo] = React.useState<UserGroupRepository | null>(null);
   let {user} = React.useContext(FirebaseAppContext).authState;
 
   React.useEffect(() => {
     if (!user) return () => {};
-
-    let r = new UserGroupRepository(user);
-    r.getIsGroupnameValid().then(setGroupnames);
-    setRepo(r);
-    return r.getUserGroups(setGroups);
+    repo.getIsGroupnameValid().then(setGroupnames);
+    return repo.getUserGroups(user.uid, setGroups);
   }, [user]);
 
   return (
@@ -55,7 +53,7 @@ export function FamilyPage(props) {
 
   function createGroup({name, displayName}) {
     if (!repo) return;
-    repo.addGroup(name, displayName);
+    repo.addGroup(user.uid, name, displayName);
   }
 }
 

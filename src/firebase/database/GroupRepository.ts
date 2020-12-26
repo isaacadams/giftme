@@ -15,14 +15,7 @@ export class GroupRepository extends Repository<GroupModel> {
 }
 
 export class UserGroupRepository {
-  user: firebase.User;
-  constructor(user: firebase.User) {
-    if (!user) {
-      console.error('failed to create repo');
-      return;
-    }
-    this.user = user;
-  }
+  constructor() {}
 
   getIsGroupnameValid(): Promise<{
     groupnames: string[];
@@ -54,14 +47,18 @@ export class UserGroupRepository {
       });
   }
 
-  addGroup(name: string, displayName: string, members: string[] = []): void {
-    name = name.trim().toLowerCase();
-    displayName = displayName?.trim();
-    let userid = this.user?.uid;
+  addGroup(
+    userid: string,
+    name: string,
+    displayName: string,
+    members: string[] = []
+  ): void {
     if (!userid) {
       console.error('no userid');
       return;
     }
+    name = name.trim().toLowerCase();
+    displayName = displayName?.trim();
 
     FirebaseApp.database()
       .ref(`groups`)
@@ -78,9 +75,12 @@ export class UserGroupRepository {
       .catch(console.error);
   }
 
-  getUserGroups(cb: (groups: GroupModel[]) => void): () => void {
-    if (!this.user) {
-      console.error('no user');
+  getUserGroups(
+    userid: string,
+    cb: (groups: GroupModel[]) => void
+  ): () => void {
+    if (!userid) {
+      console.error('no userid');
       return;
     }
 
@@ -89,7 +89,7 @@ export class UserGroupRepository {
     let groupsRef = rootRef.ref('groups');
 
     usersRef
-      .child(this.user.uid)
+      .child(userid)
       .once('value')
       .then((s) => s.val())
       .then((user) => {
