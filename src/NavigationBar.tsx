@@ -35,7 +35,7 @@ function NavigationBar(props) {
           },
           {
             label: (
-              <Link to='/groups'>
+              <Link to="/groups">
                 <Anchor
                   icon={<Group />}
                   label="Groups"
