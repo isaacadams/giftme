@@ -84,7 +84,8 @@ export class UserGroupRepository {
 
   getUserGroups(
     userid: string,
-    cb: (groups: GroupModel[]) => void
+    cb: (groups: GroupModel[]) => void,
+    complete?: () => void
   ): () => void {
     if (!userid) {
       console.error('no userid');
@@ -98,10 +99,12 @@ export class UserGroupRepository {
     refs.push(usersRef);
 
     usersRef.on('value', (s) => {
-      let newUserGroup = s.val();
-      if (!newUserGroup) return;
+      let userGroups: string[] = Object.keys(s.val() ?? {});
 
-      Promise.all(Object.keys(newUserGroup).map(getGroup)).then(cb);
+      Promise.all(userGroups.map(getGroup))
+        .then(cb)
+        .finally(complete)
+        .catch(console.error);
       console.log('adding another group');
     });
 

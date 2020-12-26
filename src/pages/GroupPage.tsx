@@ -17,20 +17,24 @@ import {
   TextInput,
 } from 'grommet';
 import {Add, Group} from 'grommet-icons';
+import {Loader} from '@shared';
 
 const repo = new UserGroupRepository();
 
 export function GroupPage(props) {
-  let [groups, setGroups] = React.useState([]);
+  let [groups, setGroups] = React.useState<GroupModel[]>([]);
   let [groupnames, setGroupnames] = React.useState(null);
+  let [loading, setLoading] = React.useState(true);
   let {user} = React.useContext(FirebaseAppContext).authState;
 
   React.useEffect(() => {
     if (!user) return () => {};
     repo.getIsGroupnameValid().then(setGroupnames);
     console.log('running effect');
-    return repo.getUserGroups(user?.uid, setGroups);
+    return repo.getUserGroups(user?.uid, setGroups, () => setLoading(false));
   }, [user]);
+
+  if (!user || loading) return <Loader />;
 
   console.log('rerendering group page');
 
@@ -49,7 +53,7 @@ export function GroupPage(props) {
             <Box fill pad="small" align="center">
               <Group size="large" />
             </Box>
-            <Text>{g['displayName'] ?? '@' + g['name']}</Text>
+            <Text>{g.displayName ?? '@' + g.name}</Text>
           </Box>
         ))}
     </Box>
