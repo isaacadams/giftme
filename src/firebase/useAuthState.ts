@@ -1,21 +1,30 @@
 import React, {useEffect, useState} from 'react';
+import {Redirect} from 'react-router-dom';
+import {UserRepository} from './database/UserRepository';
 
 export type FirebaseAuthState = {
-  initializing: boolean;
+  loading: boolean;
   isAuthenticated: boolean;
   user?: firebase.User | null;
-  error?: string;
+  error?: firebase.auth.Error;
 };
 
 export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
   let [user, setUser] = useState<firebase.User>(null);
-  let [initializing, setInitializing] = useState<boolean>(true);
-  let [error, setError] = useState<string>(null);
+  let [loading, setLoading] = useState<boolean>(true);
+  let [error, setError] = useState<firebase.auth.Error>(null);
+
   useEffect(() => {
     let unsubscribe = auth.onAuthStateChanged((u) => {
+      setLoading(false);
+      if (!u) {
+        setUser(null);
+        return;
+      }
+
       setUser(u);
-      setInitializing(false);
-    });
+      new UserRepository(u).ensureUserExists();
+    }, setError);
     return () => {
       unsubscribe();
     };
@@ -23,8 +32,8 @@ export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
 
   return {
     user,
-    initializing,
-    isAuthenticated: !initializing && !!user,
+    loading,
+    isAuthenticated: !loading && !!user,
     error,
   };
 }

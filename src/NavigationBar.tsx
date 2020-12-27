@@ -1,6 +1,6 @@
 import {Anchor, Avatar, Box, Header, Menu, Text} from 'grommet';
 import React, {useContext} from 'react';
-import {Edit, Home, Logout, User} from 'grommet-icons';
+import {Edit, Home, Logout, User, Group} from 'grommet-icons';
 import {FirebaseAppContext} from '@firebase';
 import {Link} from 'react-router-dom';
 
@@ -27,6 +27,18 @@ function NavigationBar(props) {
                 <Anchor
                   icon={<Home />}
                   label={user.displayName}
+                  color="dark-2"
+                  as="div"
+                />
+              </Link>
+            ),
+          },
+          {
+            label: (
+              <Link to="/groups">
+                <Anchor
+                  icon={<Group />}
+                  label="Groups"
                   color="dark-2"
                   as="div"
                 />

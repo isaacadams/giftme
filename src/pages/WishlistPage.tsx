@@ -1,10 +1,11 @@
 import * as React from 'react';
 import {useState} from 'react';
 import '@isaacadams/extensions';
-import {Box, Text} from 'grommet';
-import {FirebaseAppContext, GiftRepository, useDataApi} from '@firebase';
-import {Gift} from 'grommet-icons';
+import {Box, List, Text} from 'grommet';
+import {GiftModel, useData} from '@firebase';
 import {useParams} from 'react-router-dom';
+import {Loader} from '@shared';
+import {Gift} from 'grommet-icons';
 
 interface IUrlParams {
   uid: string;
@@ -12,36 +13,37 @@ interface IUrlParams {
 
 export function WishlistPage(props) {
   let {uid} = useParams<IUrlParams>();
-  let [repo, setRepo] = useState<GiftRepository | null>(null);
-  let api = useDataApi(repo);
+  return <Wishlist uid={uid} />;
+}
 
-  let {database} = React.useContext(FirebaseAppContext);
-  React.useEffect(() => {
-    setRepo(new GiftRepository(database, uid));
-  }, [database]);
+export function Wishlist({uid}) {
+  if (!uid) return <Loader />;
+  let api = useData<GiftModel>(`gifts/${uid}`);
+  return <WishlistView name={'My'} gifts={api?.items.map((i) => i.value)} />;
+}
 
+interface IProps {
+  name: string;
+  gifts: GiftModel[];
+}
+
+export function WishlistView({name, gifts}: IProps) {
   return (
-    <Box>
-      <Box direction="row" gap="small">
-        <Gift />
-        <Text>My Wishlist</Text>
+    <Box gap="small">
+      <Box direction="row" justify="center">
+        <Text>{name} Wishlist</Text>
       </Box>
-      <Box
-        gap="medium"
-        margin={{top: 'small'}}
-        pad="medium"
-        border={{color: 'dark-2', size: 'xsmall'}}
-      >
-        {api &&
-          api.items.map((g, i) => <GiftItemView key={i} name={g.value.name} />)}
-      </Box>
+      <List data={gifts} pad="small" margin={{top: 'small'}}>
+        {(datum) => <GiftItemView name={datum.name} />}
+      </List>
     </Box>
   );
 }
 
 export function GiftItemView({name}) {
   return (
-    <Box direction="row" fill="horizontal" justify="between">
+    <Box direction="row" fill="horizontal" justify="start" gap="small">
+      <Gift />
       <Text>{name}</Text>
     </Box>
   );
