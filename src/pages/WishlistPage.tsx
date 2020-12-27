@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useState} from 'react';
 import '@isaacadams/extensions';
-import {Box, Text} from 'grommet';
+import {Box, List, Text} from 'grommet';
 import {GiftModel, useData} from '@firebase';
 import {useParams} from 'react-router-dom';
 import {Loader} from '@shared';
@@ -29,26 +29,21 @@ interface IProps {
 
 export function WishlistView({name, gifts}: IProps) {
   return (
-    <Box>
-      <Box direction="row" gap="small">
-        <Gift />
+    <Box gap="small">
+      <Box direction="row" justify="center">
         <Text>{name} Wishlist</Text>
       </Box>
-      <Box
-        gap="medium"
-        margin={{top: 'small'}}
-        pad="medium"
-        border={{color: 'dark-2', size: 'xsmall'}}
-      >
-        {gifts && gifts.map((g, i) => <GiftItemView key={i} name={g.name} />)}
-      </Box>
+      <List data={gifts} pad="small" margin={{top: 'small'}}>
+        {(datum) => <GiftItemView name={datum.name} />}
+      </List>
     </Box>
   );
 }
 
 export function GiftItemView({name}) {
   return (
-    <Box direction="row" fill="horizontal" justify="between">
+    <Box direction="row" fill="horizontal" justify="start" gap="small">
+      <Gift />
       <Text>{name}</Text>
     </Box>
   );
