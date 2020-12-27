@@ -34,7 +34,7 @@ export function WishlistView({name, gifts}: IProps) {
         <Text>{name} Wishlist</Text>
       </Box>
       <List data={gifts} pad="small" margin={{top: 'small'}}>
-        {(datum) => <GiftItemView name={datum.name} />}
+        {(g, i) => <GiftItemView key={i} name={g.name} />}
       </List>
     </Box>
   );

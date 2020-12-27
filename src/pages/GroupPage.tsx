@@ -38,6 +38,7 @@ export function GroupPage(props) {
       <InfiniteScroll items={groups}>
         {(item, i) => (
           <Box
+            key={i}
             pad="small"
             align="center"
             justify="center"
