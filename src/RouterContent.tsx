@@ -31,11 +31,11 @@ function RouterContent(props) {
           )
         }
       />
-      <AuthenticatedRoute path="/groups" component={GroupPage} />
       <AuthenticatedRoute
         path="/groups/:groupname"
         component={GroupWishlistPage}
       />
+      <AuthenticatedRoute path="/groups" component={GroupPage} />
       <AuthenticatedRoute path="/" exact component={WishlistEditPage} />
       <AuthenticatedRoute path="/:uid" component={WishlistPage} />
       {!user && <Redirect to="/login" />}
