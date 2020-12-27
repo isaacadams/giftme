@@ -1,4 +1,12 @@
-import {Anchor, Avatar, Box, Header, Menu, Text} from 'grommet';
+import {
+  Anchor,
+  Avatar,
+  Box,
+  Header,
+  Menu,
+  ResponsiveContext,
+  Text,
+} from 'grommet';
 import React, {useContext} from 'react';
 import {Edit, Home, Logout, User, Group} from 'grommet-icons';
 import {FirebaseAppContext} from '@firebase';
@@ -6,6 +14,18 @@ import {Link} from 'react-router-dom';
 
 function NavigationBar(props) {
   let {signOut, user} = useContext(FirebaseAppContext).authProviders;
+  const size = React.useContext(ResponsiveContext);
+
+  let responsiveMenuProps = {
+    small: {
+      fill: true,
+    },
+  };
+
+  let menuProps = responsiveMenuProps[size] ?? {margin: {horizontal: 'small'}};
+  let headerProps =
+    size === 'small' ? {} : {pad: {vertical: 'medium', horizontal: 'medium'}};
+
   if (!user) return <></>;
 
   return (
@@ -13,13 +33,15 @@ function NavigationBar(props) {
       fill="horizontal"
       alignContent="center"
       justify="end"
-      pad={{vertical: 'medium', horizontal: 'medium'}}
+      {...headerProps}
     >
       <Menu
+        {...menuProps}
+        justifyContent="end"
         label={<ShowAvatar photoUrl={user.photoURL} />}
-        margin={{horizontal: 'small'}}
         dropAlign={{top: 'bottom', right: 'right'}}
         dropBackground="light-2"
+        dropProps={{responsive: true, stretch: true}}
         items={[
           {
             label: (
