@@ -41,8 +41,8 @@ function RouterContent(props) {
       />
       <AuthenticatedRoute path="/groups" component={GroupPage} />
       <AuthenticatedRoute path="/" exact component={WishlistEditPage} />
-      <Route path="/:uid" component={WishlistPage} />
-      {!isAuthenticated && <Redirect to="/login" />}
+      <AuthenticatedRoute path="/:uid" component={WishlistPage} />
+      {!loading && !user && <Redirect to="/login" />}
     </Switch>
   );
 }
