@@ -1,5 +1,9 @@
-import {Repository} from './Repository';
 import FirebaseApp from '../FirebaseApp';
+
+export type GroupNamesModel = {
+  groupnames: string[];
+  isValid: (name: string) => boolean;
+};
 
 export class GroupModelForm {
   name: string;
@@ -11,17 +15,6 @@ export class GroupModel extends GroupModelForm {
   members?: string[];
   inviteLink?: string;
 }
-
-export class GroupRepository extends Repository<GroupModel> {
-  constructor(database: firebase.database.Database) {
-    super(database.ref('groups'), null);
-  }
-}
-
-export type GroupNamesModel = {
-  groupnames: string[];
-  isValid: (name: string) => boolean;
-};
 
 export class UserGroupRepository {
   constructor() {}
