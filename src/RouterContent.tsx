@@ -12,7 +12,11 @@ import {
 } from '@pages';
 
 function RouterContent(props) {
-  let {user, isAuthenticated} = useContext(FirebaseAppContext).authState;
+  let {user, isAuthenticated, loading} = useContext(
+    FirebaseAppContext
+  ).authState;
+
+  if (loading && !user) return <Loader />;
 
   return (
     <Switch>
@@ -37,16 +41,14 @@ function RouterContent(props) {
       />
       <AuthenticatedRoute path="/groups" component={GroupPage} />
       <AuthenticatedRoute path="/" exact component={WishlistEditPage} />
-      <AuthenticatedRoute path="/:uid" component={WishlistPage} />
-      {!user && <Redirect to="/login" />}
+      <Route path="/:uid" component={WishlistPage} />
+      {!isAuthenticated && <Redirect to="/login" />}
     </Switch>
   );
 }
 
 function AuthenticatedRoute({children, component, ...rest}: RouteProps) {
-  let {user, loading} = useContext(
-    FirebaseAppContext
-  ).authState;
+  let {user, loading} = useContext(FirebaseAppContext).authState;
   if (loading) return <Loader />;
 
   let ChildComponent = component;

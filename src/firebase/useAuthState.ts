@@ -16,6 +16,7 @@ export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
 
   useEffect(() => {
     let unsubscribe = auth.onAuthStateChanged((u) => {
+      setLoading(false);
       if (!u) {
         setUser(null);
         return;
@@ -24,11 +25,8 @@ export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
       setUser(u);
       new UserRepository(u).ensureUserExists();
     }, setError);
-
-    setLoading(false);
     return () => {
       unsubscribe();
-      setLoading(true);
     };
   }, []);
 
