@@ -1,4 +1,4 @@
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import {FirebaseAuthState, useAuthState} from './useAuthState';
 import useAuthProviders, {FirebaseAuthProviders} from './useAuthProviders';
 import FirebaseApp from './FirebaseApp';
