@@ -20,7 +20,7 @@ website is live @ [here](https://giftme-8e917.web.app/)
     - [x] auth
     - [x] add text gift wish
     - [x] create groups
-- [ ] pages
+- [x] pages
     - [x] group wishlist view
     - [x] wishlist view
     - [x] edit wishlist view
@@ -32,6 +32,7 @@ website is live @ [here](https://giftme-8e917.web.app/)
     - [ ] only owners can invite members
     - [ ] only owners can accept requests
     - [ ] only users can add themselves to groups by requesting or accepting invites
+    - [ ] delete/edit groups
 - [ ] cleanup
     - [x] remove border from wishlist and turn them into lists
     - [ ] add displayName, username, avatar to profile view
