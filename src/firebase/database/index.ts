@@ -10,11 +10,15 @@ export type Repositories = {
 };
 
 export function getRepositories(user: firebase.User): Repositories {
+  let repos = user && {
+    giftRepo: new GiftRepository(user.uid),
+    userRepo: new UserRepository(user),
+    userGroupRepo: new UserGroupRepository(user),
+  };
+
   return {
     loading: !user,
-    giftRepo: user && new GiftRepository(user.uid),
-    userRepo: user && new UserRepository(user),
-    userGroupRepo: user && new UserGroupRepository(user),
+    ...repos
   };
 }
 
