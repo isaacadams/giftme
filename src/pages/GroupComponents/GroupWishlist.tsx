@@ -20,7 +20,9 @@ export function GroupWishlistPage(props) {
     getGroupByName(groupname).then(setGroup);
   }, [groupname]);
 
-  return <Box>{group && <GroupWishlist users={Object.keys(group.members)} />}</Box>;
+  return (
+    <Box>{group && <GroupWishlist users={Object.keys(group.members)} />}</Box>
+  );
 }
 
 export function GroupWishlist({users}: IProps) {

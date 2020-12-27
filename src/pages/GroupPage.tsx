@@ -37,12 +37,7 @@ export function GroupPage(props) {
       {groups &&
         groups.map((g, i) => (
           <Link key={i} to={`/groups/${g.name}`}>
-            <Box
-              pad="small"
-              align="center"
-              hoverIndicator
-              onClick={() => {}}
-            >
+            <Box pad="small" align="center" hoverIndicator onClick={() => {}}>
               <Box fill pad="small" align="center">
                 <Group size="large" />
               </Box>
