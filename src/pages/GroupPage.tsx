@@ -1,16 +1,17 @@
 import * as React from 'react';
 import {FirebaseAppContext, GroupModel, GroupNamesModel} from '@firebase';
-import {Box, Text} from 'grommet';
+import {Anchor, Box, Text} from 'grommet';
 import {Group} from 'grommet-icons';
 import {Loader} from '@shared';
 import {AddGroupButton} from './GroupComponents/AddGroupButton';
-import {Link} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 
 export function GroupPage(props) {
   let [groups, setGroups] = React.useState<GroupModel[]>([]);
   let [groupnames, setGroupnames] = React.useState<GroupNamesModel>(null);
   let [loading, setLoading] = React.useState(true);
   let {userGroupRepo} = React.useContext(FirebaseAppContext).repos;
+  let history = useHistory();
 
   React.useEffect(() => {
     console.log('running effect');
@@ -36,14 +37,20 @@ export function GroupPage(props) {
       <AddGroupButton onAddGroup={createGroup} groupnames={groupnames} />
       {groups &&
         groups.map((g, i) => (
-          <Link key={i} to={`/groups/${g.name}`}>
-            <Box pad="small" align="center" hoverIndicator onClick={() => {}}>
-              <Box fill pad="small" align="center">
-                <Group size="large" />
-              </Box>
-              <Text>{g.displayName ?? '@' + g.name}</Text>
+          <Box
+            key={i}
+            pad="small"
+            align="center"
+            hoverIndicator
+            onClick={() => {
+              history.push(`/groups/${g.name}`);
+            }}
+          >
+            <Box fill pad="small" align="center">
+              <Group size="large" />
             </Box>
-          </Link>
+            <Text>{g.displayName ?? '@' + g.name}</Text>
+          </Box>
         ))}
     </Box>
   );
