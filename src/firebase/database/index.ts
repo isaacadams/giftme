@@ -1,3 +1,4 @@
+import firebase from 'firebase';
 import {GiftRepository} from './GiftRepository';
 import {UserRepository} from './UserRepository';
 import {UserGroupRepository} from './UserGroupRepository';
