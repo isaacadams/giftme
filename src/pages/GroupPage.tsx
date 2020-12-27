@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {FirebaseAppContext, GroupModel, GroupNamesModel} from '@firebase';
-import {Anchor, Box, Text} from 'grommet';
+import {Anchor, Box, Grid, InfiniteScroll, Text} from 'grommet';
 import {Group} from 'grommet-icons';
 import {Loader} from '@shared';
 import {AddGroupButton} from './GroupComponents/AddGroupButton';
@@ -33,26 +33,27 @@ export function GroupPage(props) {
   console.log('rerendering group page');
 
   return (
-    <Box direction="row" gap="small">
+    <Grid columns={{count: 2, size: 'auto'}} rows="auto">
       <AddGroupButton onAddGroup={createGroup} groupnames={groupnames} />
-      {groups &&
-        groups.map((g, i) => (
+      <InfiniteScroll items={groups}>
+        {(item, i) => (
           <Box
-            key={i}
             pad="small"
             align="center"
+            justify="center"
             hoverIndicator
             onClick={() => {
-              history.push(`/groups/${g.name}`);
+              history.push(`/groups/${item.name}`);
             }}
           >
-            <Box fill pad="small" align="center">
+            <Box fill="horizontal" pad="small" align="center">
               <Group size="large" />
             </Box>
-            <Text>{g.displayName ?? '@' + g.name}</Text>
+            <Text>{item.displayName ?? '@' + item.name}</Text>
           </Box>
-        ))}
-    </Box>
+        )}
+      </InfiniteScroll>
+    </Grid>
   );
 
   function createGroup({name, displayName}) {
