@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {Redirect} from 'react-router-dom';
 import {UserRepository} from './database/UserRepository';
 
 export type FirebaseAuthState = {
@@ -15,13 +16,19 @@ export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
 
   useEffect(() => {
     let unsubscribe = auth.onAuthStateChanged((u) => {
-      if (!u) return;
+      if (!u) {
+        setUser(null);
+        return;
+      }
+
       setUser(u);
-      setLoading(false);
       new UserRepository(u).ensureUserExists();
     }, setError);
+
+    setLoading(false);
     return () => {
       unsubscribe();
+      setLoading(true);
     };
   }, []);
 
