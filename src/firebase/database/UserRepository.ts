@@ -1,4 +1,3 @@
-import {Repository} from './Repository';
 import FirebaseApp from '../FirebaseApp';
 
 const rootRef = FirebaseApp.database();
@@ -9,17 +8,20 @@ export class User {
 }
 
 export class UserRepository {
-  constructor() {}
+  user: firebase.User;
+  constructor(user: firebase.User) {
+    this.user = user;
+  }
 
-  ensureUserExists(user: firebase.User): void {
+  ensureUserExists(): void {
     rootRef
-      .ref(`users/${user.uid}`)
+      .ref(`users/${this.user.uid}`)
       .once('value')
       .then((s) => {
         if (s.val()) {
           return;
         }
-        let {displayName, email, phoneNumber} = user;
+        let {displayName, email, phoneNumber} = this.user;
         s.ref.update({displayName, email, phoneNumber});
       });
   }

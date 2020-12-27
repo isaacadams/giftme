@@ -17,7 +17,10 @@ export class GroupModel extends GroupModelForm {
 }
 
 export class UserGroupRepository {
-  constructor() {}
+  userid: string;
+  constructor(user: firebase.User) {
+    this.userid = user.uid;
+  }
 
   getIsGroupnameValid(cb: (groupnames: GroupNamesModel) => void): () => void {
     let groupNamesRef = FirebaseApp.database().ref(`groupnames`);
@@ -48,12 +51,8 @@ export class UserGroupRepository {
       });
   }
 
-  addGroup(
-    userid: string,
-    name: string,
-    displayName: string,
-    members: string[] = []
-  ): void {
+  addGroup(name: string, displayName: string, members: string[] = []): void {
+    let userid = this.userid;
     if (!userid) {
       console.error('no userid');
       return;
@@ -80,10 +79,10 @@ export class UserGroupRepository {
   }
 
   getUserGroups(
-    userid: string,
     cb: (groups: GroupModel[]) => void,
     complete?: () => void
   ): () => void {
+    let userid = this.userid;
     if (!userid) {
       console.error('no userid');
       return;

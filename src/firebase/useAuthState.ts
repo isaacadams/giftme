@@ -15,9 +15,10 @@ export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
 
   useEffect(() => {
     let unsubscribe = auth.onAuthStateChanged((u) => {
+      if (!u) return;
       setUser(u);
       setLoading(false);
-      new UserRepository().ensureUserExists(u);
+      new UserRepository(u).ensureUserExists();
     }, setError);
     return () => {
       unsubscribe();

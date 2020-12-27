@@ -1,25 +1,14 @@
 import * as React from 'react';
 import {useState} from 'react';
 import {Box, Form, TextInput, Text, Button} from 'grommet';
-import {
-  FirebaseAppContext,
-  GiftModel,
-  GiftRepository,
-  IDataItems,
-  useDataApi,
-} from '@firebase';
+import {FirebaseAppContext, GiftModel, IDataItems, useDataApi} from '@firebase';
 import {useModal} from '@shared';
 import {Trash} from 'grommet-icons';
 
 export function WishlistEditPage(props) {
   let [newGift, setNewGift] = useState<string>('');
-  let [repo, setRepo] = useState<GiftRepository | null>(null);
-  let api = useDataApi(repo);
-
-  let {authState} = React.useContext(FirebaseAppContext);
-  React.useEffect(() => {
-    setRepo(new GiftRepository(authState.user.uid));
-  }, [authState]);
+  let {giftRepo} = React.useContext(FirebaseAppContext).repos;
+  let api = useDataApi(giftRepo);
 
   return (
     <Box

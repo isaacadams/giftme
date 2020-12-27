@@ -1,29 +1,22 @@
 import * as React from 'react';
-import {
-  FirebaseAppContext,
-  UserGroupRepository,
-  GroupModel,
-  GroupNamesModel,
-} from '@firebase';
+import {FirebaseAppContext, GroupModel, GroupNamesModel} from '@firebase';
 import {Box, Text} from 'grommet';
 import {Group} from 'grommet-icons';
 import {Loader} from '@shared';
 import {AddGroupButton} from './GroupComponents/AddGroupButton';
 
-const repo = new UserGroupRepository();
-
 export function GroupPage(props) {
   let [groups, setGroups] = React.useState<GroupModel[]>([]);
   let [groupnames, setGroupnames] = React.useState<GroupNamesModel>(null);
   let [loading, setLoading] = React.useState(true);
-  let {user} = React.useContext(FirebaseAppContext).authState;
+  let {userGroupRepo} = React.useContext(FirebaseAppContext).repos;
 
   React.useEffect(() => {
     console.log('running effect');
-    if (!user) return () => {};
+    if (!userGroupRepo) return () => {};
 
-    let unsubFromGroupnames = repo.getIsGroupnameValid(setGroupnames);
-    let unsubFromGroups = repo.getUserGroups(user?.uid, setGroups, () =>
+    let unsubFromGroupnames = userGroupRepo.getIsGroupnameValid(setGroupnames);
+    let unsubFromGroups = userGroupRepo.getUserGroups(setGroups, () =>
       setLoading(false)
     );
 
@@ -31,9 +24,9 @@ export function GroupPage(props) {
       unsubFromGroupnames();
       unsubFromGroups();
     };
-  }, [user]);
+  }, [userGroupRepo]);
 
-  if (!user || loading) return <Loader />;
+  if (!userGroupRepo || loading) return <Loader />;
 
   console.log('rerendering group page');
 
@@ -59,7 +52,7 @@ export function GroupPage(props) {
   );
 
   function createGroup({name, displayName}) {
-    if (!repo) return;
-    repo.addGroup(user?.uid, name, displayName);
+    if (!userGroupRepo) return;
+    userGroupRepo.addGroup(name, displayName);
   }
 }

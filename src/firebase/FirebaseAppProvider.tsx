@@ -5,10 +5,12 @@ import FirebaseApp from './FirebaseApp';
 import React from 'react';
 import {Loader} from '@shared';
 import {Box} from 'grommet';
+import {getRepositories, Repositories} from './database';
 
 export type FirebaseAppModel = {
   authProviders: FirebaseAuthProviders;
   authState: FirebaseAuthState;
+  repos: Repositories;
 };
 
 export const FirebaseAppContext = React.createContext<FirebaseAppModel | null>(
@@ -21,6 +23,7 @@ export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
   let {error, user} = authState;
 
   if (error) return <Box>ERROR: {error.message}</Box>;
+  //if (!user) return <Box fill><Loader /></Box>;
 
   return (
     <FirebaseAppContext.Provider
@@ -33,6 +36,7 @@ export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
           user,
         }),
         authState,
+        repos: getRepositories(user),
       }}
     >
       {children}
