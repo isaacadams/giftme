@@ -11,12 +11,7 @@ export function WishlistEditPage(props) {
   let api = user && useData<GiftModel>(`gifts/${user.uid}`);
 
   return (
-    <Box
-      gap="medium"
-      margin={{top: 'small'}}
-      pad="small"
-      border={{color: 'dark-2', size: 'xsmall'}}
-    >
+    <Box gap="medium" margin={{top: 'small'}} pad="small">
       <Form onSubmit={(e) => addGift()}>
         <TextInput
           name="newgift"
