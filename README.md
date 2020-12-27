@@ -36,6 +36,7 @@ website is live @ [here](https://giftme-8e917.web.app/)
 - [ ] cleanup
     - [x] remove border from wishlist and turn them into lists
     - [ ] add displayName, username, avatar to profile view
+    - [ ] make wishlist appear a bit larger in mobile mode?
     - [ ] get rid of footer
     - [ ] give header more utility
     - [ ] make login page more appealing
