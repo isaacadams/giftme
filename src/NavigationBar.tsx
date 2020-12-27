@@ -33,7 +33,7 @@ function NavigationBar(props) {
     <Header
       fill="horizontal"
       alignContent="center"
-      justify="start"
+      justify="end"
       background="light-2"
       {...headerProps}
     >
