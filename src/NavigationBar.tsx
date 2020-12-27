@@ -46,7 +46,6 @@ function NavigationBar(props) {
         dropProps={{
           responsive: true,
           stretch: true,
-          onClickOutside: () => console.log('outside'),
         }}
         items={[
           {
