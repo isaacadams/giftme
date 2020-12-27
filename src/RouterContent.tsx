@@ -12,9 +12,7 @@ import {
 } from '@pages';
 
 function RouterContent(props) {
-  let {user, isAuthenticated, loading} = useContext(
-    FirebaseAppContext
-  ).authState;
+  let {user, loading} = useContext(FirebaseAppContext).authState;
 
   if (loading && !user) return <Loader />;
 
@@ -35,34 +33,31 @@ function RouterContent(props) {
           )
         }
       />
-      <AuthenticatedRoute
-        path="/groups/:groupname"
-        component={GroupWishlistPage}
-      />
-      <AuthenticatedRoute path="/groups" component={GroupPage} />
-      <AuthenticatedRoute path="/" exact component={WishlistEditPage} />
-      <AuthenticatedRoute path="/:uid" component={WishlistPage} />
-      {!loading && !user && <Redirect to="/login" />}
+      <AuthenticatedRoute>
+        <Route path="/" exact component={WishlistEditPage} />
+        <Route path="/groups/:groupname" component={GroupWishlistPage} />
+        <Route path="/groups" component={GroupPage} />
+        <Route path="/:uid" component={WishlistPage} />
+      </AuthenticatedRoute>
     </Switch>
   );
 }
 
-function AuthenticatedRoute({children, component, ...rest}: RouteProps) {
+function AuthenticatedRoute({children, ...rest}: RouteProps) {
   let {user, loading} = useContext(FirebaseAppContext).authState;
   if (loading) return <Loader />;
 
-  let ChildComponent = component;
   return (
     <Route
       {...rest}
-      render={(routerProps) =>
+      render={({location}) =>
         user ? (
-          <ChildComponent {...routerProps} />
+          children
         ) : (
           <Redirect
             to={{
               pathname: '/login',
-              state: {from: routerProps.location},
+              state: {from: location},
             }}
           />
         )

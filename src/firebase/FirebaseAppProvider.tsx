@@ -20,10 +20,7 @@ export const FirebaseAppContext = React.createContext<FirebaseAppModel | null>(
 export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
   let auth = FirebaseApp.auth();
   let authState = useAuthState(auth);
-  let {error, user} = authState;
-
-  if (error) return <Box>ERROR: {error.message}</Box>;
-  //if (!user) return <Box fill><Loader /></Box>;
+  let {error, user, loading} = authState;
 
   return (
     <FirebaseAppContext.Provider
@@ -39,7 +36,12 @@ export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
         repos: getRepositories(user),
       }}
     >
-      {children}
+      {loading && (
+        <Box fill align="center" justify="center">
+          <Loader />
+        </Box>
+      )}
+      {!loading && children}
     </FirebaseAppContext.Provider>
   );
 }

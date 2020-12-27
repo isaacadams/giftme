@@ -1,3 +1,4 @@
+import firebase from 'firebase';
 import {useState} from 'react';
 
 export type FirebaseAuthProviders = {
