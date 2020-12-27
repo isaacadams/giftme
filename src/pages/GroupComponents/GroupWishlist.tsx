@@ -1,8 +1,9 @@
 import {getGroupByName, GroupModel, GroupModelForm} from '@firebase';
 import {Wishlist} from '../WishlistPage';
-import {Box} from 'grommet';
+import {Box, Heading, Text} from 'grommet';
 import * as React from 'react';
 import {useParams} from 'react-router-dom';
+import {Loader} from '@shared';
 
 interface IProps {
   users: string[];
@@ -20,8 +21,26 @@ export function GroupWishlistPage(props) {
     getGroupByName(groupname).then(setGroup);
   }, [groupname]);
 
+  if (!group) return <Loader />;
+
   return (
-    <Box>{group && <GroupWishlist users={Object.keys(group.members)} />}</Box>
+    <>
+      <Box
+        responsive
+        fill="horizontal"
+        align="start"
+        gap="small"
+        margin={{bottom: 'medium'}}
+      >
+        <Heading size={'30'} margin={'0'}>
+          {group.displayName}
+        </Heading>
+        <Text>@{group.name}</Text>
+      </Box>
+      <Box responsive>
+        <GroupWishlist users={Object.keys(group.members)} />
+      </Box>
+    </>
   );
 }
 
