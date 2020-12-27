@@ -10,10 +10,11 @@ import {
 import React, {useContext} from 'react';
 import {Edit, Home, Logout, User, Group} from 'grommet-icons';
 import {FirebaseAppContext} from '@firebase';
-import {Link} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 
 function NavigationBar(props) {
   let {signOut, user} = useContext(FirebaseAppContext).authProviders;
+  let history = useHistory();
   const size = React.useContext(ResponsiveContext);
 
   let responsiveMenuProps = {
@@ -32,51 +33,48 @@ function NavigationBar(props) {
     <Header
       fill="horizontal"
       alignContent="center"
-      justify="end"
+      justify="start"
+      background="light-2"
       {...headerProps}
     >
       <Menu
         {...menuProps}
-        justifyContent="end"
+        justifyContent="start"
         label={<ShowAvatar photoUrl={user.photoURL} />}
         dropAlign={{top: 'bottom', right: 'right'}}
         dropBackground="light-2"
-        dropProps={{responsive: true, stretch: true}}
+        dropProps={{
+          responsive: true,
+          stretch: true,
+          onClickOutside: () => console.log('outside'),
+        }}
         items={[
           {
+            onClick: () => history.push(`/${user.uid}`),
             label: (
-              <Link to={`/${user.uid}`}>
-                <Anchor
-                  icon={<Home />}
-                  label={user.displayName}
-                  color="dark-2"
-                  as="div"
-                />
-              </Link>
+              <Anchor
+                icon={<Home />}
+                label={user.displayName}
+                color="dark-2"
+                as="div"
+              />
             ),
           },
           {
+            onClick: () => history.push(`/groups`),
             label: (
-              <Link to="/groups">
-                <Anchor
-                  icon={<Group />}
-                  label="Groups"
-                  color="dark-2"
-                  as="div"
-                />
-              </Link>
+              <Anchor icon={<Group />} label="Groups" color="dark-2" as="div" />
             ),
           },
           {
+            onClick: () => history.push(`/`),
             label: (
-              <Link to={`/`}>
-                <Anchor
-                  icon={<Edit />}
-                  label="Edit Wishlist"
-                  color="dark-2"
-                  as="div"
-                />
-              </Link>
+              <Anchor
+                icon={<Edit />}
+                label="Edit Wishlist"
+                color="dark-2"
+                as="div"
+              />
             ),
           },
           {
