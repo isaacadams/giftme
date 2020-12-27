@@ -3,10 +3,20 @@ import {Switch, Route, Redirect, RouteProps} from 'react-router-dom';
 import {Loader} from '@shared';
 import {FirebaseAppContext} from '@firebase';
 import {useContext} from 'react';
-import {WishlistPage, SignInPage, WishlistEditPage} from '@pages';
+import {
+  WishlistPage,
+  SignInPage,
+  WishlistEditPage,
+  GroupPage,
+  GroupWishlistPage,
+} from '@pages';
 
 function RouterContent(props) {
-  let {user} = useContext(FirebaseAppContext).authState;
+  let {user, isAuthenticated, loading} = useContext(
+    FirebaseAppContext
+  ).authState;
+
+  if (loading && !user) return <Loader />;
 
   return (
     <Switch>
@@ -25,25 +35,28 @@ function RouterContent(props) {
           )
         }
       />
-      <AuthenticatedRoute path={`/:uid`} exact component={WishlistPage} />
+      <AuthenticatedRoute
+        path="/groups/:groupname"
+        component={GroupWishlistPage}
+      />
+      <AuthenticatedRoute path="/groups" component={GroupPage} />
       <AuthenticatedRoute path="/" exact component={WishlistEditPage} />
-      {!user && <Redirect to="/login" />}
+      <AuthenticatedRoute path="/:uid" component={WishlistPage} />
+      {!loading && !user && <Redirect to="/login" />}
     </Switch>
   );
 }
 
 function AuthenticatedRoute({children, component, ...rest}: RouteProps) {
-  let {isAuthenticated, initializing} = useContext(
-    FirebaseAppContext
-  ).authState;
-  if (initializing) return <Loader />;
+  let {user, loading} = useContext(FirebaseAppContext).authState;
+  if (loading) return <Loader />;
 
   let ChildComponent = component;
   return (
     <Route
       {...rest}
       render={(routerProps) =>
-        isAuthenticated ? (
+        user ? (
           <ChildComponent {...routerProps} />
         ) : (
           <Redirect

@@ -5,14 +5,14 @@ import {grommet} from 'grommet/themes';
 import {DisplayFooter} from './DisplayFooter';
 import NavigationBar from './NavigationBar';
 import RouterContent from './RouterContent';
-import {FirebaseAppContext, useFirebaseApp} from '@firebase';
+import {FirebaseAppProvider} from '@firebase';
 import {BrowserRouter as Router} from 'react-router-dom';
 
 function App(props) {
   return (
-    <FirebaseAppContext.Provider value={useFirebaseApp()}>
-      <Router>
-        <Grommet full theme={grommet}>
+    <Grommet full theme={grommet}>
+      <FirebaseAppProvider>
+        <Router>
           <Grid
             fill="vertical"
             style={{gridTemplateRows: 'min-content 1fr'}}
@@ -31,9 +31,9 @@ function App(props) {
               <DisplayFooter />
             </Box>
           </Grid>
-        </Grommet>
-      </Router>
-    </FirebaseAppContext.Provider>
+        </Router>
+      </FirebaseAppProvider>
+    </Grommet>
   );
 }
 

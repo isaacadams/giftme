@@ -1,33 +1,17 @@
 import * as React from 'react';
 import {useState} from 'react';
-import {Box, Form, TextInput, Text} from 'grommet';
-import {
-  FirebaseAppContext,
-  Gift,
-  GiftRepository,
-  IDataItems,
-  useDataApi,
-} from '@firebase';
+import {Box, Form, TextInput, Text, Button} from 'grommet';
+import {FirebaseAppContext, GiftModel, IDataItems, useData} from '@firebase';
 import {useModal} from '@shared';
 import {Trash} from 'grommet-icons';
 
 export function WishlistEditPage(props) {
   let [newGift, setNewGift] = useState<string>('');
-  let [repo, setRepo] = useState<GiftRepository | null>(null);
-  let api = useDataApi(repo);
-
-  let {database, authState} = React.useContext(FirebaseAppContext);
-  React.useEffect(() => {
-    setRepo(new GiftRepository(database, authState.user.uid));
-  }, [database, authState]);
+  let {user} = React.useContext(FirebaseAppContext).authState;
+  let api = user && useData<GiftModel>(`gifts/${user.uid}`);
 
   return (
-    <Box
-      gap="medium"
-      margin={{top: 'small'}}
-      pad="small"
-      border={{color: 'dark-2', size: 'xsmall'}}
-    >
+    <Box gap="medium" margin={{top: 'small'}} pad="small">
       <Form onSubmit={(e) => addGift()}>
         <TextInput
           name="newgift"
@@ -48,8 +32,8 @@ export function WishlistEditPage(props) {
   }
 }
 
-export function EditGiftItem({value, remove, update}: IDataItems<Gift>) {
-  let [gift, setGift] = useState<Gift>(value);
+export function EditGiftItem({value, remove, update}: IDataItems<GiftModel>) {
+  let [gift, setGift] = useState<GiftModel>(value);
 
   let {setShow, Modal} = useModal({
     prompt: `Are you sure about deleting '${gift.name}'?`,
@@ -72,7 +56,9 @@ export function EditGiftItem({value, remove, update}: IDataItems<Gift>) {
             />
           </Form>
         </Box>
-        <Trash
+        <Button
+          icon={<Trash />}
+          hoverIndicator
           onClick={(e) => {
             setShow(true);
           }}
