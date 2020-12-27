@@ -16,18 +16,22 @@ website is live @ [here](https://giftme-8e917.web.app/)
 
 ### mvp
 
-- [ ] functionality
+- [x] functionality
     - [x] auth
     - [x] add text gift wish
-    - [ ] create family
+    - [x] create groups
 - [ ] pages
-    - [ ] family wishlist view
+    - [x] group wishlist view
     - [x] wishlist view
     - [x] edit wishlist view
     - [x] sign in / sign out
 - [x] mobile friendly
 - [ ] group feature
-    - [ ] cannot add duplicate groupnames
+    - [x] cannot add duplicate groupnames
+    - [x] groups should have owners
+    - [ ] only owners can invite members
+    - [ ] only owners can accept requests
+    - [ ] only users can add themselves to groups by requesting or accepting invites
 - [ ] cleanup
     - [ ] remove border from wishlist and turn them into lists
     - [ ] add displayName, username, avatar to profile view
@@ -59,4 +63,5 @@ website is live @ [here](https://giftme-8e917.web.app/)
 
 #### 📚 For Further Reading
 
-[help with usernames](https://fireship.io/lessons/custom-usernames-with-firebase-authentication-and-angular/)
+- [help with usernames](https://fireship.io/lessons/custom-usernames-with-firebase-authentication-and-angular/)
+- [info for when implementing email/pass sign in](https://stackoverflow.com/questions/44615808/firebase-detecting-if-user-exists)
