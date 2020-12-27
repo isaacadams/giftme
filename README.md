@@ -33,7 +33,7 @@ website is live @ [here](https://giftme-8e917.web.app/)
     - [ ] only owners can accept requests
     - [ ] only users can add themselves to groups by requesting or accepting invites
 - [ ] cleanup
-    - [ ] remove border from wishlist and turn them into lists
+    - [x] remove border from wishlist and turn them into lists
     - [ ] add displayName, username, avatar to profile view
     - [ ] get rid of footer
     - [ ] give header more utility
@@ -42,7 +42,8 @@ website is live @ [here](https://giftme-8e917.web.app/)
 - [ ] various mobile bugs
     - [ ] inputs squish when keyboard appears during wishlist editing
     - [ ] was getting an odd error when trying to sign up on mobile phone
-    - [ ] make navbar menu stretch across width and it pushes content down
+    - [x] make navbar menu stretch across width and 
+    - [ ] push content down when menu is open?
 - [ ] require username during sign up process
 - [ ] validation
     - [ ] gift items cannot be empty
