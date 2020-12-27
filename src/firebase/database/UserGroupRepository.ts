@@ -1,5 +1,7 @@
 import FirebaseApp from '../FirebaseApp';
 
+const rootRef = FirebaseApp.database();
+
 export type GroupNamesModel = {
   groupnames: string[];
   isValid: (name: string) => boolean;
@@ -16,6 +18,19 @@ export class GroupModel extends GroupModelForm {
   inviteLink?: string;
 }
 
+export function getGroupByName(name: string): Promise<GroupModel> {
+  return rootRef
+    .ref(`groupnames/${name}`)
+    .once('value')
+    .then((s) => s.val())
+    .then((k) => {
+      return rootRef
+        .ref(`groups/${k}`)
+        .once('value')
+        .then((s) => s.val());
+    });
+}
+
 export class UserGroupRepository {
   userid: string;
   constructor(user: firebase.User) {
@@ -23,7 +38,7 @@ export class UserGroupRepository {
   }
 
   getIsGroupnameValid(cb: (groupnames: GroupNamesModel) => void): () => void {
-    let groupNamesRef = FirebaseApp.database().ref(`groupnames`);
+    let groupNamesRef = rootRef.ref(`groupnames`);
     groupNamesRef.on('value', (s) => {
       let groupnames = Object.keys(s.val() ?? {});
       cb({
@@ -35,20 +50,6 @@ export class UserGroupRepository {
     return () => {
       groupNamesRef.off();
     };
-  }
-
-  getGroupByName(name: string): Promise<GroupModel> {
-    let rootRef = FirebaseApp.database();
-    return rootRef
-      .ref(`groupnames/${name}`)
-      .once('value')
-      .then((s) => s.val())
-      .then((k) => {
-        return rootRef
-          .ref(`groups/${k}`)
-          .once('value')
-          .then((s) => s.val());
-      });
   }
 
   addGroup(name: string, displayName: string, members: string[] = []): void {
@@ -63,7 +64,7 @@ export class UserGroupRepository {
     let data: GroupModel = {name, owner: userid};
     if (displayName) data.displayName = displayName;
 
-    FirebaseApp.database()
+    rootRef
       .ref(`groups`)
       .push(data)
       .then(({key, root}) => {
@@ -87,8 +88,6 @@ export class UserGroupRepository {
       console.error('no userid');
       return;
     }
-
-    let rootRef = FirebaseApp.database();
     let refs: firebase.database.Reference[] = [];
 
     let usersRef = rootRef.ref(`users/${userid}/groups`);

@@ -19,7 +19,7 @@ export function WishlistPage(props) {
 export function Wishlist({uid}) {
   if (!uid) return <Loader />;
   let api = useData<GiftModel>(`gifts/${uid}`);
-  return <WishlistView name="My" gifts={api?.items.map((i) => i.value)} />;
+  return <WishlistView name={'My'} gifts={api?.items.map((i) => i.value)} />;
 }
 
 interface IProps {
