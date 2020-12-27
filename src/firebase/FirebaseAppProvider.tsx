@@ -7,9 +7,6 @@ import {Loader} from '@shared';
 import {Box} from 'grommet';
 
 export type FirebaseAppModel = {
-  app: firebase.app.App;
-  auth: firebase.auth.Auth;
-  database: firebase.database.Database;
   authProviders: FirebaseAuthProviders;
   authState: FirebaseAuthState;
 };
@@ -21,22 +18,19 @@ export const FirebaseAppContext = React.createContext<FirebaseAppModel | null>(
 export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
   let auth = FirebaseApp.auth();
   let authState = useAuthState(auth);
-  let {error} = authState;
+  let {error, user} = authState;
 
   if (error) return <Box>ERROR: {error.message}</Box>;
 
   return (
     <FirebaseAppContext.Provider
       value={{
-        app: FirebaseApp,
-        database: FirebaseApp.database(),
-        auth,
         authProviders: useAuthProviders({
           auth,
           providers: {
             googleProvider: new firebase.auth.GoogleAuthProvider(),
           },
-          user: authState.user,
+          user,
         }),
         authState,
       }}
