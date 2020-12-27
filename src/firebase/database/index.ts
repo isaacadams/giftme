@@ -18,7 +18,7 @@ export function getRepositories(user: firebase.User): Repositories {
 
   return {
     loading: !user,
-    ...repos
+    ...repos,
   };
 }
 

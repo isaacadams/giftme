@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useState} from 'react';
 import '@isaacadams/extensions';
 import {Box, Text} from 'grommet';
-import {GiftModel, GiftRepository, useDataApi} from '@firebase';
+import {GiftModel, useData} from '@firebase';
 import {useParams} from 'react-router-dom';
 import {Loader} from '@shared';
 import {Gift} from 'grommet-icons';
@@ -18,8 +18,7 @@ export function WishlistPage(props) {
 
 export function Wishlist({uid}) {
   if (!uid) return <Loader />;
-  let api = useDataApi(new GiftRepository(uid));
-
+  let api = useData<GiftModel>(`gifts/${uid}`);
   return <WishlistView name="My" gifts={api?.items.map((i) => i.value)} />;
 }
 

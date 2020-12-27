@@ -1,5 +1,5 @@
+import FirebaseApp from '../FirebaseApp';
 import React, {useEffect} from 'react';
-import {IRepository} from './Repository';
 
 export interface IDataWithKey<T> {
   primaryKey: string;
@@ -20,27 +20,25 @@ export interface IDataService<T> {
   add: (d: T) => Promise<string>;
 }
 
-export function useDataApi<T>(repo: IRepository<T>): IDataService<T> {
-  // initialize our default state
+const rootRef = FirebaseApp.database();
+
+export function useData<T>(key: string): IDataService<T> {
   let [error, setError] = React.useState<Error>(null);
   let [loading, setLoading] = React.useState(true);
   let [feed, setFeed] = React.useState<any>(null);
 
+  let ref = rootRef.ref(key);
+
   useEffect(() => {
-    if (!repo) return;
+    ref.on('value', (s) => {
+      setFeed(s.val());
+      setLoading(false);
+    });
 
-    repo.getAll().once(
-      'value',
-      (snapShot) => {
-        let data = snapShot.val();
-        setFeed(data);
-        setLoading(false);
-      },
-      (e) => setError(e)
-    );
-
-    return () => repo.table.off();
-  }, [repo]);
+    return () => {
+      ref.off();
+    };
+  }, [ref]);
 
   return {
     error,
@@ -49,21 +47,35 @@ export function useDataApi<T>(repo: IRepository<T>): IDataService<T> {
       primaryKey,
       value,
       update: (d: T) => {
-        repo.update(primaryKey, d);
-        feed[primaryKey] = d;
-        setFeed({...feed});
+        return new Promise<void>((res, rej) => {
+          ref.child(primaryKey).update(d, (e) => {
+            if (e) rej(e);
+            res();
+          });
+        });
       },
       remove: () => {
-        repo.remove(primaryKey);
-        delete feed[primaryKey];
-        setFeed({...feed});
+        return new Promise<void>((res, rej) => {
+          ref.child(primaryKey).remove((e) => {
+            if (e) rej(e);
+            res();
+          });
+        });
       },
     })),
-    add: async (d: T) => {
-      let ref = await repo.create(d);
-      feed[ref.key] = d;
-      setFeed({...feed});
-      return ref.key;
+    add: (d: T) => {
+      return ref
+        .push(
+          d,
+          (e) =>
+            new Promise<void>((res, rej) => {
+              if (e) rej(e);
+              res();
+            })
+        )
+        .then((r) => {
+          return r.key;
+        });
     },
   };
 }
