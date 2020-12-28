@@ -1,38 +1,48 @@
-import {UserModel, useQuery} from '@firebase';
+import {
+  UserModel,
+  GiftModel,
+  useQueryPromise,
+} from '@firebase';
 import {Loader} from '@shared';
 import {Box, Heading, Text} from 'grommet';
-import React, {useContext, useEffect, useState} from 'react';
+import React from 'react';
 import {useParams} from 'react-router-dom';
-import {Wishlist, WishlistView} from './WishlistPage';
+import {WishlistView} from './WishlistPage';
 
 interface IUrlParams {
   uid: string;
 }
 
+interface IProfile {
+  user: UserModel;
+  gifts: GiftModel[];
+}
+
 export function ProfilePage(props) {
   let {uid} = useParams<IUrlParams>();
 
-  let {data, loading} = useQuery<UserModel>(
-    [`users/${uid}`],
-    (refs) =>
-      new Promise((res, rej) => {
-        let [usersRef] = refs;
-        usersRef.on('value', (s) => {
-          res(s.val());
-        });
-      })
+  let {data, loading} = useQueryPromise<IProfile>(
+    [
+      {
+        key: `users/${uid}`,
+        event: 'value',
+        cb: (s) => s.val(),
+      },
+      {
+        key: `gifts/${uid}`,
+        event: 'value',
+        cb: (s) => Object.values(s.val()) ?? [],
+      },
+    ],
+    ([user, gifts]) => ({user, gifts})
   );
 
   if (!uid || loading || !data) return <Loader />;
 
-  return <ProfileView user={data} uid={uid} />;
+  return <ProfileView {...data} />;
 }
 
-interface IProps {
-  uid: string;
-  user: UserModel;
-}
-export function ProfileView({user, uid}: IProps) {
+export function ProfileView({user, gifts}: IProfile) {
   return (
     <Box direction="row" fill justify="center" gap="medium">
       <Box responsive align="start" gap="small" margin={{bottom: 'medium'}}>
@@ -42,7 +52,7 @@ export function ProfileView({user, uid}: IProps) {
         <Text>@{user.name}</Text>
       </Box>
       <Box margin={{top: 'medium'}}>
-        <Wishlist uid={uid} />
+        <WishlistView gifts={gifts} name="My" />
       </Box>
     </Box>
   );
