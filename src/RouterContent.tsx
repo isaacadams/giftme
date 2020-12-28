@@ -8,7 +8,7 @@ import {
   WishlistEditPage,
   GroupPage,
   GroupWishlistPage,
-  ProfilePage
+  ProfilePage,
 } from '@pages';
 
 function RouterContent(props) {

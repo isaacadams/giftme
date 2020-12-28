@@ -39,6 +39,6 @@ export class UserRepository {
 
     return () => {
       usersRef.off();
-    }
+    };
   }
 }
