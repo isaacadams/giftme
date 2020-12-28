@@ -8,6 +8,7 @@ import {
   WishlistEditPage,
   GroupPage,
   GroupWishlistPage,
+  ProfilePage
 } from '@pages';
 
 function RouterContent(props) {
@@ -37,7 +38,7 @@ function RouterContent(props) {
         path="/groups/:groupname"
         component={GroupWishlistPage}
       />
-      <AuthenticatedRoute path="/:uid" exact component={WishlistPage} />
+      <AuthenticatedRoute path="/:uid" exact component={ProfilePage} />
     </Switch>
   );
 
