@@ -1,7 +1,7 @@
-import {FirebaseAppContext, UserModel} from '@firebase';
-import { Loader } from '@shared';
+import {UserModel, useQuery} from '@firebase';
+import {Loader} from '@shared';
 import {Box, Heading, Text} from 'grommet';
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {Wishlist, WishlistView} from './WishlistPage';
 
@@ -11,15 +11,21 @@ interface IUrlParams {
 
 export function ProfilePage(props) {
   let {uid} = useParams<IUrlParams>();
-  let {userRepo} = useContext(FirebaseAppContext).repos;
-  let [user, setUser] = useState(null);
-  useEffect(() => {
-    userRepo.getUser(setUser);
-  }, []);
 
-  if(!uid || !user) return <Loader />;
+  let {data, loading} = useQuery<UserModel>(
+    [`users/${uid}`],
+    (refs) =>
+      new Promise((res, rej) => {
+        let [usersRef] = refs;
+        usersRef.on('value', (s) => {
+          res(s.val());
+        });
+      })
+  );
 
-  return <ProfileView user={user} uid={uid} />;
+  if (!uid || loading || !data) return <Loader />;
+
+  return <ProfileView user={data} uid={uid} />;
 }
 
 interface IProps {
@@ -28,13 +34,8 @@ interface IProps {
 }
 export function ProfileView({user, uid}: IProps) {
   return (
-    <Box direction='row' fill justify='center' gap='medium'>
-      <Box
-        responsive
-        align="start"
-        gap="small"
-        margin={{bottom: 'medium'}}
-      >
+    <Box direction="row" fill justify="center" gap="medium">
+      <Box responsive align="start" gap="small" margin={{bottom: 'medium'}}>
         <Heading size={'30'} margin={'0'}>
           {user.displayName}
         </Heading>
