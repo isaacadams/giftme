@@ -82,7 +82,10 @@ function NavigationBar(props) {
                 icon={<Logout />}
                 label="Logout"
                 color="dark-2"
-                onClick={signOut}
+                onClick={(e) => {
+                  history.push('/login');
+                  signOut();
+                }}
               />
             ),
           },

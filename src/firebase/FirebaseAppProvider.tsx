@@ -20,7 +20,7 @@ export const FirebaseAppContext = React.createContext<FirebaseAppModel | null>(
 export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
   let auth = FirebaseApp.auth();
   let authState = useAuthState(auth);
-  let {error, user, loading} = authState;
+  let {user, loading} = authState;
 
   return (
     <FirebaseAppContext.Provider

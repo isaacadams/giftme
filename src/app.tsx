@@ -9,11 +9,11 @@ import {Body} from './Body';
 function App(props) {
   return (
     <Grommet full theme={grommet}>
-      <FirebaseAppProvider>
-        <Router>
+      <Router>
+        <FirebaseAppProvider>
           <Body />
-        </Router>
-      </FirebaseAppProvider>
+        </FirebaseAppProvider>
+      </Router>
     </Grommet>
   );
 }

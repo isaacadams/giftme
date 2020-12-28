@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {Switch, Route, Redirect, RouteProps} from 'react-router-dom';
-import {Loader} from '@shared';
 import {FirebaseAppContext} from '@firebase';
 import {useContext} from 'react';
 import {
@@ -12,16 +11,14 @@ import {
 } from '@pages';
 
 function RouterContent(props) {
-  let {user, loading} = useContext(FirebaseAppContext).authState;
-
-  if (loading && !user) return <Loader />;
+  let {isAuthenticated} = useContext(FirebaseAppContext).authState;
 
   return (
     <Switch>
       <Route
         path="/login"
         render={({location}) =>
-          !user ? (
+          !isAuthenticated ? (
             <SignInPage />
           ) : (
             <Redirect
@@ -33,37 +30,36 @@ function RouterContent(props) {
           )
         }
       />
-      <AuthenticatedRoute>
-        <Route path="/" exact component={WishlistEditPage} />
-        <Route path="/groups/:groupname" component={GroupWishlistPage} />
-        <Route path="/groups" component={GroupPage} />
-        <Route path="/:uid" component={WishlistPage} />
-      </AuthenticatedRoute>
+      {!isAuthenticated && <Redirect to="/login" />}
+      <AuthenticatedRoute path="/groups" exact component={GroupPage} />
+      <AuthenticatedRoute path="/" exact component={WishlistEditPage} />
+      <AuthenticatedRoute
+        path="/groups/:groupname"
+        component={GroupWishlistPage}
+      />
+      <AuthenticatedRoute path="/:uid" exact component={WishlistPage} />
     </Switch>
   );
-}
 
-function AuthenticatedRoute({children, ...rest}: RouteProps) {
-  let {user, loading} = useContext(FirebaseAppContext).authState;
-  if (loading) return <Loader />;
-
-  return (
-    <Route
-      {...rest}
-      render={({location}) =>
-        user ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: '/login',
-              state: {from: location},
-            }}
-          />
-        )
-      }
-    />
-  );
+  function AuthenticatedRoute({children, ...route}: RouteProps) {
+    return (
+      <Route
+        {...route}
+        render={(props) =>
+          isAuthenticated ? (
+            children ?? <route.component {...props} />
+          ) : (
+            <Redirect
+              to={{
+                pathname: '/login',
+                state: {from: props.location},
+              }}
+            />
+          )
+        }
+      />
+    );
+  }
 }
 
 export default RouterContent;
