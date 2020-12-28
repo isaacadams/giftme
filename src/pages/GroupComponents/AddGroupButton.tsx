@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {isUrlSafe, GroupModelForm} from '@firebase';
+import {GroupModelForm, UserNameValidation} from '@firebase';
 import {
   Box,
   Button,
@@ -17,6 +17,8 @@ const defaultFormValue: GroupModelForm = {name: ''};
 export function AddGroupButton({onAddGroup, groupnames}) {
   let [show, setShow] = React.useState(false);
   let [value, setValue] = React.useState<GroupModelForm>(defaultFormValue);
+
+  let validation = new UserNameValidation();
 
   return (
     <>
@@ -55,18 +57,8 @@ export function AddGroupButton({onAddGroup, groupnames}) {
                 required
                 validate={[
                   //{ regexp: /^[a-z]/i },
-                  (name) => {
-                    if (!name) return undefined;
-
-                    if (name.length > 16) return 'must be <=16 characters';
-                    if (name.length < 4) return 'must be >=4 characters';
-
-                    return undefined;
-                  },
-                  (name) => {
-                    if (isUrlSafe(name)) return undefined;
-                    return 'invalid name';
-                  },
+                  (name) => validation.length(name),
+                  (name) => validation.urlSafe(name),
                   (name) => {
                     if (groupnames.isValid(name)) return undefined;
                     return `@${name} is taken`;
