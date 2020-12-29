@@ -1,8 +1,6 @@
 import firebase from 'firebase/app';
 import {FirebaseAuthState, useAuthState} from './useAuthState';
-import CreateAuthProviders, {
-  FirebaseAuthProviders,
-} from './CreateAuthProviders';
+import useAuthProviders, {FirebaseAuthProviders} from './useAuthProviders';
 import FirebaseApp from './FirebaseApp';
 import React from 'react';
 import {Loader} from '@shared';
@@ -17,15 +15,14 @@ export type FirebaseAppModel = {
 
 const auth = FirebaseApp.auth();
 
-const authProviders = CreateAuthProviders(auth, {
-  googleProvider: new firebase.auth.GoogleAuthProvider(),
-});
-
 export const FirebaseAppContext = React.createContext<FirebaseAppModel | null>(
   null
 );
 
 export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
+  let authProviders = useAuthProviders(auth, {
+    googleProvider: new firebase.auth.GoogleAuthProvider(),
+  });
   let authState = useAuthState(auth);
   let {user, loading} = authState;
 
