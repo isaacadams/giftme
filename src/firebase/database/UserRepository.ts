@@ -14,23 +14,29 @@ export class UserModel {
 
 export class UserRepository {
   user: firebase.User;
+  usernames: string[];
   constructor(user: firebase.User) {
     this.user = user;
   }
 
-  ensureUserExistsAndIsValid(): Promise<boolean> {
+  ensureUserExistsAndIsValid(): Promise<{
+    valid: boolean;
+    userModel: UserModel;
+  }> {
     return rootRef
       .ref(`users/${this.user.uid}`)
       .once('value')
       .then((s) => {
         let user = s.val();
-        if (user) {
-          //if user exists but does not have a username then user will be redirected to a form to make one
-          return !!user?.username;
+        if (!user) {
+          let {displayName, email, phoneNumber} = this.user;
+          s.ref.update({displayName, email, phoneNumber});
         }
-        let {displayName, email, phoneNumber} = this.user;
-        s.ref.update({displayName, email, phoneNumber});
-        return false;
+        //if user exists but does not have a username then user will be redirected to a form to make one
+        return {
+          valid: !!user?.username,
+          userModel: user,
+        };
       });
   }
 

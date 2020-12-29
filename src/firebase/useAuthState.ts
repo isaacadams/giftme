@@ -1,17 +1,19 @@
 import firebase from 'firebase';
 import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {UserRepository} from './database/UserRepository';
+import {UserModel, UserRepository} from './database/UserRepository';
 
 export type FirebaseAuthState = {
   loading: boolean;
   isAuthenticated: boolean;
   user?: firebase.User | null;
+  userModel: UserModel;
   error?: firebase.auth.Error;
 };
 
 export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
   let [user, setUser] = useState<firebase.User>(null);
+  let [userModel, setUserModel] = useState<UserModel>(null);
   let [loading, setLoading] = useState<boolean>(true);
   let [error, setError] = useState<firebase.auth.Error>(null);
 
@@ -23,10 +25,12 @@ export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
         setUser(null);
       } else {
         setUser(u);
-        new UserRepository(u).ensureUserExistsAndIsValid().then((valid) => {
-          if (valid) return;
-          history.push('/profile/update');
-        });
+        new UserRepository(u)
+          .ensureUserExistsAndIsValid()
+          .then(({valid, userModel}) => {
+            setUserModel(userModel);
+            if (!valid) history.push('/profile/update');
+          });
       }
 
       setLoading(false);
@@ -39,6 +43,7 @@ export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
 
   return {
     user,
+    userModel,
     loading,
     isAuthenticated: !loading && !!user,
     error,
