@@ -14,7 +14,7 @@ import {Add, Group} from 'grommet-icons';
 
 const defaultFormValue: GroupModelForm = {name: ''};
 
-export function AddGroupButton({onAddGroup, groupnames}) {
+export function CreateGroupButton({onAddGroup, groupnames}) {
   let [show, setShow] = React.useState(false);
   let [value, setValue] = React.useState<GroupModelForm>(defaultFormValue);
 
@@ -34,7 +34,7 @@ export function AddGroupButton({onAddGroup, groupnames}) {
           </Box>
           <Add color="brand" />
         </Stack>
-        <Text>Add Group</Text>
+        <Text>Create Group</Text>
       </Box>
       {show && (
         <Layer margin="small" onClickOutside={closeModal} onEsc={closeModal}>

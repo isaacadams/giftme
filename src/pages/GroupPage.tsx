@@ -3,7 +3,7 @@ import {FirebaseAppContext, GroupModel, GroupNamesModel} from '@firebase';
 import {Anchor, Box, Grid, InfiniteScroll, Text} from 'grommet';
 import {Group} from 'grommet-icons';
 import {Loader} from '@shared';
-import {AddGroupButton} from './GroupComponents/AddGroupButton';
+import {CreateGroupButton} from './GroupComponents/CreateGroupButton';
 import {Link, useHistory} from 'react-router-dom';
 
 export function GroupPage(props) {
@@ -34,7 +34,7 @@ export function GroupPage(props) {
 
   return (
     <Grid columns={{count: 2, size: 'auto'}} rows="auto">
-      <AddGroupButton onAddGroup={createGroup} groupnames={groupnames} />
+      <CreateGroupButton onAddGroup={createGroup} groupnames={groupnames} />
       <InfiniteScroll items={groups}>
         {(item, i) => (
           <Box
