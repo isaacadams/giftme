@@ -39,7 +39,7 @@ function RouterContent(props) {
         path="/groups/:groupname"
         component={GroupWishlistPage}
       />
-      <AuthenticatedRoute path="/:uid" exact component={ProfilePage} />
+      <AuthenticatedRoute path="/:username" exact component={ProfilePage} />
       <AuthenticatedRoute
         path="/profile/update"
         exact

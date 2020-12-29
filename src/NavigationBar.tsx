@@ -15,7 +15,7 @@ import {Link, useHistory} from 'react-router-dom';
 function NavigationBar(props) {
   let context = useContext(FirebaseAppContext);
   let {signOut} = context.authProviders;
-  let {user} = context.authState;
+  let {user, userModel} = context.authState;
   let history = useHistory();
   const size = React.useContext(ResponsiveContext);
 
@@ -51,7 +51,7 @@ function NavigationBar(props) {
         }}
         items={[
           {
-            onClick: () => history.push(`/${user.uid}`),
+            onClick: () => history.push(`/${userModel.username}`),
             label: (
               <Anchor
                 icon={<Home />}

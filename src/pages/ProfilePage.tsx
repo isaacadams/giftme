@@ -1,12 +1,12 @@
-import {UserModel, GiftModel, useQuery} from '@firebase';
+import {UserModel, GiftModel, useQuery, FirebaseAppContext} from '@firebase';
 import {Loader} from '@shared';
 import {Box, Heading, Text} from 'grommet';
-import React from 'react';
-import {useParams} from 'react-router-dom';
+import React, {useContext} from 'react';
+import {Redirect, useHistory, useParams} from 'react-router-dom';
 import {WishlistView} from './WishlistPage';
 
 interface IUrlParams {
-  uid: string;
+  username: string;
 }
 
 interface IProfile {
@@ -15,8 +15,21 @@ interface IProfile {
 }
 
 export function ProfilePage(props) {
-  let {uid} = useParams<IUrlParams>();
+  let {username} = useParams<IUrlParams>();
+  let {usernames, loading} = useContext(FirebaseAppContext).usernamesHook;
+  if (loading) return <Loader />;
 
+  let uid: string = usernames[username];
+
+  if (!uid) {
+    console.log(`no userid for @${username}`);
+    return <Redirect to="/" />;
+  }
+
+  return <Profile uid={uid} />;
+}
+
+export function Profile({uid}) {
   let {data, loading} = useQuery<IProfile>(
     [
       {
@@ -33,7 +46,7 @@ export function ProfilePage(props) {
     ([user, gifts]) => ({user, gifts})
   );
 
-  if (!uid || loading || !data) return <Loader />;
+  if (loading || !data) return <Loader />;
 
   return <ProfileView {...data} />;
 }
