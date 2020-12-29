@@ -6,11 +6,13 @@ import React from 'react';
 import {Loader} from '@shared';
 import {Box} from 'grommet';
 import {getRepositories, Repositories} from './database';
+import {IUsernamesHook, useUsernames} from './useUsernames';
 
 export type FirebaseAppModel = {
   authProviders: FirebaseAuthProviders;
   authState: FirebaseAuthState;
   repos: Repositories;
+  usernamesHook: IUsernamesHook;
 };
 
 const auth = FirebaseApp.auth();
@@ -25,6 +27,7 @@ export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
   });
   let authState = useAuthState(auth);
   let {user, loading} = authState;
+  let usernamesHook = useUsernames();
 
   return (
     <FirebaseAppContext.Provider
@@ -32,6 +35,7 @@ export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
         authProviders,
         authState,
         repos: getRepositories(user),
+        usernamesHook,
       }}
     >
       {loading && (
