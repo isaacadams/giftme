@@ -1,8 +1,4 @@
-import {
-  UserModel,
-  GiftModel,
-  useQueryPromise,
-} from '@firebase';
+import {UserModel, GiftModel, useQuery} from '@firebase';
 import {Loader} from '@shared';
 import {Box, Heading, Text} from 'grommet';
 import React from 'react';
@@ -21,7 +17,7 @@ interface IProfile {
 export function ProfilePage(props) {
   let {uid} = useParams<IUrlParams>();
 
-  let {data, loading} = useQueryPromise<IProfile>(
+  let {data, loading} = useQuery<IProfile>(
     [
       {
         key: `users/${uid}`,
@@ -31,7 +27,7 @@ export function ProfilePage(props) {
       {
         key: `gifts/${uid}`,
         event: 'value',
-        cb: (s) => Object.values(s.val()) ?? [],
+        cb: (s) => Object.values(s.val() ?? {}),
       },
     ],
     ([user, gifts]) => ({user, gifts})
@@ -49,7 +45,7 @@ export function ProfileView({user, gifts}: IProfile) {
         <Heading size={'30'} margin={'0'}>
           {user.displayName}
         </Heading>
-        <Text>@{user.name}</Text>
+        <Text>@{user.username}</Text>
       </Box>
       <Box margin={{top: 'medium'}}>
         <WishlistView gifts={gifts} name="My" />

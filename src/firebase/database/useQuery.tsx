@@ -5,59 +5,36 @@ import {useState, useEffect} from 'react';
 const rootRef = FirebaseApp.database();
 
 export function useQuery<T>(
-  databaseKeys: string[],
-  query: (tableRefs: firebase.database.Reference[]) => Promise<T>
-) {
-  let [error, setError] = useState<any>(null);
-  let [loading, setLoading] = useState(true);
-  let [data, setData] = useState<T>(null);
-
-  useEffect(() => {
-    let refs = databaseKeys.map((k) => rootRef.ref(k));
-
-    query(refs)
-      .then(setData)
-      .catch(setError)
-      .finally(() => {
-        setLoading(false);
-      });
-
-    return () => {
-      refs.forEach((r) => r.off());
-    };
-  }, []);
-
-  return {
-    error,
-    loading,
-    data,
-  };
-}
-
-export function useQueryPromise<T>(
   config: {
     key: string;
-    event: firebase.database.EventType; 
+    event: firebase.database.EventType;
     cb: firebaseOnCallback<any>;
   }[],
   construct: (parts: any[]) => T
 ) {
   let [error, setError] = useState<any>(null);
   let [loading, setLoading] = useState(true);
-  let [data, setData] = useState<T>(null);
+  let [feed, setFeed] = useState<any[]>([]);
 
   useEffect(() => {
-    let tables = config.map(({key, event, cb}) => {
+    let tables = config.map(({key, event, cb}, i) => {
       let ref = rootRef.ref(key);
+      let promise = databaseListenify(ref, event, (s, b) => {
+        console.log('feed changing...');
+        console.log(feed);
+        setFeed((v) => {
+          v[i] = cb(s, b);
+          return [...v];
+        });
+        console.log(feed);
+      });
       return {
         ref,
-        promise: databaseListenify(ref, event, cb),
+        promise,
       };
     });
 
     Promise.all(tables.map((t) => t.promise))
-      .then(construct)
-      .then(setData)
       .catch(setError)
       .finally(() => {
         setLoading(false);
@@ -71,7 +48,7 @@ export function useQueryPromise<T>(
   return {
     error,
     loading,
-    data,
+    data: construct(feed),
   };
 }
 

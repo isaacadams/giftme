@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import React, {useEffect, useState} from 'react';
+import {useHistory} from 'react-router-dom';
 import {UserRepository} from './database/UserRepository';
 
 export type FirebaseAuthState = {
@@ -14,13 +15,18 @@ export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
   let [loading, setLoading] = useState<boolean>(true);
   let [error, setError] = useState<firebase.auth.Error>(null);
 
+  let history = useHistory();
+
   useEffect(() => {
     let unsubscribe = auth.onAuthStateChanged((u) => {
       if (!u) {
         setUser(null);
       } else {
         setUser(u);
-        new UserRepository(u).ensureUserExists();
+        new UserRepository(u).ensureUserExistsAndIsValid().then((valid) => {
+          if (valid) return;
+          history.push('/profile/update');
+        });
       }
 
       setLoading(false);
