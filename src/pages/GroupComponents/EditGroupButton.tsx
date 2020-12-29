@@ -1,7 +1,6 @@
 import {Box, Text, Button} from 'grommet';
 import {Edit} from 'grommet-icons';
 import React from 'react';
-import {useHistory} from 'react-router-dom';
 
 export function EditGroupButton({onEditButtonClick}) {
   return (
