@@ -1,36 +1,15 @@
-import {getGroupByName, GroupModel, GroupModelForm} from '@firebase';
+import {GroupModel} from '@firebase';
 import {Wishlist} from '../WishlistPage';
 import {Box, Heading, Text} from 'grommet';
 import * as React from 'react';
-import {useParams} from 'react-router-dom';
-import {Loader} from '@shared';
 import {InviteToGroup} from './InviteToGroup';
 import {EditGroupButton} from './EditGroupButton';
 
-interface IProps {
-  users: string[];
+interface IGroupWishlistPageProps {
+  group: GroupModel;
 }
 
-interface IUrlParams {
-  groupname: string;
-}
-
-export function GroupWishlistPage(props) {
-  let [group, setGroup] = React.useState<GroupModel>(null);
-  let {groupname} = useParams<IUrlParams>();
-
-  React.useEffect(() => {
-    let unsub = getGroupByName(groupname, (g) => {
-      setGroup({...g});
-    });
-
-    return () => {
-      unsub();
-    };
-  }, [groupname]);
-
-  if (!group) return <Loader />;
-
+export function GroupWishlistPage({group}: IGroupWishlistPageProps) {
   return (
     <>
       <Box
@@ -56,6 +35,10 @@ export function GroupWishlistPage(props) {
   function onEditButtonClick() {
     console.log('clicked edit');
   }
+}
+
+interface IProps {
+  users: string[];
 }
 
 export function GroupWishlist({users}: IProps) {

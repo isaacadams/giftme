@@ -10,6 +10,7 @@ import {
   GroupWishlistPage,
   ProfilePage,
   ProfileUpdatePage,
+  GroupHomePage,
 } from '@pages';
 
 function RouterContent(props) {
@@ -35,10 +36,7 @@ function RouterContent(props) {
       {!isAuthenticated && <Redirect to="/login" />}
       <AuthenticatedRoute path="/groups" exact component={GroupPage} />
       <AuthenticatedRoute path="/" exact component={WishlistEditPage} />
-      <AuthenticatedRoute
-        path="/groups/:groupname"
-        component={GroupWishlistPage}
-      />
+      <AuthenticatedRoute path="/groups/:groupname" component={GroupHomePage} />
       <AuthenticatedRoute path="/:username" exact component={ProfilePage} />
       <AuthenticatedRoute
         path="/profile/update"
