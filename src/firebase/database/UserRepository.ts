@@ -46,7 +46,7 @@ export class UserRepository {
     };
   }
 
-  addUsername(name: string): void {
+  addUsername(name: string): Promise<void> {
     name = name.trim().toLowerCase();
     let validation = new UserNameValidation();
     let errors = [validation.length(name), validation.urlSafe(name)].filter(
@@ -60,7 +60,7 @@ export class UserRepository {
     let userid = this.user.uid;
     let usernamesRef = rootRef.ref('usernames');
 
-    rootRef
+    return rootRef
       .ref(`users/${userid}/username`)
       .get()
       .then((s) => {
@@ -88,7 +88,6 @@ export class UserRepository {
               return usernames;
             }); */
           });
-      })
-      .catch(console.error);
+      });
   }
 }

@@ -1,12 +1,8 @@
-import {
-  databaseListenify,
-  FirebaseAppContext,
-  useQuery,
-  UserNameValidation,
-} from '@firebase';
+import {FirebaseAppContext, useQuery, UserNameValidation} from '@firebase';
 import {Loader} from '@shared';
 import {Box, Form, FormField, TextInput, Button, Text} from 'grommet';
 import React, {useContext} from 'react';
+import {useHistory} from 'react-router-dom';
 
 interface IUserRequiredFieldsForm {
   username: string;
@@ -18,6 +14,7 @@ export function ProfileUpdatePage(props) {
   let [value, setValue] = React.useState<IUserRequiredFieldsForm>(
     defaultFormValue
   );
+  let history = useHistory();
   let {userRepo} = useContext(FirebaseAppContext).repos;
 
   let {data: usernames, loading} = useQuery<string[]>(
@@ -25,19 +22,13 @@ export function ProfileUpdatePage(props) {
       {
         key: `usernames`,
         event: 'value',
-        cb: (s) => {
-          console.log('usernames changed...');
-          let d = Object.keys(s.val() ?? {});
-          console.log(d);
-          return d;
-        },
+        cb: (s) => Object.keys(s.val() ?? {}),
       },
     ],
     ([usernames]) => usernames
   );
 
   if (loading) return <Loader />;
-  console.log('rerendering form...');
   let validation = new UserNameValidation();
 
   return (
@@ -48,8 +39,15 @@ export function ProfileUpdatePage(props) {
           setValue({username});
         }}
         onSubmit={({value}) => {
-          userRepo.addUsername(value['username']);
-          setValue(defaultFormValue);
+          userRepo
+            .addUsername(value['username'])
+            .then(() => {
+              history.push('/');
+            })
+            .catch((e) => {
+              setValue(defaultFormValue);
+              console.error(e);
+            });
         }}
         validate="blur"
       >
@@ -61,8 +59,6 @@ export function ProfileUpdatePage(props) {
             validation.urlSafe,
             (name) => {
               name = name.trim().toLowerCase();
-              console.log(name);
-              console.log(usernames);
               if (!usernames.includes(name)) return undefined;
               return `@${name} is taken`;
             },
