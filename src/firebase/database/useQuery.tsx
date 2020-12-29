@@ -12,42 +12,47 @@ export function useQuery<T>(
   }[],
   construct: (parts: any[]) => T
 ) {
-  let [error, setError] = useState<any>(null);
-  let [loading, setLoading] = useState(true);
+  let [errors, setError] = useState<Error[]>([]);
+  let [loading, setLoading] = useState<boolean[]>([]);
   let [feed, setFeed] = useState<any[]>([]);
 
   useEffect(() => {
-    let tables = config.map(({key, event, cb}, i) => {
-      let ref = rootRef.ref(key);
-      let promise = databaseListenify(ref, event, (s, b) => {
-        console.log('feed changing...');
-        console.log(feed);
-        setFeed((v) => {
-          v[i] = cb(s, b);
-          return [...v];
-        });
-        console.log(feed);
-      });
-      return {
-        ref,
-        promise,
-      };
-    });
-
-    Promise.all(tables.map((t) => t.promise))
-      .catch(setError)
-      .finally(() => {
-        setLoading(false);
-      });
+    let unsubscriptions = config.map(({key, event, cb}, i) =>
+      databaseListener(
+        rootRef.ref(key),
+        event,
+        (s, b) => {
+          setFeed((v) => {
+            v[i] = cb(s, b);
+            return [...v];
+          });
+        },
+        (err) => {
+          setError((e) => {
+            e[i] = err;
+            return [...e];
+          });
+        },
+        () => {
+          setLoading((b) => {
+            b[i] = false;
+            return [...b];
+          });
+        }
+      )
+    );
 
     return () => {
-      tables.forEach((t) => t.ref.off());
+      unsubscriptions.forEach((unsub) => unsub());
     };
   }, []);
 
   return {
-    error,
-    loading,
+    error: !errors || errors.some((e) => !!e) ? errors : undefined,
+    loading:
+      !loading ||
+      loading.length < config.length ||
+      !loading.every((load) => !load),
     data: construct(feed),
   };
 }
@@ -63,17 +68,26 @@ export type firebaseOnCallback<T> = (
  * @param event the event to subscribe to
  * @param cb callback for the subscribed event
  * @param onError callback for errors
+ * @param onComplete callback for completion
  * @returns unsubcribe handler
  */
 export function databaseListener(
   ref: firebase.database.Reference,
   event: firebase.database.EventType,
   cb: firebaseOnCallback<any>,
-  onError?: (error: Error) => void
+  onError?: (error: Error) => void,
+  onComplete?: () => void
 ): () => void {
-  let callbackReference = ref.on(event, cb, (e) => {
-    if (e && onError) onError(e);
-  });
+  let callbackReference = ref.on(
+    event,
+    (s, b) => {
+      cb(s, b);
+      onComplete();
+    },
+    (e) => {
+      if (e && onError) onError(e);
+    }
+  );
 
   return () => ref.off(event, callbackReference);
 }
