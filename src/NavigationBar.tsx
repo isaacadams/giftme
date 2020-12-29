@@ -13,7 +13,9 @@ import {FirebaseAppContext} from '@firebase';
 import {Link, useHistory} from 'react-router-dom';
 
 function NavigationBar(props) {
-  let {signOut, user} = useContext(FirebaseAppContext).authProviders;
+  let context = useContext(FirebaseAppContext);
+  let {signOut} = context.authProviders;
+  let {user} = context.authState;
   let history = useHistory();
   const size = React.useContext(ResponsiveContext);
 

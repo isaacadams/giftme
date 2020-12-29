@@ -14,8 +14,6 @@ export type FirebaseAuthProviders = {
   ) => void;
   signOut: () => void;
   createUserWithEmailAndPassword: (email: string, password: string) => void;
-  /* setError: (error: string) => void;*/
-  user?: firebase.User | null;
   error?: string;
   loading: boolean;
 };
@@ -29,17 +27,10 @@ export type AuthProviders = {
   githubProvider?: firebase.auth.GithubAuthProvider;
 };
 
-export type AuthProviderDependencies = {
-  auth: firebase.auth.Auth;
-  providers?: AuthProviders;
-  user: firebase.User;
-};
-
-export default function useAuthProviders({
-  auth,
-  providers,
-  user,
-}: AuthProviderDependencies): FirebaseAuthProviders {
+export default function CreateAuthProviders(
+  auth: firebase.auth.Auth,
+  providers: AuthProviders
+): FirebaseAuthProviders {
   let [loading, setLoading] = useState<boolean>(false);
   let [error, setError] = useState<string>(null);
   return {
@@ -81,7 +72,6 @@ export default function useAuthProviders({
     },
     loading,
     error,
-    user,
   };
 
   async function tryTo<T>(operation: () => Promise<T>) {
