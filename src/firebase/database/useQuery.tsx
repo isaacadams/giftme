@@ -82,7 +82,7 @@ export function databaseListener(
     event,
     (s, b) => {
       cb(s, b);
-      onComplete();
+      if (onComplete) onComplete();
     },
     (e) => {
       if (e && onError) onError(e);
