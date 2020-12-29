@@ -35,7 +35,8 @@ website is live @ [here](https://giftme-8e917.web.app/)
     - [ ] delete/edit groups
 - [ ] cleanup
     - [x] remove border from wishlist and turn them into lists
-    - [ ] add displayName, username, avatar to profile view
+    - [x] add displayName, username
+    - [ ] add avatar to profile view
     - [ ] make wishlist appear a bit larger in mobile mode?
     - [ ] get rid of footer
     - [ ] give header more utility
@@ -46,10 +47,10 @@ website is live @ [here](https://giftme-8e917.web.app/)
     - [ ] was getting an odd error when trying to sign up on mobile phone
     - [x] make navbar menu stretch across width and 
     - [ ] push content down when menu is open?
-- [ ] require username during sign up process
+- [x] require username during sign up process
 - [ ] validation
     - [ ] gift items cannot be empty
-    - [ ] cannot choose username that already exists
+    - [x] cannot choose username that already exists
 
 
 #### feature requests
