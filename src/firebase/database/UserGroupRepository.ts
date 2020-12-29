@@ -19,17 +19,27 @@ export class GroupModel extends GroupModelForm {
   inviteLink?: string;
 }
 
-export function getGroupByName(name: string): Promise<GroupModel> {
-  return rootRef
-    .ref(`groupnames/${name}`)
-    .once('value')
-    .then((s) => s.val())
-    .then((k) => {
-      return rootRef
-        .ref(`groups/${k}`)
-        .once('value')
-        .then((s) => s.val());
+export function getGroupByName(
+  name: string,
+  cb: (group: GroupModel) => void
+): () => void {
+  let refs: firebase.database.Reference[] = [];
+  let groupsnamesRef = rootRef.ref(`groupnames/${name}`);
+  refs.push(groupsnamesRef);
+
+  groupsnamesRef.once('value').then((s) => {
+    let groupKey = s.val();
+    let groupsRef = rootRef.ref(`groups/${groupKey}`);
+    refs.push(groupsRef);
+
+    groupsRef.on('value', (s) => {
+      cb(s.val());
     });
+  });
+
+  return () => {
+    refs.forEach((r) => r.off());
+  };
 }
 
 export class UserGroupRepository {

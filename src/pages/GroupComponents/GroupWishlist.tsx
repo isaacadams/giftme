@@ -4,6 +4,7 @@ import {Box, Heading, Text} from 'grommet';
 import * as React from 'react';
 import {useParams} from 'react-router-dom';
 import {Loader} from '@shared';
+import {InviteToGroup} from './InviteToGroup';
 
 interface IProps {
   users: string[];
@@ -18,7 +19,13 @@ export function GroupWishlistPage(props) {
   let {groupname} = useParams<IUrlParams>();
 
   React.useEffect(() => {
-    getGroupByName(groupname).then(setGroup);
+    let unsub = getGroupByName(groupname, (g) => {
+      setGroup({...g});
+    });
+
+    return () => {
+      unsub();
+    };
   }, [groupname]);
 
   if (!group) return <Loader />;
@@ -36,6 +43,7 @@ export function GroupWishlistPage(props) {
           {group.displayName}
         </Heading>
         <Text>@{group.name}</Text>
+        <InviteToGroup />
       </Box>
       <Box responsive>
         <GroupWishlist users={Object.keys(group.members)} />
