@@ -5,6 +5,7 @@ import * as React from 'react';
 import {useParams} from 'react-router-dom';
 import {Loader} from '@shared';
 import {InviteToGroup} from './InviteToGroup';
+import {EditGroupButton} from './EditGroupButton';
 
 interface IProps {
   users: string[];
@@ -43,6 +44,7 @@ export function GroupWishlistPage(props) {
           {group.displayName}
         </Heading>
         <Text>@{group.name}</Text>
+        <EditGroupButton {...{onEditButtonClick}} />
         <InviteToGroup />
       </Box>
       <Box responsive>
@@ -50,6 +52,10 @@ export function GroupWishlistPage(props) {
       </Box>
     </>
   );
+
+  function onEditButtonClick() {
+    console.log('clicked edit');
+  }
 }
 
 export function GroupWishlist({users}: IProps) {
