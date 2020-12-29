@@ -4,12 +4,15 @@ import {Box, Heading, Text} from 'grommet';
 import * as React from 'react';
 import {InviteToGroup} from './InviteToGroup';
 import {EditGroupButton} from './EditGroupButton';
+import {EditGroupPage} from './EditGroupPage';
 
 interface IGroupWishlistPageProps {
   group: GroupModel;
 }
 
 export function GroupWishlistPage({group}: IGroupWishlistPageProps) {
+  let [editing, setEditing] = React.useState(false);
+
   return (
     <>
       <Box
@@ -27,13 +30,14 @@ export function GroupWishlistPage({group}: IGroupWishlistPageProps) {
         <InviteToGroup />
       </Box>
       <Box responsive>
-        <GroupWishlist users={Object.keys(group.members)} />
+        {editing && <EditGroupPage {...{group, groupname: ''}} />}
+        {!editing && <GroupWishlist users={Object.keys(group.members)} />}
       </Box>
     </>
   );
 
   function onEditButtonClick() {
-    console.log('clicked edit');
+    setEditing(!editing);
   }
 }
 
