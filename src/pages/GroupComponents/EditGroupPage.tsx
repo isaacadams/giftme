@@ -2,6 +2,7 @@ import {DatabaseModel, GroupModel, useQuery, UserModel} from '@database';
 import {Box, Button, Heading, List} from 'grommet';
 import {Trash, User} from 'grommet-icons';
 import React from 'react';
+import {CustomList} from '@shared';
 
 interface IProps {
   group: GroupModel;
@@ -49,22 +50,6 @@ export function EditGroupPage({groupname, group}: IProps) {
           </>,
         ]}
       />
-    </Box>
-  );
-}
-
-function CustomList({
-  items,
-}: {
-  items: Array<JSX.Element | string | React.ReactNode>;
-}) {
-  return (
-    <Box round="xsmall" border>
-      {items.map((e, i) => (
-        <Box key={i} border={i !== 0 ? {side: 'top'} : undefined} pad="small">
-          {e}
-        </Box>
-      ))}
     </Box>
   );
 }
