@@ -52,7 +52,7 @@ export function Profile({uid}) {
 }
 
 export function ProfileView({user, gifts}: IProfile) {
-  if(!user) {
+  if (!user) {
     console.error('user is undefined!');
     return <Loader />;
   }

@@ -50,9 +50,10 @@ export function useQuery<T>(
   return {
     error: !errors || errors.some((e) => !!e) ? errors : undefined,
     loading:
-      !(loading.length === config.length &&
-        loading.every((load) => load === false)) ??
-      true,
+      !(
+        loading.length === config.length &&
+        loading.every((load) => load === false)
+      ) ?? true,
     data: construct(feed),
   };
 }
