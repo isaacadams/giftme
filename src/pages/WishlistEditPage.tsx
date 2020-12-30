@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {useState} from 'react';
 import {Box, Form, TextInput, Text, Button} from 'grommet';
-import {FirebaseAppContext, GiftModel, IDataItems, useData} from '@firebase';
+import {FirebaseAppContext} from '@firebase';
+import {GiftModel, IDataItems, useData} from '@firebase/database';
 import {useModal} from '@shared';
 import {Trash} from 'grommet-icons';
 

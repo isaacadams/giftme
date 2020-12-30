@@ -1,4 +1,4 @@
-import {getGroupByName, GroupModel} from '@firebase';
+import {getGroupByName, GroupModel} from '@firebase/database';
 import * as React from 'react';
 import {useParams} from 'react-router-dom';
 import {Loader} from '@shared';

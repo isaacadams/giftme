@@ -1,4 +1,4 @@
-import {GroupModel} from '@firebase';
+import {GroupModel} from '@firebase/database';
 import {Wishlist} from '../WishlistPage';
 import {Box, Heading, Text} from 'grommet';
 import * as React from 'react';

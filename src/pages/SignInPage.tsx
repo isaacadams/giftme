@@ -3,7 +3,7 @@ import {Google} from 'grommet-icons';
 import {Box, Button, Grid, Heading} from 'grommet';
 import {Loader} from '@shared';
 import {useContext} from 'react';
-import {FirebaseAppContext} from '../firebase';
+import {FirebaseAppContext} from '@firebase';
 
 export function SignInPage(props) {
   let {signInWithGoogle, loading} = useContext(

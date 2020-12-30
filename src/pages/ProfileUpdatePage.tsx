@@ -1,4 +1,5 @@
-import {FirebaseAppContext, useQuery, UserNameValidation} from '@firebase';
+import {FirebaseAppContext} from '@firebase';
+import {useQuery, UserNameValidation} from '@firebase/database';
 import {Loader} from '@shared';
 import {Box, Form, FormField, TextInput, Button, Text} from 'grommet';
 import React, {useContext} from 'react';

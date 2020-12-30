@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {FirebaseAppContext, GroupModel, GroupNamesModel} from '@firebase';
+import {GroupModel, GroupNamesModel} from '@firebase/database';
+import {FirebaseAppContext} from '@firebase';
 import {Anchor, Box, Grid, InfiniteScroll, Text} from 'grommet';
 import {Group} from 'grommet-icons';
 import {Loader} from '@shared';
