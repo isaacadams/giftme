@@ -3,7 +3,8 @@ import {Wishlist} from '../WishlistPage';
 import {Box, Button, Heading, ResponsiveContext, Text} from 'grommet';
 import * as React from 'react';
 import {EditGroupPage} from './EditGroupPage';
-import {Edit} from 'grommet-icons';
+import {Edit, Trash} from 'grommet-icons';
+import {BaseList, CustomList} from '@shared';
 
 interface IGroupWishlistPageProps {
   group: GroupModel;
@@ -21,10 +22,11 @@ export function GroupWishlistPage({group}: IGroupWishlistPageProps) {
       direction="row-responsive"
       justify="center"
       pad="medium"
+      gap="large"
     >
       <Box
-        width="medium"
-        height="15rem"
+        width="20rem"
+        fill="vertical"
         align="start"
         gap="small"
         margin={{bottom: 'medium'}}
@@ -33,15 +35,35 @@ export function GroupWishlistPage({group}: IGroupWishlistPageProps) {
           {group.displayName}
         </Heading>
         <Text>@{group.name}</Text>
-        <Box direction="row" margin={{vertical: 'small'}}>
-          <Button
-            size="small"
-            icon={<Edit />}
-            label="Edit Group"
-            primary
-            onClick={(e) => onEditButtonClick()}
-          />
-        </Box>
+        <BaseList
+          fill="horizontal"
+          itemProps={{
+            direction: 'row',
+            gap: 'small',
+            hoverIndicator: true,
+            focusIndicator: false,
+          }}
+          items={[
+            {
+              children: [
+                <Edit size="medium" />,
+                <Text size="medium">Edit Group</Text>,
+              ],
+              props: {
+                onClick: (e) => onEditButtonClick(),
+              },
+            },
+            {
+              children: [
+                <Trash size="medium" />,
+                <Text size="medium">Delete Group</Text>,
+              ],
+              props: {
+                onClick: (e) => {},
+              },
+            },
+          ]}
+        />
       </Box>
       <Box responsive fill="horizontal" justify="start">
         {editing && <EditGroupPage {...{group, groupname: ''}} />}
