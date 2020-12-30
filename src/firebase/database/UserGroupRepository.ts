@@ -15,7 +15,7 @@ export class GroupModelForm {
 
 export class GroupModel extends GroupModelForm {
   owner: string;
-  members?: string[];
+  members?: {[key: string]: boolean};
   inviteLink?: string;
 }
 
@@ -33,7 +33,8 @@ export function getGroupByName(
     refs.push(groupsRef);
 
     groupsRef.on('value', (s) => {
-      cb(s.val());
+      let group: GroupModel = s.val();
+      cb(group);
     });
   });
 
