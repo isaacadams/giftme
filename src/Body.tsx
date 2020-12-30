@@ -10,15 +10,11 @@ export function Body() {
   let context = React.useContext(FirebaseAppContext);
   if (!context) return <Loader />;
   return (
-    <Grid
-      fill="vertical"
-      style={{gridTemplateRows: 'min-content 1fr'}}
-      gap="small"
-    >
+    <Grid fill="vertical" style={{gridTemplateRows: 'min-content 1fr'}}>
       <Box>
         <NavigationBar />
       </Box>
-      <Main align="center" pad={{vertical: 'medium', horizontal: 'medium'}}>
+      <Main direction="row-responsive" justify="center">
         <RouterContent />
       </Main>
       <Box>

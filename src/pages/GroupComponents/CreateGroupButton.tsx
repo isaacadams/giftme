@@ -25,6 +25,7 @@ export function CreateGroupButton({onAddGroup, groupnames}) {
       <Box
         pad="small"
         align="center"
+        justify="center"
         hoverIndicator
         onClick={() => setShow(true)}
       >

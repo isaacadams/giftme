@@ -15,13 +15,18 @@ export function GroupWishlistPage({group}: IGroupWishlistPageProps) {
   console.log(size);
   {...(['small', 'xsmall'].includes(size) ? {justify: 'start'} : {align: 'center'})} */
   return (
-    <Box direction="row-responsive" fill>
+    <Box
+      width={{max: '1280px'}}
+      fill="horizontal"
+      direction="row-responsive"
+      justify="center"
+      pad="medium"
+    >
       <Box
         width="medium"
         height="15rem"
         align="start"
         gap="small"
-        pad="medium"
         margin={{bottom: 'medium'}}
       >
         <Heading size={'30'} margin={'0'}>
@@ -38,7 +43,7 @@ export function GroupWishlistPage({group}: IGroupWishlistPageProps) {
           />
         </Box>
       </Box>
-      <Box fill responsive justify="start">
+      <Box responsive fill="horizontal" justify="start">
         {editing && <EditGroupPage {...{group, groupname: ''}} />}
         {!editing && <GroupWishlist users={Object.keys(group.members)} />}
       </Box>
