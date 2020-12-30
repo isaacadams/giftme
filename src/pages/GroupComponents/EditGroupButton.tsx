@@ -8,12 +8,14 @@ export function EditGroupButton({onEditButtonClick}) {
       direction="row"
       round
       gap="small"
-      pad={{vertical: 'small', horizontal: 'large'}}
+      pad={{vertical: 'medium', horizontal: 'large'}}
       hoverIndicator
       onClick={() => {
         onEditButtonClick();
       }}
       background="light-4"
+      fill="vertical"
+      align="center"
     >
       <Edit />
       <Text>Edit Group</Text>

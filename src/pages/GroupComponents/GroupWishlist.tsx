@@ -27,9 +27,9 @@ export function GroupWishlistPage({group}: IGroupWishlistPageProps) {
         </Heading>
         <Text>@{group.name}</Text>
         <EditGroupButton {...{onEditButtonClick}} />
-        <InviteToGroup />
+        {/* <InviteToGroup /> */}
       </Box>
-      <Box responsive>
+      <Box width="medium" responsive>
         {editing && <EditGroupPage {...{group, groupname: ''}} />}
         {!editing && <GroupWishlist users={Object.keys(group.members)} />}
       </Box>
