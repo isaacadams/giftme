@@ -1,4 +1,3 @@
-import {StatusPlaceholderSmall} from 'grommet-icons';
 import {GiftModel} from './GiftRepository';
 import {GroupModel} from './UserGroupRepository';
 import {UserModel} from './UserRepository';

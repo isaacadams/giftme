@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {GroupModelForm, UserNameValidation} from '@firebase/database';
+import {GroupModelForm, UserNameValidation} from '@database';
 import {
   Box,
   Button,

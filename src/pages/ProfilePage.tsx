@@ -1,5 +1,5 @@
 import {FirebaseAppContext} from '@firebase';
-import {UserModel, GiftModel, useQuery} from '@firebase/database';
+import {UserModel, GiftModel, useQuery} from '@database';
 import {Loader} from '@shared';
 import {Box, Heading, Text} from 'grommet';
 import React, {useContext} from 'react';

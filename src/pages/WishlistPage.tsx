@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useState} from 'react';
 import '@isaacadams/extensions';
 import {Box, List, Text} from 'grommet';
-import {GiftModel, useData} from '@firebase/database';
+import {GiftModel, useData} from '@database';
 import {useParams} from 'react-router-dom';
 import {Loader} from '@shared';
 import {Gift} from 'grommet-icons';

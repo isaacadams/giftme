@@ -8,7 +8,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write src/**/*",
-    "prestart": "npm run format && rimraf dist .parcel-cache",
+    "prestart": "rimraf dist .parcel-cache && npm run format",
     "start": "parcel src/index.html",
     "preprod": "rimraf build",
     "prod": "parcel build src/index.html"
@@ -23,6 +23,8 @@
   },
   "homepage": "https://github.com/isaacadams/giftme#readme",
   "alias": {
+    "@config": "./src/config/index.ts",
+    "@database": "./src/database/index.ts",
     "@firebase": "./src/firebase/index.ts",
     "@shared": "./src/shared/index.ts",
     "@pages": "./src/pages/index.ts"

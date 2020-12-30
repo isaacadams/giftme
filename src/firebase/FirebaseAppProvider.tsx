@@ -1,11 +1,11 @@
 import firebase from 'firebase/app';
 import {FirebaseAuthState, useAuthState} from './useAuthState';
 import useAuthProviders, {FirebaseAuthProviders} from './useAuthProviders';
-import FirebaseApp from './FirebaseApp';
+import FirebaseApp from '@config';
 import React from 'react';
 import {Loader} from '@shared';
 import {Box} from 'grommet';
-import {getRepositories, Repositories} from './database';
+import {getRepositories, Repositories} from '@database';
 import {IUsernamesHook, useUsernames} from './useUsernames';
 
 export type FirebaseAppModel = {

@@ -1,6 +1,6 @@
-import FirebaseApp from './FirebaseApp';
+import FirebaseApp from '@config';
 import {useEffect, useState} from 'react';
-import {databaseListener} from './database/useQuery';
+import {databaseListener} from '@database';
 
 export interface IUsernamesHook {
   usernames: any;
