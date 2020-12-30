@@ -1,10 +1,9 @@
 import {GroupModel} from '@database';
 import {Wishlist} from '../WishlistPage';
-import {Box, Heading, Text} from 'grommet';
+import {Box, Button, Heading, ResponsiveContext, Text} from 'grommet';
 import * as React from 'react';
-import {InviteToGroup} from './InviteToGroup';
-import {EditGroupButton} from './EditGroupButton';
 import {EditGroupPage} from './EditGroupPage';
+import {Edit} from 'grommet-icons';
 
 interface IGroupWishlistPageProps {
   group: GroupModel;
@@ -12,28 +11,38 @@ interface IGroupWishlistPageProps {
 
 export function GroupWishlistPage({group}: IGroupWishlistPageProps) {
   let [editing, setEditing] = React.useState(false);
-
+  /* let size = React.useContext(ResponsiveContext);
+  console.log(size);
+  {...(['small', 'xsmall'].includes(size) ? {justify: 'start'} : {align: 'center'})} */
   return (
-    <>
+    <Box direction="row-responsive" fill>
       <Box
-        responsive
-        fill="horizontal"
+        width="medium"
+        height="15rem"
         align="start"
         gap="small"
+        pad="medium"
         margin={{bottom: 'medium'}}
       >
         <Heading size={'30'} margin={'0'}>
           {group.displayName}
         </Heading>
         <Text>@{group.name}</Text>
-        <EditGroupButton {...{onEditButtonClick}} />
-        {/* <InviteToGroup /> */}
+        <Box direction="row" margin={{vertical: 'small'}}>
+          <Button
+            size="small"
+            icon={<Edit />}
+            label="Edit Group"
+            primary
+            onClick={(e) => onEditButtonClick()}
+          />
+        </Box>
       </Box>
-      <Box width="medium" responsive>
+      <Box fill responsive justify="start">
         {editing && <EditGroupPage {...{group, groupname: ''}} />}
         {!editing && <GroupWishlist users={Object.keys(group.members)} />}
       </Box>
-    </>
+    </Box>
   );
 
   function onEditButtonClick() {
@@ -47,6 +56,8 @@ interface IProps {
 
 export function GroupWishlist({users}: IProps) {
   return (
-    <Box>{users && users.map((u, i) => <Wishlist key={i} uid={u} />)}</Box>
+    <Box width="medium">
+      {users && users.map((u, i) => <Wishlist key={i} uid={u} />)}
+    </Box>
   );
 }
