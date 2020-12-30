@@ -48,11 +48,14 @@ export function Profile({uid}) {
   );
 
   if (loading || !data) return <Loader />;
-
   return <ProfileView {...data} />;
 }
 
 export function ProfileView({user, gifts}: IProfile) {
+  if(!user) {
+    console.error('user is undefined!');
+    return <Loader />;
+  }
   return (
     <Box direction="row" fill justify="center" gap="medium">
       <Box responsive align="start" gap="small" margin={{bottom: 'medium'}}>
