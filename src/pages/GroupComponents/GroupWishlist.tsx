@@ -1,6 +1,6 @@
 import {GroupModel} from '@database';
 import {Wishlist} from '../WishlistPage';
-import {Box, Button, Heading, ResponsiveContext, Text} from 'grommet';
+import {Box, Button, Heading, Layer, ResponsiveContext, Text} from 'grommet';
 import * as React from 'react';
 import {EditGroupPage} from './EditGroupPage';
 import {Edit, Trash} from 'grommet-icons';
@@ -12,6 +12,7 @@ interface IGroupWishlistPageProps {
 
 export function GroupWishlistPage({group}: IGroupWishlistPageProps) {
   let [editing, setEditing] = React.useState(false);
+  let [showDelete, setShowDelete] = React.useState(false);
   /* let size = React.useContext(ResponsiveContext);
   console.log(size);
   {...(['small', 'xsmall'].includes(size) ? {justify: 'start'} : {align: 'center'})} */
@@ -59,7 +60,9 @@ export function GroupWishlistPage({group}: IGroupWishlistPageProps) {
                 <Text size="medium">Delete Group</Text>,
               ],
               props: {
-                onClick: (e) => {},
+                onClick: (e) => {
+                  setShowDelete(!showDelete);
+                },
               },
             },
           ]}
@@ -68,6 +71,21 @@ export function GroupWishlistPage({group}: IGroupWishlistPageProps) {
       <Box responsive fill="horizontal" justify="start">
         {editing && <EditGroupPage {...{group, groupname: ''}} />}
         {!editing && <GroupWishlist users={Object.keys(group.members)} />}
+        {showDelete && (
+          <Layer
+            margin="small"
+            onEsc={() => {
+              setShowDelete(false);
+            }}
+            onClickOutside={() => {
+              setShowDelete(false);
+            }}
+          >
+            <Box pad="small">
+              Are you sure? This group cannot be recovered once deleted!
+            </Box>
+          </Layer>
+        )}
       </Box>
     </Box>
   );
