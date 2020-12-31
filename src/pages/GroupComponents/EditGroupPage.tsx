@@ -37,7 +37,7 @@ export function EditGroupPage({groupname, group}: IProps) {
           Manage members
         </Heading>
         <Box justify="end">
-          <Button secondary label="Invite a member" size="small" />
+          <Button primary label="Invite a member" size="small" />
         </Box>
       </Box>
       <CustomList
