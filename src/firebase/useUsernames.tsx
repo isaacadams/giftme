@@ -1,14 +1,16 @@
 import FirebaseApp from '@config';
 import {useEffect, useState} from 'react';
-import {databaseListener} from '@database';
+import {databaseListener, DatabaseModel} from '@database';
 
 export interface IUsernamesHook {
-  usernames: any;
+  usernamesTable: DatabaseModel['usernames'];
   loading: boolean;
+  usernames: string[];
+  uids: string[];
 }
 
 export function useUsernames(): IUsernamesHook {
-  let [usernames, setUsernames] = useState<string[]>([]);
+  let [usernamesTable, setUsernames] = useState<DatabaseModel['usernames']>({});
   let [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -27,6 +29,8 @@ export function useUsernames(): IUsernamesHook {
 
   return {
     loading,
-    usernames,
+    usernamesTable,
+    usernames: Object.keys(usernamesTable),
+    uids: Object.values(usernamesTable),
   };
 }

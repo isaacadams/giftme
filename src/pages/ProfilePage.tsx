@@ -17,10 +17,10 @@ interface IProfile {
 
 export function ProfilePage(props) {
   let {username} = useParams<IUrlParams>();
-  let {usernames, loading} = useContext(FirebaseAppContext).usernamesHook;
+  let {usernamesTable, loading} = useContext(FirebaseAppContext).usernamesHook;
   if (loading) return <Loader />;
 
-  let uid: string = usernames[username];
+  let uid: string = usernamesTable[username];
 
   if (!uid) {
     console.log(`no userid for @${username}`);
