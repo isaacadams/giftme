@@ -42,7 +42,6 @@ export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
         setUserModel(userModel);
         setLoadingUserModel(false);
         if (!valid) history.push('/profile/update');
-        console.log(userModel);
       }
     );
 
