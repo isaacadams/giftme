@@ -19,25 +19,29 @@ export class UserRepository {
     this.user = user;
   }
 
-  ensureUserExistsAndIsValid(): Promise<{
-    valid: boolean;
-    userModel: UserModel;
-  }> {
-    return rootRef
-      .ref(`users/${this.user.uid}`)
-      .once('value')
-      .then((s) => {
-        let user = s.val();
-        if (!user) {
-          let {displayName, email, phoneNumber} = this.user;
-          s.ref.update({displayName, email, phoneNumber});
-        }
-        //if user exists but does not have a username then user will be redirected to a form to make one
-        return {
+  ensureUserExistsAndIsValid(
+    cb: (valid: boolean, userModel: UserModel) => void
+  ): () => void {
+    if (!this.user) return () => {};
+
+    let usersRef = rootRef.ref(`users/${this.user.uid}`);
+    let unsub = usersRef.on('value', (s) => {
+      let user = s.val();
+      if (!user) {
+        let {displayName, email, phoneNumber} = this.user;
+        s.ref.update({displayName, email, phoneNumber});
+      }
+      //if user exists but does not have a username then user will be redirected to a form to make one
+      /* {
           valid: !!user?.username,
-          userModel: user,
-        };
-      });
+          userModel: user
+        } */
+      cb(!!user?.username, user);
+    });
+
+    return () => {
+      usersRef.off('value', unsub);
+    };
   }
 
   getUser(cb: (d: UserModel) => void): () => void {

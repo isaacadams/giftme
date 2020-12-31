@@ -14,7 +14,8 @@ export type FirebaseAuthState = {
 export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
   let [user, setUser] = useState<firebase.User>(null);
   let [userModel, setUserModel] = useState<UserModel>(null);
-  let [loading, setLoading] = useState<boolean>(true);
+  let [loadingUser, setLoadingUser] = useState<boolean>(true);
+  let [loadingUserModel, setLoadingUserModel] = useState<boolean>(true);
   let [error, setError] = useState<firebase.auth.Error>(null);
 
   let history = useHistory();
@@ -25,21 +26,33 @@ export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
         setUser(null);
       } else {
         setUser(u);
-        new UserRepository(u)
-          .ensureUserExistsAndIsValid()
-          .then(({valid, userModel}) => {
-            setUserModel(userModel);
-            if (!valid) history.push('/profile/update');
-          });
       }
-
-      setLoading(false);
+      setLoadingUser(false);
     }, setError);
+
     return () => {
-      setLoading(true);
+      setLoadingUser(true);
       unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    let unsubscribe = new UserRepository(user).ensureUserExistsAndIsValid(
+      (valid, userModel) => {
+        setUserModel(userModel);
+        setLoadingUserModel(false);
+        if (!valid) history.push('/profile/update');
+        console.log(userModel);
+      }
+    );
+
+    return () => {
+      setLoadingUser(true);
+      unsubscribe();
+    };
+  }, [user]);
+
+  let loading = loadingUser || loadingUserModel;
 
   return {
     user,
