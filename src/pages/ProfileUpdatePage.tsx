@@ -23,6 +23,7 @@ export function ProfileUpdatePage(props) {
   return (
     <Box pad="medium" fill="vertical" justify="start" margin={{top: 'medium'}}>
       <CustomForm
+        showTray
         defaultValue={defaultFormValue}
         formProps={(update) => ({
           onSubmit: ({value}) => {
