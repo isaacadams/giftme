@@ -75,7 +75,6 @@ export function GroupWishlistPage({group, groupname}: IGroupWishlistPageProps) {
         {!editing && <GroupWishlist users={Object.keys(group.members)} />}
         {showDelete && (
           <Layer
-            margin="small"
             onEsc={() => {
               setShowDelete(false);
             }}

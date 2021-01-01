@@ -9,8 +9,11 @@ interface IDeleteForm {
 export function DeleteGroupView({groupname}) {
   let [showDelete, setShowDelete] = useState(false);
   return (
-    <Box pad="small">
-      Are you sure? This group cannot be recovered once deleted!
+    <Box>
+      <Box background="light-2" pad="small">
+        Are you sure?
+      </Box>
+      <Box pad="medium">This group cannot be recovered once deleted!</Box>
       <CustomForm<IDeleteForm>
         defaultValue={{groupname: ''}}
         formProps={(update) => ({
@@ -26,6 +29,8 @@ export function DeleteGroupView({groupname}) {
             <FormField
               name={'groupname'}
               required
+              label={`Please type ${groupname} to confirm`}
+              pad
               validate={[
                 (name) => {
                   if (name === groupname) return undefined;
