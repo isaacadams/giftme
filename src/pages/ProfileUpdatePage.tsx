@@ -39,7 +39,7 @@ export function ProfileUpdatePage(props) {
           validate: 'blur',
         })}
       >
-        {(value) => (
+        {({formData, FieldComponent}) => (
           <FormField
             label="create a username"
             required
@@ -57,7 +57,7 @@ export function ProfileUpdatePage(props) {
             <TextInput
               icon={<Text>@</Text>}
               name="username"
-              value={value.username}
+              value={formData.username}
             />
           </FormField>
         )}
