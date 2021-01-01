@@ -74,15 +74,8 @@ export function GroupWishlistPage({group, groupname}: IGroupWishlistPageProps) {
         {editing && <EditGroupPage {...{group, groupname: ''}} />}
         {!editing && <GroupWishlist users={Object.keys(group.members)} />}
         {showDelete && (
-          <Layer
-            onEsc={() => {
-              setShowDelete(false);
-            }}
-            onClickOutside={() => {
-              setShowDelete(false);
-            }}
-          >
-            <DeleteGroupView {...{groupname}} />
+          <Layer onEsc={close} onClickOutside={close}>
+            <DeleteGroupView {...{groupname, close}} />
           </Layer>
         )}
       </Box>
@@ -91,6 +84,10 @@ export function GroupWishlistPage({group, groupname}: IGroupWishlistPageProps) {
 
   function onEditButtonClick() {
     setEditing(!editing);
+  }
+
+  function close() {
+    setShowDelete(false);
   }
 }
 
