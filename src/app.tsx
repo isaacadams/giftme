@@ -5,10 +5,19 @@ import {grommet} from 'grommet/themes';
 import {FirebaseAppProvider} from '@firebase';
 import {BrowserRouter as Router} from 'react-router-dom';
 import {Body} from './Body';
+import {deepMerge} from 'grommet/utils';
+
+let merged = deepMerge(grommet, {
+  button: {
+    border: {
+      radius: '6px',
+    },
+  },
+});
 
 function App(props) {
   return (
-    <Grommet full theme={grommet}>
+    <Grommet full theme={merged}>
       <Router>
         <FirebaseAppProvider>
           <Body />
