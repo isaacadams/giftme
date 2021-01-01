@@ -8,13 +8,21 @@ export interface IUrlParams {
   groupname: string;
 }
 
+export interface IGroupHomePageState {
+  group: GroupModel;
+  groupname: string;
+  groupkey: string;
+}
+
 export function GroupHomePage() {
-  let [group, setGroup] = React.useState<GroupModel>(null);
+  let [loading, setLoading] = React.useState<boolean>(true);
+  let [groupHome, setGroupHome] = React.useState<IGroupHomePageState>(null);
   let {groupname} = useParams<IUrlParams>();
 
   React.useEffect(() => {
-    let unsub = getGroupByName(groupname, (g) => {
-      setGroup({...g});
+    let unsub = getGroupByName(groupname, (group, groupkey) => {
+      setGroupHome({group, groupname, groupkey});
+      setLoading(false);
     });
 
     return () => {
@@ -22,6 +30,6 @@ export function GroupHomePage() {
     };
   }, [groupname]);
 
-  if (!group) return <Loader />;
-  return <GroupWishlistPage {...{group, groupname}} />;
+  if (loading) return <Loader />;
+  return <GroupWishlistPage {...groupHome} />;
 }

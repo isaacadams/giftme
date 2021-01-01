@@ -21,7 +21,7 @@ export class GroupModel extends GroupModelForm {
 
 export function getGroupByName(
   name: string,
-  cb: (group: GroupModel) => void
+  cb: (group: GroupModel, groupKey: string) => void
 ): () => void {
   let refs: firebase.database.Reference[] = [];
   let groupsnamesRef = rootRef.ref(`groupnames/${name}`);
@@ -34,13 +34,26 @@ export function getGroupByName(
 
     groupsRef.on('value', (s) => {
       let group: GroupModel = s.val();
-      cb(group);
+      cb(group, groupKey);
     });
   });
 
   return () => {
     refs.forEach((r) => r.off());
   };
+}
+
+export function deleteGroup(
+  groupkey: string,
+  groupname: string,
+  group: GroupModel
+) {
+  rootRef.ref(`groupnames/${groupname}`).remove();
+  rootRef.ref(`groups/${groupkey}`).remove();
+  let usersRef = rootRef.ref('users');
+  Object.keys(group.members).forEach((k) => {
+    usersRef.child(k).child(`groups/${groupkey}`).remove();
+  });
 }
 
 export class UserGroupRepository {

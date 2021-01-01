@@ -1,10 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Box,
-  TextInput,
-  Text,
-  Button,
-} from 'grommet';
+import {Box, TextInput, Text, Button} from 'grommet';
 import {CustomForm} from '@shared';
 import {FormClose} from 'grommet-icons';
 
@@ -12,7 +7,7 @@ interface IDeleteForm {
   groupname: string;
 }
 
-export function DeleteGroupView({groupname, close}) {
+export function DeleteGroupView({groupname, close, deleteGroup}) {
   let [showDelete, setShowDelete] = useState(false);
   return (
     <Box>
@@ -69,7 +64,7 @@ export function DeleteGroupView({groupname, close}) {
           focusIndicator={false}
           plain
           hoverIndicator
-          onClick={() => {}}
+          onClick={deleteGroup}
         />
       </Box>
     </Box>

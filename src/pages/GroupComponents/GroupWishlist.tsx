@@ -1,23 +1,22 @@
-import {GroupModel} from '@database';
+import {deleteGroup} from '@database';
 import {Wishlist} from '../WishlistPage';
-import {Box, Button, Heading, Layer, ResponsiveContext, Text} from 'grommet';
+import {Box, Heading, Layer, Text} from 'grommet';
 import * as React from 'react';
 import {EditGroupPage} from './EditGroupPage';
 import {Edit, Trash} from 'grommet-icons';
-import {BaseList, CustomList} from '@shared';
+import {BaseList} from '@shared';
 import {DeleteGroupView} from './DeleteGroupView';
+import {IGroupHomePageState} from '@pages';
+import {useHistory} from 'react-router-dom';
 
-interface IGroupWishlistPageProps {
-  group: GroupModel;
-  groupname: string;
-}
-
-export function GroupWishlistPage({group, groupname}: IGroupWishlistPageProps) {
+export function GroupWishlistPage({
+  group,
+  groupname,
+  groupkey,
+}: IGroupHomePageState) {
   let [editing, setEditing] = React.useState(false);
   let [showDelete, setShowDelete] = React.useState(false);
-  /* let size = React.useContext(ResponsiveContext);
-  console.log(size);
-  {...(['small', 'xsmall'].includes(size) ? {justify: 'start'} : {align: 'center'})} */
+  let history = useHistory();
   return (
     <Box
       width={{max: '1280px'}}
@@ -75,7 +74,9 @@ export function GroupWishlistPage({group, groupname}: IGroupWishlistPageProps) {
         {!editing && <GroupWishlist users={Object.keys(group.members)} />}
         {showDelete && (
           <Layer onEsc={close} onClickOutside={close}>
-            <DeleteGroupView {...{groupname, close}} />
+            <DeleteGroupView
+              {...{groupname, close, deleteGroup: deleteAndMoveToGroups}}
+            />
           </Layer>
         )}
       </Box>
@@ -88,6 +89,11 @@ export function GroupWishlistPage({group, groupname}: IGroupWishlistPageProps) {
 
   function close() {
     setShowDelete(false);
+  }
+
+  function deleteAndMoveToGroups() {
+    deleteGroup(groupkey, groupname, group);
+    history.push('/groups');
   }
 }
 
