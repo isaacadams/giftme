@@ -23,5 +23,5 @@ export function GroupHomePage() {
   }, [groupname]);
 
   if (!group) return <Loader />;
-  return <GroupWishlistPage {...{group}} />;
+  return <GroupWishlistPage {...{group, groupname}} />;
 }

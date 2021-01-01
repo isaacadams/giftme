@@ -5,12 +5,14 @@ import * as React from 'react';
 import {EditGroupPage} from './EditGroupPage';
 import {Edit, Trash} from 'grommet-icons';
 import {BaseList, CustomList} from '@shared';
+import {DeleteGroupView} from './DeleteGroupView';
 
 interface IGroupWishlistPageProps {
   group: GroupModel;
+  groupname: string;
 }
 
-export function GroupWishlistPage({group}: IGroupWishlistPageProps) {
+export function GroupWishlistPage({group, groupname}: IGroupWishlistPageProps) {
   let [editing, setEditing] = React.useState(false);
   let [showDelete, setShowDelete] = React.useState(false);
   /* let size = React.useContext(ResponsiveContext);
@@ -81,9 +83,7 @@ export function GroupWishlistPage({group}: IGroupWishlistPageProps) {
               setShowDelete(false);
             }}
           >
-            <Box pad="small">
-              Are you sure? This group cannot be recovered once deleted!
-            </Box>
+            <DeleteGroupView {...{groupname}} />
           </Layer>
         )}
       </Box>
