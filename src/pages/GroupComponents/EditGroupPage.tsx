@@ -41,7 +41,11 @@ export function EditGroupPage({groupname, group}: IProps) {
           <>
             {members.map((m, i) => (
               <UserListItem
-                {...{member: m.value.displayName, role: null, key: i}}
+                {...{
+                  member: m.value.displayName ?? `@${m.value.username}`,
+                  role: group.owner === m.key ? 'owner' : 'member',
+                  key: i,
+                }}
               />
             ))}
           </>,
