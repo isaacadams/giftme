@@ -1,7 +1,7 @@
 import {searchUsers} from '@database';
-import {UserItemView} from '@shared';
-import {Box, Button, Heading, TextInput} from 'grommet';
-import {Search, User} from 'grommet-icons';
+import {Loader, useDebounce, UserItemView} from '@shared';
+import {Box, Button, Heading, Stack, TextInput} from 'grommet';
+import {Search} from 'grommet-icons';
 import React, {useEffect, useState} from 'react';
 
 // search for existing user to invite
@@ -11,32 +11,36 @@ import React, {useEffect, useState} from 'react';
 // auth.sendSignInLinkToEmail('some@email.com', {url: 'https://giftme-8e917.web.app/', handleCodeInApp: true});
 
 export function InviteToGroup({}) {
-  //let auth = FirebaseApp.auth();
   let [isSelected, setIsSelected] = useState();
-  let [query, setQuery] = useState('');
+  let [delayedQuery, query, setQuery] = useDebounce('', 500);
+  let [loading, setLoading] = useState<boolean>(false);
   let [suggestions, setSuggestions] = useState<
     ({label?: React.ReactNode; value?: any} | string)[]
   >([]);
 
   useEffect(() => {
     console.log('running effect');
-    searchUsers(query, (users) => {
+    searchUsers(delayedQuery, (users) => {
       console.log(users);
       setSuggestions(
-        Object.values(users ?? {}).map((u, i) => ({
-          label: (
-            <UserItemView
-              key={i}
-              top={u.displayName}
-              bottom={u.username}
-              pad="small"
-            />
-          ),
-          value: u.username,
-        }))
+        Object.keys(users ?? {}).map((k, i) => {
+          let u = users[k];
+          return {
+            label: (
+              <UserItemView
+                key={i}
+                top={u.displayName}
+                bottom={'@' + u.username}
+                pad="small"
+              />
+            ),
+            value: k,
+          };
+        })
       );
+      setLoading(false);
     });
-  }, [query]);
+  }, [delayedQuery]);
 
   return (
     <Box pad="medium">
@@ -49,16 +53,20 @@ export function InviteToGroup({}) {
         Invite member to group
       </Heading>
       <Box gap="small">
-        <TextInput
-          height="small"
-          placeholder="Invite by username or email"
-          icon={<Search />}
-          onChange={(e) => {
-            setQuery(e.currentTarget.value);
-          }}
-          value={query}
-          suggestions={suggestions}
-        />
+        <Stack anchor="right" fill>
+          <TextInput
+            height="small"
+            placeholder="Invite by username or email"
+            icon={<Search />}
+            onChange={(e) => {
+              if (!loading) setLoading(true);
+              setQuery(e.currentTarget.value);
+            }}
+            value={query}
+            suggestions={suggestions}
+          />
+          <Box margin={{right: 'small'}}>{loading && <Loader size={1} />}</Box>
+        </Stack>
         <Button
           primary
           label={
