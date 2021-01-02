@@ -19,8 +19,13 @@ export function InviteToGroup({}) {
   >([]);
 
   useEffect(() => {
+    if (delayedQuery.isNullOrWhitespace()) {
+      setSuggestions([]);
+      setLoading(false);
+      return;
+    }
+
     searchUsers(delayedQuery, (users) => {
-      console.log(users);
       setSuggestions(
         Object.keys(users ?? {}).map((k, i) => {
           let u = users[k];
@@ -58,8 +63,9 @@ export function InviteToGroup({}) {
             placeholder="Invite by username or email"
             icon={<Search />}
             onChange={(e) => {
+              let v = e.currentTarget.value;
               if (!loading) setLoading(true);
-              setQuery(e.currentTarget.value);
+              setQuery(v);
             }}
             value={query}
             suggestions={suggestions}
