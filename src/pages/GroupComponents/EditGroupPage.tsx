@@ -2,7 +2,7 @@ import {getUser, GroupModel, TableKeyWithItem, UserModel} from '@database';
 import {Box, Button, Heading, Layer} from 'grommet';
 import {Trash} from 'grommet-icons';
 import React, {useEffect, useState} from 'react';
-import {CustomList, ShowAvatar} from '@shared';
+import {CustomList, UserItemView} from '@shared';
 import {InviteToGroup} from './InviteToGroup';
 
 interface IProps {
@@ -76,15 +76,7 @@ export function EditGroupPage({groupname, group}: IProps) {
 function UserListItem({member, role}) {
   return (
     <Box direction="row" justify="between">
-      <Box direction="row" gap="small">
-        <Box>
-          <ShowAvatar avatarProps={{size: 'medium'}} />
-        </Box>
-        <Box>
-          <Box>{member ?? 'member'}</Box>
-          <Box>{role ?? 'role'}</Box>
-        </Box>
-      </Box>
+      <UserItemView top={member ?? 'member'} bottom={role ?? 'role'} />
       <Box justify="center">
         <Trash />
       </Box>
