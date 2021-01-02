@@ -9,7 +9,6 @@ export function useDebounce<T>(
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      console.log('setting debounce');
       setDebouncedValue(realValue);
     }, delay);
     return () => {
@@ -21,7 +20,6 @@ export function useDebounce<T>(
     debouncedValue,
     realValue,
     (v) => {
-      console.log('setting real value');
       setRealValue(v);
     },
   ];

@@ -19,7 +19,6 @@ export function InviteToGroup({}) {
   >([]);
 
   useEffect(() => {
-    console.log('running effect');
     searchUsers(delayedQuery, (users) => {
       console.log(users);
       setSuggestions(
