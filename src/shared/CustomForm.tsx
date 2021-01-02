@@ -1,7 +1,6 @@
 import {Box, Form, Button, FormProps, FormField, FormFieldProps} from 'grommet';
 import React from 'react';
-import { ChildRenderFunction, Scalar } from './CustomTypes';
-
+import {ChildRenderFunction, Scalar} from './CustomTypes';
 
 export type FormSafeData<T> = {
   [K in keyof T]: T[K] extends Scalar ? NonNullable<T[K]> : never;

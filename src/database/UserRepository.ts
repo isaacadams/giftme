@@ -16,12 +16,13 @@ export function searchUsers(
   cb: (users: Table<UserModel>) => void
 ) {
   let queryingOnUsername = query.startsWith('@');
-  if(queryingOnUsername && query.length === 1) return;
-  if(queryingOnUsername) query = query.slice(1, query.length);
+  if (queryingOnUsername && query.length === 1) return;
+  if (queryingOnUsername) query = query.slice(1, query.length);
 
   let childKey: string = queryingOnUsername ? 'username' : 'displayName';
 
-  rootRef.ref('users')
+  rootRef
+    .ref('users')
     .orderByChild(childKey)
     .startAt(query.toUpperCase())
     .endAt(query.toLowerCase() + '\uf8ff')
