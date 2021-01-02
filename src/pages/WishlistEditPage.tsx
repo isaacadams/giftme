@@ -1,9 +1,17 @@
 import * as React from 'react';
 import {useState} from 'react';
-import {Box, Form, TextInput, Text, Button} from 'grommet';
+import {
+  Box,
+  Form,
+  TextInput,
+  Text,
+  Button,
+  Grid,
+  Heading,
+  Layer,
+} from 'grommet';
 import {FirebaseAppContext} from '@firebase';
 import {GiftModel, IDataItems, useData} from '@database';
-import {useModal} from '@shared';
 import {Trash} from 'grommet-icons';
 
 export function WishlistEditPage(props) {
@@ -72,4 +80,49 @@ export function EditGiftItem({value, remove, update}: IDataItems<GiftModel>) {
   function onSubmit() {
     update(gift);
   }
+}
+
+interface IModalProps {
+  title?: string;
+  prompt: string;
+  confirmation?: () => void;
+}
+
+function useModal({title, prompt, confirmation}: IModalProps) {
+  let [show, setShow] = useState(false);
+
+  return {
+    show,
+    setShow,
+    Modal: show && (
+      <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
+        <Grid>
+          {title && (
+            <Box direction="row" fill="horizontal" justify="start">
+              <Heading margin="small" size="20">
+                {title}
+              </Heading>
+            </Box>
+          )}
+          <Box pad="medium" direction="row" fill="horizontal">
+            <Text>{prompt}</Text>
+          </Box>
+          <Box direction="row" fill="horizontal" justify="end">
+            <Box margin="small">
+              <Button label="cancel" onClick={() => setShow(false)} />
+            </Box>
+            <Box margin="small">
+              <Button
+                label="ok"
+                onClick={(e) => {
+                  confirmation();
+                  setShow(false);
+                }}
+              />
+            </Box>
+          </Box>
+        </Grid>
+      </Layer>
+    ),
+  };
 }

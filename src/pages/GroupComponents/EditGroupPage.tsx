@@ -2,7 +2,7 @@ import {getUser, GroupModel, TableKeyWithItem, UserModel} from '@database';
 import {Box, Button, Heading} from 'grommet';
 import {Trash} from 'grommet-icons';
 import React, {useEffect, useState} from 'react';
-import {CustomList, useCustomModal, UserItemView} from '@shared';
+import {CustomList, useModal, UserItemView} from '@shared';
 import {InviteToGroup} from './InviteToGroup';
 
 interface IProps {
@@ -20,7 +20,7 @@ export function EditGroupPage({groupname, group}: IProps) {
     });
   }, []);
 
-  let [modalControl, Modal] = useCustomModal({
+  let [modalControl, Modal] = useModal({
     children: (controls) => <InviteToGroup />,
   });
 

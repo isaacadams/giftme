@@ -1,6 +1,5 @@
 export * from './Loader';
 export * from './Modal';
-export * from './useCustomModal';
 export * from './AddifyIcon';
 export * from './CustomList';
 export * from './CustomForm';

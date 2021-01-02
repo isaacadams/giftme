@@ -1,48 +1,41 @@
 import React, {useState} from 'react';
-import {Layer, Grid, Box, Heading, Button, Text} from 'grommet';
+import {Layer, Box, Stack} from 'grommet';
+import {FormClose} from 'grommet-icons';
 import {ChildRenderFunction} from './CustomTypes';
 
-interface IProps {
-  title?: string;
-  prompt: string;
-  confirmation?: () => void;
+export interface ICustomModalProps {
+  children?: ChildRenderFunction<IModalControl>;
 }
 
-export function useModal({title, prompt, confirmation}: IProps) {
-  let [show, setShow] = useState(false);
+export interface IModalControl {
+  close: () => void;
+  open: () => void;
+}
 
-  return {
-    show,
-    setShow,
-    Modal: show && (
+export function useModal({
+  children,
+}: ICustomModalProps): [IModalControl, React.ReactNode] {
+  let [show, setShow] = useState(false);
+  let modalControl = {close, open};
+  return [
+    modalControl,
+    show && (
       <Layer onEsc={() => setShow(false)} onClickOutside={() => setShow(false)}>
-        <Grid>
-          {title && (
-            <Box direction="row" fill="horizontal" justify="start">
-              <Heading margin="small" size="20">
-                {title}
-              </Heading>
-            </Box>
-          )}
-          <Box pad="medium" direction="row" fill="horizontal">
-            <Text>{prompt}</Text>
+        <Stack anchor="top-right">
+          {children(modalControl)}
+          <Box onClick={close} style={{boxShadow: 'none'}} pad="small">
+            <FormClose />
           </Box>
-          <Box direction="row" fill="horizontal" justify="end">
-            <Box margin="small">
-              <Button label="cancel" onClick={() => setShow(false)} />
-            </Box>
-            <Box margin="small">
-              <Button
-                label="ok"
-                onClick={(e) => {
-                  confirmation();
-                  setShow(false);
-                }}
-              />
-            </Box>
-          </Box>
-        </Grid>
+        </Stack>
       </Layer>
     ),
-  };
+  ];
+
+  function close() {
+    setShow(false);
+  }
+
+  function open() {
+    setShow(true);
+  }
 }
