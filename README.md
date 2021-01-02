@@ -30,9 +30,12 @@ website is live @ [here](https://giftme.isaacadams.me)
     - [x] cannot add duplicate groupnames
     - [x] groups should have owners
     - [ ] only owners can invite members
+        - [ ] new invites go to existing users/$uid 
+        - [ ] if an email associated with no existing users, then it goes to potentialusers/$email?
     - [ ] only owners can accept requests
     - [ ] only users can add themselves to groups by requesting or accepting invites
-    - [ ] delete/edit groups
+    - [x] delete groups
+    - [ ] edit groups
 - [ ] cleanup
     - [x] remove border from wishlist and turn them into lists
     - [x] add displayName, username
