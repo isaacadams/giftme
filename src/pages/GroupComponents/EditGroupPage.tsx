@@ -1,8 +1,8 @@
 import {getUser, GroupModel, TableKeyWithItem, UserModel} from '@database';
-import {Box, Button, Heading, Layer} from 'grommet';
+import {Box, Button, Heading} from 'grommet';
 import {Trash} from 'grommet-icons';
 import React, {useEffect, useState} from 'react';
-import {CustomList, UserItemView} from '@shared';
+import {CustomList, useCustomModal, UserItemView} from '@shared';
 import {InviteToGroup} from './InviteToGroup';
 
 interface IProps {
@@ -11,7 +11,6 @@ interface IProps {
 }
 
 export function EditGroupPage({groupname, group}: IProps) {
-  let [showInvite, setShowInvite] = React.useState(false);
   let [members, setMembers] = useState<TableKeyWithItem<UserModel>[]>([]);
   useEffect(() => {
     Object.keys(group?.members ?? {}).forEach((k) => {
@@ -21,13 +20,13 @@ export function EditGroupPage({groupname, group}: IProps) {
     });
   }, []);
 
+  let [modalControl, Modal] = useCustomModal({
+    children: (controls) => <InviteToGroup />,
+  });
+
   return (
     <>
-      {showInvite && (
-        <Layer onEsc={closeInviteModal} onClickOutside={closeInviteModal}>
-          <InviteToGroup />
-        </Layer>
-      )}
+      {Modal}
       <Box width="large">
         <Box
           direction="row"
@@ -44,7 +43,7 @@ export function EditGroupPage({groupname, group}: IProps) {
               primary
               label="Invite a member"
               size="small"
-              onClick={() => setShowInvite(true)}
+              onClick={() => modalControl.open()}
             />
           </Box>
         </Box>
@@ -67,10 +66,6 @@ export function EditGroupPage({groupname, group}: IProps) {
       </Box>
     </>
   );
-
-  function closeInviteModal() {
-    setShowInvite(false);
-  }
 }
 
 function UserListItem({member, role}) {
