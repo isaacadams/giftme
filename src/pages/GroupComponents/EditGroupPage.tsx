@@ -2,7 +2,7 @@ import {DatabaseModel, GroupModel, useQuery, UserModel} from '@database';
 import {Box, Button, Heading, List} from 'grommet';
 import {Trash, User} from 'grommet-icons';
 import React from 'react';
-import {CustomList} from '@shared';
+import {CustomList, ShowAvatar} from '@shared';
 
 interface IProps {
   group: GroupModel;
@@ -58,7 +58,9 @@ function UserListItem({member, role}) {
   return (
     <Box direction="row" justify="between">
       <Box direction="row" gap="small">
-        <Box pad="small">Avatar</Box>
+        <Box>
+          <ShowAvatar avatarProps={{size: 'medium'}} />
+        </Box>
         <Box>
           <Box>name</Box>
           <Box>role</Box>
