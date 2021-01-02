@@ -1,6 +1,6 @@
 import {searchUsers} from '@database';
 import {Loader, useDebounce, UserItemView} from '@shared';
-import {Box, Button, Heading, Stack, TextInput} from 'grommet';
+import {Box, Button, Heading, Stack, TextInput, Text} from 'grommet';
 import {Search} from 'grommet-icons';
 import React, {useEffect, useState} from 'react';
 
@@ -57,10 +57,11 @@ export function InviteToGroup({}) {
         Invite member to group
       </Heading>
       <Box gap="small">
+        <Text>begin with '@' to search usernames</Text>
         <Stack anchor="right" fill>
           <TextInput
             height="small"
-            placeholder="Invite by username or email"
+            placeholder="Invite by full name, username, or email"
             icon={<Search />}
             onChange={(e) => {
               let v = e.currentTarget.value;
