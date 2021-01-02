@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Layer, Grid, Box, Heading, Button, Text} from 'grommet';
+import {ChildRenderFunction} from './CustomTypes';
 
 interface IProps {
   title?: string;
