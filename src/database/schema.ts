@@ -13,11 +13,11 @@ export type DatabaseModel = {
 export type Table<T> = {[key: string]: T};
 export type TableKey = keyof DatabaseModel;
 
-export function GetTableType<T extends TableKey>(): DatabaseModel[T] {
-  return null;
+export function GetTableType(key: TableKey): string {
+  return key.toString();
 }
 
-let poop = GetTableType<'groups'>();
+//let groups = GetTableType('groups');
 
 //type PropType<TObj, TProp extends keyof TObj> = TObj[TProp];
 /* export function GetTableType<TObj, TProp extends keyof TObj>(key: keyof TObj): TObj[TProp] {
