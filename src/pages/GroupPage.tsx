@@ -34,7 +34,8 @@ export function GroupPage(props) {
   console.log('rerendering group page');
 
   return (
-    <Grid columns={{count: 2, size: 'auto'}} rows="auto">
+    <Box margin={{vertical: 'small'}}>
+      <Grid columns={{count: 2, size: 'auto'}} rows="auto">
       <CreateGroupButton onAddGroup={createGroup} groupnames={groupnames} />
       <InfiniteScroll items={groups}>
         {(item, i) => (
@@ -56,6 +57,7 @@ export function GroupPage(props) {
         )}
       </InfiniteScroll>
     </Grid>
+    </Box>
   );
 
   function createGroup({name, displayName}) {
