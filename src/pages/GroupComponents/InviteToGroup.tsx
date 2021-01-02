@@ -32,7 +32,7 @@ export function InviteToGroup({}) {
   }, [delayedQuery]);
 
   return (
-    <Box pad="medium">
+    <Box pad="medium" width="30rem">
       <Heading
         alignSelf="center"
         level="4"
@@ -41,66 +41,65 @@ export function InviteToGroup({}) {
       >
         Invite member to group
       </Heading>
-      <Box gap="small">
-        {isSelected ? (
-          <UserItemView
-            top={selectedUser.displayName}
-            bottom={'@' + selectedUser.username}
-            pad="small"
-          />
-        ) : (
-          <>
-            <Text>begin with '@' to search usernames</Text>
-            <Stack anchor="right" fill>
-              <TextInput
-                height="small"
-                placeholder="Invite by full name, username, or email"
-                icon={<Search />}
-                onChange={(e) => {
-                  let v = e.currentTarget.value;
-                  if (!loading) setLoading(true);
-                  setQuery(v);
-                }}
-                value={query}
-                onSelect={(e) => {
-                  console.log(e);
-                  setSelectedUser(users[e.suggestion.value])
-                }}
-                suggestions={Object.keys(users ?? {}).map((k, i) => {
-                  let u = users[k];
-                  return {
-                    label: (
-                      <UserItemView
-                        key={i}
-                        top={u.displayName}
-                        bottom={'@' + u.username}
-                        pad="small"
-                      />
-                    ),
-                    value: k,
-                  };
-                })}
-              />
-              <Box margin={{right: 'small'}}>
-                {loading && <Loader size={1} />}
-              </Box>
-            </Stack>
-          </>
-        )}
-        <Button
-          primary
-          label={
-            <Box round="xsmall" pad="xsmall" align="center">
-              {isSelected ? 'Add user to this group' : 'Select a user above'}
-            </Box>
-          }
-          focusIndicator={false}
-          plain
-          hoverIndicator
-          disabled={!isSelected}
-          onClick={() => {}}
+      {isSelected ? (
+        <UserItemView
+          top={selectedUser.displayName}
+          bottom={'@' + selectedUser.username}
+          pad="small"
         />
-      </Box>
+      ) : (
+        <Box gap="small">
+          <Text>begin with '@' to search usernames</Text>
+          <Stack anchor="right" fill>
+            <TextInput
+              height="small"
+              placeholder="Invite by full name, username, or email"
+              icon={<Search />}
+              onChange={(e) => {
+                let v = e.currentTarget.value;
+                if (!loading) setLoading(true);
+                setQuery(v);
+              }}
+              value={query}
+              onSelect={(e) => {
+                console.log(e);
+                setSelectedUser(users[e.suggestion.value]);
+              }}
+              suggestions={Object.keys(users ?? {}).map((k, i) => {
+                let u = users[k];
+                return {
+                  label: (
+                    <UserItemView
+                      key={i}
+                      top={u.displayName}
+                      bottom={'@' + u.username}
+                      pad="small"
+                    />
+                  ),
+                  value: k,
+                };
+              })}
+            />
+            <Box margin={{right: 'small'}}>
+              {loading && <Loader size={1} />}
+            </Box>
+          </Stack>
+        </Box>
+      )}
+      <Button
+        primary
+        label={
+          <Box round="xsmall" pad="xsmall" align="center">
+            {isSelected ? 'Add user to this group' : 'Select a user above'}
+          </Box>
+        }
+        margin={{top: 'small'}}
+        focusIndicator={false}
+        plain
+        hoverIndicator
+        disabled={!isSelected}
+        onClick={() => {}}
+      />
     </Box>
   );
 }
