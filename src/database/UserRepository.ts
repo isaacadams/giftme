@@ -15,10 +15,16 @@ export function searchUsers(
   query: string,
   cb: (users: Table<UserModel>) => void
 ) {
-  rootRef
-    .ref('users')
-    .orderByChild('username')
-    .startAt(query)
+  let queryingOnUsername = query.startsWith('@');
+  if(queryingOnUsername && query.length === 1) return;
+  if(queryingOnUsername) query = query.slice(1, query.length);
+
+  let childKey: string = queryingOnUsername ? 'username' : 'displayName';
+
+  rootRef.ref('users')
+    .orderByChild(childKey)
+    .startAt(query.toUpperCase())
+    .endAt(query.toLowerCase() + '\uf8ff')
     .once('value', (s) => {
       cb(s.val());
     });
