@@ -4,6 +4,12 @@ import {UserNameValidation} from './validation';
 
 const rootRef = FirebaseApp.database();
 
+export function getUser(userid: string, cb: (d: UserModel) => void): void {
+  rootRef.ref(`users/${userid}`).once('value', (s) => {
+    cb(s.val());
+  });
+}
+
 export class UserModel {
   displayName: string;
   username: string;
