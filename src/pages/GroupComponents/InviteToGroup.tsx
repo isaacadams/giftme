@@ -1,4 +1,4 @@
-import {searchUsers} from '@database';
+import {searchUsers, Table, UserModel} from '@database';
 import {Loader, useDebounce, UserItemView} from '@shared';
 import {Box, Button, Heading, Stack, TextInput, Text} from 'grommet';
 import {Search} from 'grommet-icons';
@@ -11,37 +11,22 @@ import React, {useEffect, useState} from 'react';
 // auth.sendSignInLinkToEmail('some@email.com', {url: 'https://giftme-8e917.web.app/', handleCodeInApp: true});
 
 export function InviteToGroup({}) {
-  let [isSelected, setIsSelected] = useState();
+  let [selectedUser, setSelectedUser] = useState<UserModel>(null);
   let [delayedQuery, query, setQuery] = useDebounce('', 500);
   let [loading, setLoading] = useState<boolean>(false);
-  let [suggestions, setSuggestions] = useState<
-    ({label?: React.ReactNode; value?: any} | string)[]
-  >([]);
+  let [users, setUsers] = useState<Table<UserModel>>({});
+
+  let isSelected = !!selectedUser;
 
   useEffect(() => {
     if (delayedQuery.isNullOrWhitespace()) {
-      setSuggestions([]);
+      setUsers({});
       setLoading(false);
       return;
     }
 
     searchUsers(delayedQuery, (users) => {
-      setSuggestions(
-        Object.keys(users ?? {}).map((k, i) => {
-          let u = users[k];
-          return {
-            label: (
-              <UserItemView
-                key={i}
-                top={u.displayName}
-                bottom={'@' + u.username}
-                pad="small"
-              />
-            ),
-            value: k,
-          };
-        })
-      );
+      setUsers(users);
       setLoading(false);
     });
   }, [delayedQuery]);
@@ -57,22 +42,51 @@ export function InviteToGroup({}) {
         Invite member to group
       </Heading>
       <Box gap="small">
-        <Text>begin with '@' to search usernames</Text>
-        <Stack anchor="right" fill>
-          <TextInput
-            height="small"
-            placeholder="Invite by full name, username, or email"
-            icon={<Search />}
-            onChange={(e) => {
-              let v = e.currentTarget.value;
-              if (!loading) setLoading(true);
-              setQuery(v);
-            }}
-            value={query}
-            suggestions={suggestions}
+        {isSelected ? (
+          <UserItemView
+            top={selectedUser.displayName}
+            bottom={'@' + selectedUser.username}
+            pad="small"
           />
-          <Box margin={{right: 'small'}}>{loading && <Loader size={1} />}</Box>
-        </Stack>
+        ) : (
+          <>
+            <Text>begin with '@' to search usernames</Text>
+            <Stack anchor="right" fill>
+              <TextInput
+                height="small"
+                placeholder="Invite by full name, username, or email"
+                icon={<Search />}
+                onChange={(e) => {
+                  let v = e.currentTarget.value;
+                  if (!loading) setLoading(true);
+                  setQuery(v);
+                }}
+                value={query}
+                onSelect={(e) => {
+                  console.log(e);
+                  setSelectedUser(users[e.suggestion.value])
+                }}
+                suggestions={Object.keys(users ?? {}).map((k, i) => {
+                  let u = users[k];
+                  return {
+                    label: (
+                      <UserItemView
+                        key={i}
+                        top={u.displayName}
+                        bottom={'@' + u.username}
+                        pad="small"
+                      />
+                    ),
+                    value: k,
+                  };
+                })}
+              />
+              <Box margin={{right: 'small'}}>
+                {loading && <Loader size={1} />}
+              </Box>
+            </Stack>
+          </>
+        )}
         <Button
           primary
           label={
