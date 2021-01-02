@@ -1,7 +1,7 @@
 import {searchUsers, Table, UserModel} from '@database';
 import {Loader, useDebounce, UserItemView} from '@shared';
 import {Box, Button, Heading, Stack, TextInput, Text} from 'grommet';
-import {Search} from 'grommet-icons';
+import {FormClose, Search} from 'grommet-icons';
 import React, {useEffect, useState} from 'react';
 
 // search for existing user to invite
@@ -15,7 +15,6 @@ export function InviteToGroup({}) {
   let [delayedQuery, query, setQuery] = useDebounce('', 500);
   let [loading, setLoading] = useState<boolean>(false);
   let [users, setUsers] = useState<Table<UserModel>>({});
-
   let isSelected = !!selectedUser;
 
   useEffect(() => {
@@ -26,6 +25,7 @@ export function InviteToGroup({}) {
     }
 
     searchUsers(delayedQuery, (users) => {
+      console.log(users);
       setUsers(users);
       setLoading(false);
     });
@@ -42,11 +42,20 @@ export function InviteToGroup({}) {
         Invite member to group
       </Heading>
       {isSelected ? (
-        <UserItemView
-          top={selectedUser.displayName}
-          bottom={'@' + selectedUser.username}
-          pad="small"
-        />
+        <Stack anchor="right">
+          <UserItemView
+            top={selectedUser.displayName}
+            bottom={'@' + selectedUser.username}
+            pad="small"
+          />
+          <Box
+            onClick={() => setSelectedUser(null)}
+            style={{boxShadow: 'none'}}
+            pad="small"
+          >
+            <FormClose />
+          </Box>
+        </Stack>
       ) : (
         <Box gap="small">
           <Text>begin with '@' to search usernames</Text>
@@ -62,8 +71,8 @@ export function InviteToGroup({}) {
               }}
               value={query}
               onSelect={(e) => {
-                console.log(e);
                 setSelectedUser(users[e.suggestion.value]);
+                setQuery('');
               }}
               suggestions={Object.keys(users ?? {}).map((k, i) => {
                 let u = users[k];
