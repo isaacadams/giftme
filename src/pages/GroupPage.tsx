@@ -36,27 +36,27 @@ export function GroupPage(props) {
   return (
     <Box margin={{vertical: 'small'}}>
       <Grid columns={{count: 2, size: 'auto'}} rows="auto">
-      <CreateGroupButton onAddGroup={createGroup} groupnames={groupnames} />
-      <InfiniteScroll items={groups}>
-        {(item, i) => (
-          <Box
-            key={i}
-            pad="small"
-            align="center"
-            justify="center"
-            hoverIndicator
-            onClick={() => {
-              history.push(`/groups/${item.name}`);
-            }}
-          >
-            <Box fill="horizontal" pad="small" align="center">
-              <Group size="large" />
+        <CreateGroupButton onAddGroup={createGroup} groupnames={groupnames} />
+        <InfiniteScroll items={groups}>
+          {(item, i) => (
+            <Box
+              key={i}
+              pad="small"
+              align="center"
+              justify="center"
+              hoverIndicator
+              onClick={() => {
+                history.push(`/groups/${item.name}`);
+              }}
+            >
+              <Box fill="horizontal" pad="small" align="center">
+                <Group size="large" />
+              </Box>
+              <Text>{item.displayName ?? '@' + item.name}</Text>
             </Box>
-            <Text>{item.displayName ?? '@' + item.name}</Text>
-          </Box>
-        )}
-      </InfiniteScroll>
-    </Grid>
+          )}
+        </InfiniteScroll>
+      </Grid>
     </Box>
   );
 
