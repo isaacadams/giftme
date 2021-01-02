@@ -1,6 +1,7 @@
 import firebase from 'firebase';
 import FirebaseApp from '@config';
 import {UserNameValidation} from './validation';
+import {Table} from '@database';
 
 const rootRef = FirebaseApp.database();
 
@@ -8,6 +9,21 @@ export function getUser(userid: string, cb: (d: UserModel) => void): void {
   rootRef.ref(`users/${userid}`).once('value', (s) => {
     cb(s.val());
   });
+}
+
+export function searchUsers(
+  query: string,
+  cb: (users: Table<UserModel>) => void
+) {
+  console.log('running searchUsers');
+  rootRef
+    .ref('users')
+    .orderByChild('username')
+    .startAt(query)
+    .once('value', (s) => {
+      console.log('getting something back?');
+      cb(s.val());
+    });
 }
 
 export class UserModel {

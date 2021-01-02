@@ -1,10 +1,15 @@
-import {Box} from 'grommet';
+import {Box, BoxProps} from 'grommet';
 import React from 'react';
 import {ShowAvatar} from '@shared';
 
-export function UserItemView({top, bottom}) {
+interface IProps extends BoxProps {
+  top?: string | React.ReactNode;
+  bottom?: string | React.ReactNode;
+}
+
+export function UserItemView({top, bottom, ...props}: IProps) {
   return (
-    <Box direction="row" gap="small">
+    <Box direction="row" gap="small" {...(props ?? {})}>
       <Box>
         <ShowAvatar avatarProps={{size: 'medium'}} />
       </Box>

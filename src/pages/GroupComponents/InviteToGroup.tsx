@@ -1,6 +1,8 @@
+import {searchUsers} from '@database';
+import {UserItemView} from '@shared';
 import {Box, Button, Heading, TextInput} from 'grommet';
-import {Search} from 'grommet-icons';
-import React, {useState} from 'react';
+import {Search, User} from 'grommet-icons';
+import React, {useEffect, useState} from 'react';
 
 // search for existing user to invite
 // if none, invite to app
@@ -11,9 +13,39 @@ import React, {useState} from 'react';
 export function InviteToGroup({}) {
   //let auth = FirebaseApp.auth();
   let [isSelected, setIsSelected] = useState();
+  let [query, setQuery] = useState('');
+  let [suggestions, setSuggestions] = useState<
+    ({label?: React.ReactNode; value?: any} | string)[]
+  >([]);
+
+  useEffect(() => {
+    console.log('running effect');
+    searchUsers(query, (users) => {
+      console.log(users);
+      setSuggestions(
+        Object.values(users ?? {}).map((u, i) => ({
+          label: (
+            <UserItemView
+              key={i}
+              top={u.displayName}
+              bottom={u.username}
+              pad="small"
+            />
+          ),
+          value: u.username,
+        }))
+      );
+    });
+  }, [query]);
+
   return (
     <Box pad="medium">
-      <Heading level="4" style={{margin: 'none'}} textAlign="center">
+      <Heading
+        alignSelf="center"
+        level="4"
+        style={{margin: 'none'}}
+        textAlign="center"
+      >
         Invite member to group
       </Heading>
       <Box gap="small">
@@ -21,6 +53,11 @@ export function InviteToGroup({}) {
           height="small"
           placeholder="Invite by username or email"
           icon={<Search />}
+          onChange={(e) => {
+            setQuery(e.currentTarget.value);
+          }}
+          value={query}
+          suggestions={suggestions}
         />
         <Button
           primary
