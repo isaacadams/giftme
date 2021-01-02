@@ -1,10 +1,10 @@
 import {deleteGroup} from '@database';
 import {Wishlist} from '../WishlistPage';
-import {Box, Heading, Layer, Text} from 'grommet';
+import {Box, Heading, Text} from 'grommet';
 import * as React from 'react';
 import {EditGroupPage} from './EditGroupPage';
 import {Edit, Trash} from 'grommet-icons';
-import {BaseList} from '@shared';
+import {BaseList, useModal} from '@shared';
 import {DeleteGroupView} from './DeleteGroupView';
 import {IGroupHomePageState} from '@pages';
 import {useHistory} from 'react-router-dom';
@@ -15,7 +15,13 @@ export function GroupWishlistPage({
   groupkey,
 }: IGroupHomePageState) {
   let [editing, setEditing] = React.useState(false);
-  let [showDelete, setShowDelete] = React.useState(false);
+  let [modalControl, DeleteModal] = useModal({
+    children: ({close, open}) => (
+      <DeleteGroupView
+        {...{groupname, close, deleteGroup: deleteAndMoveToGroups}}
+      />
+    ),
+  });
   let history = useHistory();
   return (
     <Box
@@ -62,7 +68,7 @@ export function GroupWishlistPage({
               ],
               props: {
                 onClick: (e) => {
-                  setShowDelete(!showDelete);
+                  modalControl.open();
                 },
               },
             },
@@ -72,23 +78,13 @@ export function GroupWishlistPage({
       <Box responsive fill="horizontal" justify="start">
         {editing && <EditGroupPage {...{group, groupname: ''}} />}
         {!editing && <GroupWishlist users={Object.keys(group.members)} />}
-        {showDelete && (
-          <Layer onEsc={close} onClickOutside={close}>
-            <DeleteGroupView
-              {...{groupname, close, deleteGroup: deleteAndMoveToGroups}}
-            />
-          </Layer>
-        )}
+        {DeleteModal}
       </Box>
     </Box>
   );
 
   function onEditButtonClick() {
     setEditing(!editing);
-  }
-
-  function close() {
-    setShowDelete(false);
   }
 
   function deleteAndMoveToGroups() {
