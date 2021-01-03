@@ -7,10 +7,10 @@ import {InviteToGroup} from './InviteToGroup';
 import {IGroupHomePageState} from './GroupHomePage';
 
 interface IProps extends IGroupHomePageState {
-  user: firebase.default.User;
+  user?: firebase.default.User;
 }
 
-export function EditGroupPage({groupname, group, groupkey, user}: IProps) {
+export function EditGroupPage({groupname, group, groupkey}: IProps) {
   let [members, setMembers] = useState<TableKeyWithItem<UserModel>[]>([]);
   useEffect(() => {
     Object.keys(group?.members ?? {}).forEach((k) => {
@@ -21,7 +21,7 @@ export function EditGroupPage({groupname, group, groupkey, user}: IProps) {
   }, []);
 
   let [modalControl, Modal] = useModal({
-    children: (controls) => <InviteToGroup {...{groupkey, userid: user.uid}} />,
+    children: (controls) => <InviteToGroup {...{groupkey}} />,
   });
 
   return (

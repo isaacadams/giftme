@@ -8,12 +8,14 @@ import {BaseList, useModal} from '@shared';
 import {DeleteGroupView} from './DeleteGroupView';
 import {IGroupHomePageState} from '@pages';
 import {useHistory} from 'react-router-dom';
+//import {FirebaseAppContext} from '@firebase';
 
 export function GroupWishlistPage({
   group,
   groupname,
   groupkey,
 }: IGroupHomePageState) {
+  //let {user} = React.useContext(FirebaseAppContext).authState;
   let [editing, setEditing] = React.useState(false);
   let [modalControl, DeleteModal] = useModal({
     children: ({close, open}) => (
@@ -76,7 +78,7 @@ export function GroupWishlistPage({
         />
       </Box>
       <Box responsive fill="horizontal" justify="start">
-        {editing && <EditGroupPage {...{group, groupname: ''}} />}
+        {editing && <EditGroupPage {...{group, groupname, groupkey}} />}
         {!editing && <GroupWishlist users={Object.keys(group.members)} />}
         {DeleteModal}
       </Box>
