@@ -32,8 +32,9 @@ website is live @ [here](https://giftme.isaacadams.me)
     - [ ] only owners can invite members
         - [ ] new invites go to existing users/$uid 
         - [ ] if an email associated with no existing users, then it goes to potentialusers/$email?
-    - [ ] only owners can accept requests
-    - [ ] only users can add themselves to groups by requesting or accepting invites
+        - [ ] users can accept invites
+    - [ ] users can request to be in a group
+        - [ ] only owners can accept requests
     - [x] delete groups
     - [ ] edit groups
 - [ ] cleanup
@@ -45,6 +46,7 @@ website is live @ [here](https://giftme.isaacadams.me)
     - [ ] give header more utility
     - [ ] make login page more appealing
     - [ ] customize theme
+    - [ ] use responsive grid to help with height issues in mobile view
 - [ ] various mobile bugs
     - [ ] inputs squish when keyboard appears during wishlist editing
     - [ ] was getting an odd error when trying to sign up on mobile phone
@@ -68,6 +70,7 @@ website is live @ [here](https://giftme.isaacadams.me)
     - add an image
     - add description / instructions
 - spruce up sign in page with logo
+- filter users in `Manage members` list using search bar
 
 #### 📚 For Further Reading
 
