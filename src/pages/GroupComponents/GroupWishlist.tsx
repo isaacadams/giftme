@@ -34,7 +34,7 @@ export function GroupWishlistPage({
     >
       <Box
         width="20rem"
-        fill="vertical"
+        height={{min: 'auto'}}
         align="start"
         gap="small"
         margin={{bottom: 'medium'}}

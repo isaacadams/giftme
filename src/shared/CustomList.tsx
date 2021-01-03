@@ -29,7 +29,7 @@ export type Element = JSX.Element | string | React.ReactNode;
 
 export function BaseList({items, itemProps, ...props}: IListProps) {
   return (
-    <Box round="xsmall" border {...props}>
+    <Box round="xsmall" border height={{min: 'auto'}} {...props}>
       {items.map(({props, children}, i) => (
         <Box
           key={i}

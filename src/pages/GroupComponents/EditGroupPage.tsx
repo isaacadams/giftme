@@ -31,7 +31,7 @@ export function EditGroupPage({groupname, group}: IProps) {
         <Box
           direction="row"
           align="center"
-          height={{max: 'medium'}}
+          height={{min: 'auto'}}
           justify="between"
           margin={{bottom: 'small'}}
         >
@@ -48,19 +48,18 @@ export function EditGroupPage({groupname, group}: IProps) {
           </Box>
         </Box>
         <CustomList
+          fill="vertical"
           items={[
             //'search',
-            <>
-              {members.map((m, i) => (
-                <UserListItem
-                  {...{
-                    member: m.value.displayName ?? `@${m.value.username}`,
-                    role: group.owner === m.key ? 'owner' : 'member',
-                    key: i,
-                  }}
-                />
-              ))}
-            </>,
+            members.map((m, i) => (
+              <UserListItem
+                {...{
+                  member: m.value.displayName ?? `@${m.value.username}`,
+                  role: group.owner === m.key ? 'owner' : 'member',
+                  key: i,
+                }}
+              />
+            )),
           ]}
         />
       </Box>
