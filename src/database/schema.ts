@@ -12,9 +12,8 @@ export type DatabaseModel = {
 
 export type Table<T> = {[key: string]: T};
 export type TableKey = keyof DatabaseModel;
-export type TableKeyWithItem<T> = {
+export type TableKeyWithItem<T> = T & {
   key: string;
-  value: T;
 };
 
 export function GetTableType(key: TableKey): string {

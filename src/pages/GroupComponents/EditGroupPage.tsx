@@ -4,24 +4,24 @@ import {Trash} from 'grommet-icons';
 import React, {useEffect, useState} from 'react';
 import {CustomList, useModal, UserItemView} from '@shared';
 import {InviteToGroup} from './InviteToGroup';
+import {IGroupHomePageState} from './GroupHomePage';
 
-interface IProps {
-  group: GroupModel;
-  groupname: string;
+interface IProps extends IGroupHomePageState {
+  user: firebase.default.User;
 }
 
-export function EditGroupPage({groupname, group}: IProps) {
+export function EditGroupPage({groupname, group, groupkey, user}: IProps) {
   let [members, setMembers] = useState<TableKeyWithItem<UserModel>[]>([]);
   useEffect(() => {
     Object.keys(group?.members ?? {}).forEach((k) => {
       getUser(k, (user) => {
-        setMembers([...members, {key: k, value: user}]);
+        setMembers([...members, {key: k, ...user}]);
       });
     });
   }, []);
 
   let [modalControl, Modal] = useModal({
-    children: (controls) => <InviteToGroup />,
+    children: (controls) => <InviteToGroup {...{groupkey, userid: user.uid}} />,
   });
 
   return (
@@ -54,7 +54,7 @@ export function EditGroupPage({groupname, group}: IProps) {
             members.map((m, i) => (
               <UserListItem
                 {...{
-                  member: m.value.displayName ?? `@${m.value.username}`,
+                  member: m.displayName ?? `@${m.username}`,
                   role: group.owner === m.key ? 'owner' : 'member',
                   key: i,
                 }}
