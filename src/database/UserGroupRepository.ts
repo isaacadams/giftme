@@ -56,87 +56,86 @@ export function deleteGroup(
   });
 }
 
-export class UserGroupRepository {
-  userid: string;
-  constructor(user: firebase.User) {
-    this.userid = user.uid;
-  }
-
-  getIsGroupnameValid(cb: (groupnames: GroupNamesModel) => void): () => void {
-    let groupNamesRef = rootRef.ref(`groupnames`);
-    groupNamesRef.on('value', (s) => {
-      let groupnames = Object.keys(s.val() ?? {});
-      cb({
-        groupnames,
-        isValid: (name) => !groupnames.includes(name),
-      });
+export function getIsGroupnameValid(
+  cb: (groupnames: GroupNamesModel) => void
+): () => void {
+  let groupNamesRef = rootRef.ref(`groupnames`);
+  groupNamesRef.on('value', (s) => {
+    let groupnames = Object.keys(s.val() ?? {});
+    cb({
+      groupnames,
+      isValid: (name) => !groupnames.includes(name),
     });
+  });
 
-    return () => {
-      groupNamesRef.off();
-    };
+  return () => {
+    groupNamesRef.off();
+  };
+}
+
+export function addGroup(
+  userid: string,
+  name: string,
+  displayName: string,
+  members: string[] = []
+): void {
+  if (!userid) {
+    console.error('no userid');
+    return;
   }
+  name = name.trim().toLowerCase();
+  displayName = displayName?.trim();
 
-  addGroup(name: string, displayName: string, members: string[] = []): void {
-    let userid = this.userid;
-    if (!userid) {
-      console.error('no userid');
-      return;
-    }
-    name = name.trim().toLowerCase();
-    displayName = displayName?.trim();
+  let data: GroupModel = {name, owner: userid};
+  if (displayName) data.displayName = displayName;
 
-    let data: GroupModel = {name, owner: userid};
-    if (displayName) data.displayName = displayName;
+  rootRef
+    .ref(`groups`)
+    .push(data)
+    .then(({key, root}) => {
+      let routes = [userid, ...members].reduce((p, uid) => {
+        p[`groups/${key}/members/${uid}`] = true;
+        p[`users/${uid}/groups/${key}`] = true;
+        return p;
+      }, {});
+      routes[`groupnames/${name}`] = key;
+      return root.update(routes);
+    })
+    .catch(console.error);
+}
 
-    rootRef
-      .ref(`groups`)
-      .push(data)
-      .then(({key, root}) => {
-        let routes = [userid, ...members].reduce((p, uid) => {
-          p[`groups/${key}/members/${uid}`] = true;
-          p[`users/${uid}/groups/${key}`] = true;
-          return p;
-        }, {});
-        routes[`groupnames/${name}`] = key;
-        return root.update(routes);
-      })
+export function getUserGroups(
+  userid: string,
+  cb: (groups: GroupModel[]) => void,
+  complete?: () => void
+): () => void {
+  if (!userid) {
+    console.error('no userid');
+    return;
+  }
+  let refs: firebase.database.Reference[] = [];
+
+  let usersRef = rootRef.ref(`users/${userid}/groups`);
+  refs.push(usersRef);
+
+  usersRef.on('value', (s) => {
+    let userGroups: string[] = Object.keys(s.val() ?? {});
+
+    Promise.all(userGroups.map(getGroup))
+      .then(cb)
+      .finally(complete)
       .catch(console.error);
-  }
+    console.log('adding another group');
+  });
 
-  getUserGroups(
-    cb: (groups: GroupModel[]) => void,
-    complete?: () => void
-  ): () => void {
-    let userid = this.userid;
-    if (!userid) {
-      console.error('no userid');
-      return;
-    }
-    let refs: firebase.database.Reference[] = [];
+  return () => {
+    refs.forEach((r) => r.off());
+  };
+}
 
-    let usersRef = rootRef.ref(`users/${userid}/groups`);
-    refs.push(usersRef);
-
-    usersRef.on('value', (s) => {
-      let userGroups: string[] = Object.keys(s.val() ?? {});
-
-      Promise.all(userGroups.map(getGroup))
-        .then(cb)
-        .finally(complete)
-        .catch(console.error);
-      console.log('adding another group');
-    });
-
-    return () => {
-      refs.forEach((r) => r.off());
-    };
-
-    function getGroup(gKey: string): Promise<GroupModel> {
-      return rootRef
-        .ref(`groups/${gKey}`)
-        .once('value')
-        .then((s) => s.val());
-    }
-  }
+function getGroup(gKey: string): Promise<GroupModel> {
+  return rootRef
+    .ref(`groups/${gKey}`)
+    .once('value')
+    .then((s) => s.val());
 }
