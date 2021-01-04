@@ -15,13 +15,10 @@ export function DeleteGroupView({groupname, close, deleteGroup}) {
         direction="row"
         background="light-2"
         pad="small"
-        justify="between"
+        justify="start"
         align="center"
       >
         <b>Are you sure?</b>
-        <Box onClick={close} style={{boxShadow: 'none'}}>
-          <FormClose />
-        </Box>
       </Box>
       <Box pad="small" gap="small">
         <Text>This group cannot be recovered once deleted!</Text>

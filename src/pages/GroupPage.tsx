@@ -37,7 +37,7 @@ export function GroupPage(props) {
     );
 
   return (
-    <Box margin={{vertical: 'small'}}>
+    <Box margin='small'>
       <Grid columns={{count: 2, size: 'auto'}} rows="auto">
         <CreateGroupButton onAddGroup={createGroup} groupnames={groupnames} />
         <InfiniteScroll items={groups}>
