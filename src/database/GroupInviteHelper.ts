@@ -14,7 +14,7 @@ function isValid(input: string) {
 
 export class GroupInviteHelper {
   private tables: string[];
-  constructor(id: string, groupid: string) {
+  constructor(private id: string, private groupid: string) {
     if (![id, groupid].every(isValid)) {
       console.error('email or groupid was invalid');
       return;
@@ -34,15 +34,19 @@ export class GroupInviteHelper {
   }
 
   confirmInviteToGroup() {
-    let updates = this.tables.reduce((p, c) => {
-      p[c] = true;
-      return p;
-    }, {});
+    let {groupid, id} = this;
+    rootRef.ref().update({
+      [`${GetTableType('groups')}/${groupid}/members/${id}`]: true,
+      [`${GetTableType('users')}/${id}/groups/${groupid}`]: true,
+    });
 
-    rootRef.ref().update(updates);
+    rootRef.ref(`groups/${groupid}/invites/${id}`).remove();
+    rootRef.ref(`invites/${id}/${groupid}`).remove();
   }
 
   denyInviteToGroup() {
-    this.tables.forEach((t) => rootRef.ref(t).remove());
+    let {groupid, id} = this;
+    rootRef.ref(`groups/${groupid}/invites/${id}`).remove();
+    rootRef.ref(`invites/${id}/${groupid}`).remove();
   }
 }
