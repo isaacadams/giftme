@@ -8,6 +8,7 @@ export type DatabaseModel = {
   gifts: Table<GiftModel>;
   groups: Table<GroupModel>;
   groupnames: Table<string>;
+  invites: Table<Table<boolean>>;
 };
 
 export type Table<T> = {[key: string]: T};

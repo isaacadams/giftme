@@ -1,9 +1,9 @@
 import {
-  inviteToGroup,
   searchUsers,
   Table,
   TableKeyWithItem,
   UserModel,
+  GroupInviteHelper,
 } from '@database';
 import {Loader, useDebounce, UserItemView} from '@shared';
 import {Box, Button, Heading, Stack, TextInput, Text} from 'grommet';
@@ -16,7 +16,7 @@ import React, {useEffect, useState} from 'react';
 // ^ code to run when users clicks on link in email
 // auth.sendSignInLinkToEmail('some@email.com', {url: 'https://giftme-8e917.web.app/', handleCodeInApp: true});
 
-export function InviteToGroup({groupkey}) {
+export function InviteToGroup({controls, groupkey}) {
   let [selectedUser, setSelectedUser] = useState<TableKeyWithItem<UserModel>>(
     null
   );
@@ -118,7 +118,8 @@ export function InviteToGroup({groupkey}) {
         hoverIndicator
         disabled={!isSelected}
         onClick={() => {
-          //inviteToGroup(selectedUser.key, groupkey);
+          new GroupInviteHelper(selectedUser.key, groupkey).inviteToGroup();
+          controls.close();
         }}
       />
     </Box>

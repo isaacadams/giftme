@@ -21,7 +21,7 @@ export function EditGroupPage({groupname, group, groupkey}: IProps) {
   }, []);
 
   let [modalControl, Modal] = useModal({
-    children: (controls) => <InviteToGroup {...{groupkey}} />,
+    children: (controls) => <InviteToGroup {...{controls, groupkey}} />,
   });
 
   return (

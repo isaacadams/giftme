@@ -23,6 +23,8 @@ export function getRepositories(user: firebase.User): Repositories {
   };
 }
 
+export * from './GroupInviteHelper';
+
 export * from './GiftRepository';
 export * from './UserRepository';
 export * from './UserGroupRepository';
