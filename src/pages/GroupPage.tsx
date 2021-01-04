@@ -5,6 +5,7 @@ import {
   getUserGroups,
   GroupModel,
   GroupNamesModel,
+  TableKeyWithItem,
 } from '@database';
 import {FirebaseAppContext} from '@firebase';
 import {Anchor, Box, Grid, InfiniteScroll, Text} from 'grommet';
@@ -19,7 +20,7 @@ export function GroupPage(props) {
 
   return (
     <Box margin="small">
-      <GroupInvites userid={user.uid} />
+      <GroupInvites {...{userid: user.uid}} />
       <GroupsList {...{userid: user.uid}} />
     </Box>
   );
@@ -31,21 +32,26 @@ interface IGroupsListProps {
 
 function GroupsList({userid}: IGroupsListProps) {
   let history = useHistory();
-  let [groups, setGroups] = React.useState<GroupModel[]>([]);
   let [groupnames, setGroupnames] = React.useState<GroupNamesModel>(null);
   let [loading, setLoading] = React.useState(true);
+  let [userGroups, setUserGroups] = React.useState<TableKeyWithItem<GroupModel>[]>([]);
 
   React.useEffect(() => {
-    console.log('running groups list effect');
-
-    let unsubFromGroupnames = getIsGroupnameValid(setGroupnames);
-    let unsubFromGroups = getUserGroups(userid, setGroups, () =>
+    console.log('running groups page effect');
+    let unsubFromGroups = getUserGroups(userid, setUserGroups, () =>
       setLoading(false)
     );
 
     return () => {
-      unsubFromGroupnames();
       unsubFromGroups();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    console.log('running groups list effect');
+    let unsubFromGroupnames = getIsGroupnameValid(setGroupnames);
+    return () => {
+      unsubFromGroupnames();
     };
   }, []);
 
@@ -59,7 +65,7 @@ function GroupsList({userid}: IGroupsListProps) {
   return (
     <Grid columns={{count: 2, size: 'auto'}} rows="auto">
       <CreateGroupButton onAddGroup={createGroup} groupnames={groupnames} />
-      <InfiniteScroll items={groups}>
+      <InfiniteScroll items={userGroups}>
         {(item, i) => (
           <Box
             key={i}
