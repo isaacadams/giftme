@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import FirebaseApp from '@config';
+import {TableKeyWithItem} from './schema';
 
 const rootRef = FirebaseApp.database();
 
@@ -106,19 +107,16 @@ export function addGroup(
 
 export function getUserGroups(
   userid: string,
-  cb: (groups: GroupModel[]) => void,
+  cb: (groups: TableKeyWithItem<GroupModel>[]) => void,
   complete?: () => void
 ): () => void {
   if (!userid) {
     console.error('no userid');
     return;
   }
-  let refs: firebase.database.Reference[] = [];
-
   let usersRef = rootRef.ref(`users/${userid}/groups`);
-  refs.push(usersRef);
 
-  usersRef.on('value', (s) => {
+  let usersRefCb = usersRef.on('value', (s) => {
     let userGroups: string[] = Object.keys(s.val() ?? {});
 
     Promise.all(userGroups.map(getGroup))
@@ -129,13 +127,16 @@ export function getUserGroups(
   });
 
   return () => {
-    refs.forEach((r) => r.off());
+    usersRef.off('value', usersRefCb);
   };
 }
 
-function getGroup(gKey: string): Promise<GroupModel> {
+function getGroup(gKey: string): Promise<TableKeyWithItem<GroupModel>> {
   return rootRef
     .ref(`groups/${gKey}`)
     .once('value')
-    .then((s) => s.val());
+    .then((s) => ({
+      key: gKey,
+      ...s.val(),
+    }));
 }
