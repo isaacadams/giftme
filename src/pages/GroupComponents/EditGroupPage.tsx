@@ -1,4 +1,10 @@
-import {getUser, GroupModel, TableKeyWithItem, UserModel} from '@database';
+import {
+  deleteUserFromGroup,
+  getUser,
+  GroupModel,
+  TableKeyWithItem,
+  UserModel,
+} from '@database';
 import {Box, Button, Heading} from 'grommet';
 import {Trash} from 'grommet-icons';
 import React, {useEffect, useState} from 'react';
@@ -56,6 +62,8 @@ export function EditGroupPage({groupname, group, groupkey}: IProps) {
                 {...{
                   member: m.displayName ?? `@${m.username}`,
                   role: group.owner === m.key ? 'owner' : 'member',
+                  userid: m.key,
+                  groupid: groupkey,
                   key: i,
                 }}
               />
@@ -67,11 +75,16 @@ export function EditGroupPage({groupname, group, groupkey}: IProps) {
   );
 }
 
-function UserListItem({member, role}) {
+function UserListItem({member, role, userid, groupid}) {
   return (
     <Box direction="row" justify="between">
       <UserItemView top={member ?? 'member'} bottom={role ?? 'role'} />
-      <Box justify="center">
+      <Box
+        justify="center"
+        onClick={() => {
+          deleteUserFromGroup(userid, groupid);
+        }}
+      >
         <Trash />
       </Box>
     </Box>

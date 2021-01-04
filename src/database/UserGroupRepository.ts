@@ -74,6 +74,18 @@ export function getIsGroupnameValid(
   };
 }
 
+export function addUserToGroup(userid: string, groupid: string) {
+  rootRef.ref().update({
+    [`groups/${groupid}/members/${userid}`]: true,
+    [`users/${userid}/groups/${groupid}`]: true,
+  });
+}
+
+export function deleteUserFromGroup(userid: string, groupid: string) {
+  rootRef.ref(`groups/${groupid}/members/${userid}`).remove();
+  rootRef.ref(`users/${userid}/groups/${groupid}`).remove();
+}
+
 export function addGroup(
   userid: string,
   name: string,
@@ -107,6 +119,7 @@ export function addGroup(
 
 export function getUserGroups(
   userid: string,
+  shouldContinue: boolean,
   cb: (groups: TableKeyWithItem<GroupModel>[]) => void,
   complete?: () => void
 ): () => void {
@@ -118,12 +131,14 @@ export function getUserGroups(
 
   let usersRefCb = usersRef.on('value', (s) => {
     let userGroups: string[] = Object.keys(s.val() ?? {});
+    if (shouldContinue) {
+      Promise.all(userGroups.map(getGroup))
+        .then(cb)
+        .finally(complete)
+        .catch(console.error);
 
-    Promise.all(userGroups.map(getGroup))
-      .then(cb)
-      .finally(complete)
-      .catch(console.error);
-    console.log('adding another group');
+      console.log('adding another group');
+    }
   });
 
   return () => {
