@@ -2,6 +2,7 @@ import firebase from 'firebase';
 import FirebaseApp from '@config';
 import {UserNameValidation} from './validation';
 import {Table} from '@database';
+import {EmailLike} from '@shared';
 
 const rootRef = FirebaseApp.database();
 
@@ -34,7 +35,7 @@ export function searchUsers(
 export class UserModel {
   displayName: string;
   username: string;
-  email: string;
+  email: EmailLike;
   phoneNumber: string;
   groups?: string[];
 }
