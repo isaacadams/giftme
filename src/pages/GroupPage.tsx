@@ -29,9 +29,12 @@ export function GroupPage(props) {
     };
   }, [userGroupRepo]);
 
-  if (!userGroupRepo || loading) return <Loader />;
-
-  console.log('rerendering group page');
+  if (!userGroupRepo || loading)
+    return (
+      <Box align="center" justify="center" fill>
+        <Loader />
+      </Box>
+    );
 
   return (
     <Box margin={{vertical: 'small'}}>

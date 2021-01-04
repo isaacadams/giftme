@@ -3,6 +3,7 @@ import * as React from 'react';
 import {useParams} from 'react-router-dom';
 import {Loader} from '@shared';
 import {GroupWishlistPage} from './GroupWishlist';
+import {Box} from 'grommet';
 
 export interface IUrlParams {
   groupname: string;
@@ -30,6 +31,11 @@ export function GroupHomePage() {
     };
   }, [groupname]);
 
-  if (loading) return <Loader />;
+  if (loading)
+    return (
+      <Box align="center" justify="center" fill>
+        <Loader />
+      </Box>
+    );
   return <GroupWishlistPage {...groupHome} />;
 }
