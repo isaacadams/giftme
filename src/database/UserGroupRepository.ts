@@ -61,7 +61,7 @@ export function getIsGroupnameValid(
   cb: (groupnames: GroupNamesModel) => void
 ): () => void {
   let groupNamesRef = rootRef.ref(`groupnames`);
-  groupNamesRef.on('value', (s) => {
+  let cbOff = groupNamesRef.on('value', (s) => {
     let groupnames = Object.keys(s.val() ?? {});
     cb({
       groupnames,
@@ -70,7 +70,7 @@ export function getIsGroupnameValid(
   });
 
   return () => {
-    groupNamesRef.off();
+    groupNamesRef.off('value', cbOff);
   };
 }
 
@@ -131,7 +131,7 @@ export function getUserGroups(
   };
 }
 
-function getGroup(gKey: string): Promise<TableKeyWithItem<GroupModel>> {
+export function getGroup(gKey: string): Promise<TableKeyWithItem<GroupModel>> {
   return rootRef
     .ref(`groups/${gKey}`)
     .once('value')
