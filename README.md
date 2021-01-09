@@ -32,10 +32,7 @@ website is live @ [here](https://giftme.isaacadams.me)
     - [x] only owners can invite members
         - [x] new invites go to existing users/$uid 
         - [x] users can accept/reject invites
-    - [ ] if an email associated with no existing users, then it goes to potentialusers/$email?
-    - [ ] group requests 
-        - users can request to be in a group
-        - only owners can accept requests
+    
     - [x] delete groups
     - [ ] edit groups
 - [ ] cleanup
@@ -62,9 +59,6 @@ website is live @ [here](https://giftme.isaacadams.me)
 #### feature requests
 
 - add email/pass option for sign in
-- chat room
-- themes for birthdays/christmas season
-- privacy settings
 - claim gifts on wishlists
 - give gift items properties
     - add a link
@@ -72,6 +66,14 @@ website is live @ [here](https://giftme.isaacadams.me)
     - add description / instructions
 - spruce up sign in page with logo
 - filter users in `Manage members` list using search bar
+- [ ] invite people to groups using an email
+    - if an email associated with no existing users, then it goes to potentialusers/$email?
+- [ ] group requests 
+    - users can request to be in a group
+    - only owners can accept requests
+- privacy settings
+- chat room
+- themes for birthdays/christmas season
 
 #### 📚 For Further Reading
 
