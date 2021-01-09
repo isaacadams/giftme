@@ -5,7 +5,7 @@ import {
   TableKeyWithItem,
   useQuery,
 } from '@database';
-import {Accordion, AccordionPanel, Box} from 'grommet';
+import {Box, Text} from 'grommet';
 import {FormCheckmark, FormClose} from 'grommet-icons';
 import React, {useEffect, useState} from 'react';
 
@@ -33,15 +33,17 @@ export function GroupInvites({userid}: {userid: string}) {
     let isSubscribed = !!data;
     if (isSubscribed) {
       Promise.all(data.map((g) => getGroup(g))).then((g) => {
-        setGroupsInvited([...g, ...groupsInvited]);
+        setGroupsInvited([...g]);
       });
     }
     return () => (isSubscribed = false);
   }, [data]);
   console.log(data);
   return (
-    <Accordion margin="small" style={{border: 'none'}}>
-      <AccordionPanel label={`You have group invites (${data?.length})`}>
+    <>
+      <AccordianBox
+        label={<Text>{`You have group invites (${data?.length})`}</Text>}
+      >
         {groupsInvited.map((g, i) => (
           <InviteButton
             key={i}
@@ -54,8 +56,21 @@ export function GroupInvites({userid}: {userid: string}) {
             }
           />
         ))}
-      </AccordionPanel>
-    </Accordion>
+      </AccordianBox>
+    </>
+  );
+}
+
+function AccordianBox({label, children, ...props}) {
+  let [show, setShow] = useState(false);
+  let style = show ? {} : {display: 'none'};
+  return (
+    <>
+      <Box onClick={() => setShow(!show)}>{label}</Box>
+      <Box {...props} style={style}>
+        {children}
+      </Box>
+    </>
   );
 }
 
