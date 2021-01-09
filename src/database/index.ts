@@ -30,5 +30,6 @@ export * from './schema';
 export * from './useData';
 export * from './validation';
 export * from './useQuery';
+export * from './useSelect';
 
 //export {GiftRepository, UserRepository, UserGroupRepository};
