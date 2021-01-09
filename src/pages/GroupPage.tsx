@@ -34,16 +34,21 @@ function GroupsList({userid}: IGroupsListProps) {
   let history = useHistory();
   let [groupnames, setGroupnames] = React.useState<GroupNamesModel>(null);
   let [loading, setLoading] = React.useState(true);
-  let [userGroups, setUserGroups] = React.useState<TableKeyWithItem<GroupModel>[]>([]);
+  let [userGroups, setUserGroups] = React.useState<GroupModel[]>([]);
 
   React.useEffect(() => {
     console.log('running groups page effect');
-    let unsubFromGroups = getUserGroups(userid, setUserGroups, () =>
-      setLoading(false)
+    let isSubscribed = true;
+    let unsubFromGroups = getUserGroups(
+      userid,
+      isSubscribed,
+      setUserGroups,
+      () => setLoading(false)
     );
 
     return () => {
       unsubFromGroups();
+      isSubscribed = false;
     };
   }, []);
 
