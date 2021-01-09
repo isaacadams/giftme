@@ -32,11 +32,15 @@ website is live @ [here](https://giftme.isaacadams.me)
     - [x] only owners can invite members
         - [x] new invites go to existing users/$uid 
         - [x] users can accept/reject invites
-    
     - [x] delete groups
-    - [ ] edit group displayname and username
     - [x] only owner can see controls
+    - [ ] edit group displayname and username
     - [ ] control for displaying a wishlist
+    - [ ] group home page ideas
+        - header nav bar which only shows for owner/admin with Home & Settings
+        - list of users in group displays below group display name and groupname
+        - can select one or multiple users in list to display the wishlists in the adjacent area
+        - owner/admin can select settings to reveal edit group/manage users options
 - [ ] cleanup
     - [x] remove border from wishlist and turn them into lists
     - [x] add displayName, username
