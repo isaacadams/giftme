@@ -29,12 +29,13 @@ website is live @ [here](https://giftme.isaacadams.me)
 - [ ] group feature
     - [x] cannot add duplicate groupnames
     - [x] groups should have owners
-    - [ ] only owners can invite members
-        - [ ] new invites go to existing users/$uid 
-        - [ ] if an email associated with no existing users, then it goes to potentialusers/$email?
-        - [ ] users can accept invites
-    - [ ] users can request to be in a group
-        - [ ] only owners can accept requests
+    - [x] only owners can invite members
+        - [x] new invites go to existing users/$uid 
+        - [x] users can accept/reject invites
+    - [ ] if an email associated with no existing users, then it goes to potentialusers/$email?
+    - [ ] group requests 
+        - users can request to be in a group
+        - only owners can accept requests
     - [x] delete groups
     - [ ] edit groups
 - [ ] cleanup
