@@ -62,8 +62,9 @@ export function EditGroupPage({groupname, group, groupkey}: IProps) {
                 {...{
                   member: m.displayName ?? `@${m.username}`,
                   role: group.owner === m.key ? 'owner' : 'member',
-                  userid: m.key,
-                  groupid: groupkey,
+                  onDelete: () => {
+                    deleteUserFromGroup(m.key, groupkey);
+                  },
                   key: i,
                 }}
               />
@@ -75,14 +76,14 @@ export function EditGroupPage({groupname, group, groupkey}: IProps) {
   );
 }
 
-function UserListItem({member, role, userid, groupid}) {
+function UserListItem({member, role, onDelete}) {
   return (
     <Box direction="row" justify="between">
       <UserItemView top={member ?? 'member'} bottom={role ?? 'role'} />
       <Box
         justify="center"
         onClick={() => {
-          deleteUserFromGroup(userid, groupid);
+          onDelete();
         }}
       >
         <Trash />
