@@ -34,7 +34,9 @@ website is live @ [here](https://giftme.isaacadams.me)
         - [x] users can accept/reject invites
     
     - [x] delete groups
-    - [ ] edit groups
+    - [ ] edit group displayname and username
+    - [x] only owner can see controls
+    - [ ] control for displaying a wishlist
 - [ ] cleanup
     - [x] remove border from wishlist and turn them into lists
     - [x] add displayName, username

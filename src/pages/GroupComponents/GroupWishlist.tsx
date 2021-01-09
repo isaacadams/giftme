@@ -8,14 +8,14 @@ import {BaseList, useModal} from '@shared';
 import {DeleteGroupView} from './DeleteGroupView';
 import {IGroupHomePageState} from '@pages';
 import {useHistory} from 'react-router-dom';
-//import {FirebaseAppContext} from '@firebase';
+import {FirebaseAppContext} from '@firebase';
 
 export function GroupWishlistPage({
   group,
   groupname,
   groupkey,
 }: IGroupHomePageState) {
-  //let {user} = React.useContext(FirebaseAppContext).authState;
+  let {user} = React.useContext(FirebaseAppContext).authState;
   let [editing, setEditing] = React.useState(false);
   let [modalControl, DeleteModal] = useModal({
     children: ({close, open}) => (
@@ -25,6 +25,7 @@ export function GroupWishlistPage({
     ),
   });
   let history = useHistory();
+  let isOwner = user.uid === group.owner;
   return (
     <Box
       width={{max: '1280px'}}
@@ -45,37 +46,39 @@ export function GroupWishlistPage({
           {group.displayName}
         </Heading>
         <Text>@{group.name}</Text>
-        <BaseList
-          fill="horizontal"
-          itemProps={{
-            direction: 'row',
-            gap: 'small',
-            hoverIndicator: true,
-            focusIndicator: false,
-          }}
-          items={[
-            {
-              children: [
-                <Edit size="medium" />,
-                <Text size="medium">Edit Group</Text>,
-              ],
-              props: {
-                onClick: (e) => onEditButtonClick(),
-              },
-            },
-            {
-              children: [
-                <Trash size="medium" />,
-                <Text size="medium">Delete Group</Text>,
-              ],
-              props: {
-                onClick: (e) => {
-                  modalControl.open();
+        {isOwner && (
+          <BaseList
+            fill="horizontal"
+            itemProps={{
+              direction: 'row',
+              gap: 'small',
+              hoverIndicator: true,
+              focusIndicator: false,
+            }}
+            items={[
+              {
+                children: [
+                  <Edit size="medium" />,
+                  <Text size="medium">Edit Group</Text>,
+                ],
+                props: {
+                  onClick: (e) => onEditButtonClick(),
                 },
               },
-            },
-          ]}
-        />
+              {
+                children: [
+                  <Trash size="medium" />,
+                  <Text size="medium">Delete Group</Text>,
+                ],
+                props: {
+                  onClick: (e) => {
+                    modalControl.open();
+                  },
+                },
+              },
+            ]}
+          />
+        )}
       </Box>
       <Box responsive fill="horizontal" justify="start">
         {editing && <EditGroupPage {...{group, groupname, groupkey}} />}
