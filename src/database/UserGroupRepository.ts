@@ -131,14 +131,12 @@ export function getUserGroups(
 
   let usersRefCb = usersRef.on('value', (s) => {
     let userGroups: string[] = Object.keys(s.val() ?? {});
-    if (shouldContinue) {
-      Promise.all(userGroups.map(getGroup))
-        .then(cb)
-        .finally(complete)
-        .catch(console.error);
+    Promise.all(userGroups.map(getGroup))
+      .then((d) => shouldContinue && cb(d))
+      .finally(() => shouldContinue && complete())
+      .catch((e) => shouldContinue && console.error(e));
 
-      console.log('adding another group');
-    }
+    console.log('adding another group');
   });
 
   return () => {
