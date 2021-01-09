@@ -3,12 +3,9 @@ import {Wishlist} from '../WishlistPage';
 import {Box, Heading, Text} from 'grommet';
 import * as React from 'react';
 import {EditGroupPage} from './EditGroupPage';
-import {Edit, Trash} from 'grommet-icons';
-import {BaseList, useModal} from '@shared';
-import {DeleteGroupView} from './DeleteGroupView';
 import {IGroupHomePageState} from '@pages';
-import {useHistory} from 'react-router-dom';
 import {FirebaseAppContext} from '@firebase';
+import {GroupAdminControls} from './GroupAdminControls';
 
 export function GroupWishlistPage({
   group,
@@ -17,15 +14,11 @@ export function GroupWishlistPage({
 }: IGroupHomePageState) {
   let {user} = React.useContext(FirebaseAppContext).authState;
   let [editing, setEditing] = React.useState(false);
-  let [modalControl, DeleteModal] = useModal({
-    children: ({close, open}) => (
-      <DeleteGroupView
-        {...{groupname, close, deleteGroup: deleteAndMoveToGroups}}
-      />
-    ),
-  });
-  let history = useHistory();
+
   let isOwner = user.uid === group.owner;
+  let deleteTheGroup = () => {
+    deleteGroup(groupkey, groupname, group);
+  };
   return (
     <Box
       width={{max: '1280px'}}
@@ -47,54 +40,20 @@ export function GroupWishlistPage({
         </Heading>
         <Text>@{group.name}</Text>
         {isOwner && (
-          <BaseList
-            fill="horizontal"
-            itemProps={{
-              direction: 'row',
-              gap: 'small',
-              hoverIndicator: true,
-              focusIndicator: false,
-            }}
-            items={[
-              {
-                children: [
-                  <Edit size="medium" />,
-                  <Text size="medium">Edit Group</Text>,
-                ],
-                props: {
-                  onClick: (e) => onEditButtonClick(),
-                },
-              },
-              {
-                children: [
-                  <Trash size="medium" />,
-                  <Text size="medium">Delete Group</Text>,
-                ],
-                props: {
-                  onClick: (e) => {
-                    modalControl.open();
-                  },
-                },
-              },
-            ]}
+          <GroupAdminControls
+            {...{groupname, deleteTheGroup, onEditButtonClick}}
           />
         )}
       </Box>
       <Box responsive fill="horizontal" justify="start">
         {editing && <EditGroupPage {...{group, groupname, groupkey}} />}
         {!editing && <GroupWishlist users={Object.keys(group.members)} />}
-        {DeleteModal}
       </Box>
     </Box>
   );
 
   function onEditButtonClick() {
     setEditing(!editing);
-  }
-
-  function deleteAndMoveToGroups() {
-    deleteGroup(groupkey, groupname, group);
-    history.push('/groups');
   }
 }
 
