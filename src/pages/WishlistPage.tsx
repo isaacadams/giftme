@@ -1,8 +1,7 @@
 import * as React from 'react';
-import {useState} from 'react';
 import '@isaacadams/extensions';
 import {Box, List, Text} from 'grommet';
-import {GiftModel, useData, UserModel, useSelect} from '@database';
+import {GiftModel, Table, UserModel, useSelect} from '@database';
 import {useParams} from 'react-router-dom';
 import {Loader} from '@shared';
 import {Gift} from 'grommet-icons';
@@ -18,14 +17,11 @@ export function WishlistPage(props) {
 
 export function Wishlist({uid}) {
   if (!uid) return <Loader />;
-  let api = useData<GiftModel>(`gifts/${uid}`);
+  let gifts = useSelect<Table<GiftModel>>(`gifts/${uid}`);
   let user = useSelect<UserModel>(`users/${uid}`);
 
   return (
-    <WishlistView
-      name={user?.displayName}
-      gifts={api?.items.map((i) => i.value)}
-    />
+    <WishlistView name={user?.displayName} gifts={Object.values(gifts ?? {})} />
   );
 }
 
