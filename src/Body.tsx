@@ -3,12 +3,9 @@ import {Box, Grid, Main} from 'grommet';
 import {DisplayFooter} from './DisplayFooter';
 import NavigationBar from './NavigationBar';
 import RouterContent from './RouterContent';
-import {FirebaseAppContext} from '@firebase';
-import {Loader} from '@shared';
 
 export function Body() {
-  let context = React.useContext(FirebaseAppContext);
-  if (!context) return <Loader />;
+  console.log('rendering body');
   return (
     <Grid fill="vertical" style={{gridTemplateRows: 'min-content 1fr'}}>
       <Box>

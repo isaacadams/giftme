@@ -15,7 +15,7 @@ import {
 
 function RouterContent(props) {
   let {isAuthenticated} = useContext(FirebaseAppContext).authState;
-
+  console.log('router content');
   return (
     <Switch>
       <Route
