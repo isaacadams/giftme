@@ -50,8 +50,10 @@ export class UserRepository {
   ensureUserExistsAndIsValid(
     cb: (valid: boolean, userModel: UserModel) => void
   ): () => void {
-    if (!this.user) return () => {};
-
+    if (!this.user) {
+      console.error('user was null');
+      return () => {};
+    }
     let usersRef = rootRef.ref(`users/${this.user.uid}`);
     let unsub = usersRef.on('value', (s) => {
       let user = s.val();
