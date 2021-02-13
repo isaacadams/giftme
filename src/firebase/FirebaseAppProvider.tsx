@@ -1,12 +1,14 @@
 import firebase from 'firebase/app';
 import {FirebaseAuthState, useAuthState} from './useAuthState';
-import useAuthProviders, {FirebaseAuthProviders} from './useAuthProviders';
+import {FirebaseAuthProviders, useAuthProviders} from './useAuthProviders';
 import FirebaseApp from '@config';
 import React from 'react';
 import {Loader} from '@shared';
 import {Box} from 'grommet';
 import {getRepositories, Repositories} from '@database';
 import {IUsernamesHook, useUsernames} from './useUsernames';
+import {SignInPage} from '@pages';
+import {Sign} from 'grommet-icons';
 
 export type FirebaseAppModel = {
   authProviders: FirebaseAuthProviders;
@@ -26,7 +28,7 @@ export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
     googleProvider: new firebase.auth.GoogleAuthProvider(),
   });
   let authState = useAuthState(auth);
-  let {user, loading} = authState;
+  let {user, loading, failedToLoad} = authState;
   let usernamesHook = useUsernames();
 
   return (
@@ -40,7 +42,8 @@ export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
     >
       {loading && (
         <Box fill align="center" justify="center">
-          <Loader />
+          {!failedToLoad && <Loader />}
+          {failedToLoad && <SignInPage />}
         </Box>
       )}
       {!loading && children}

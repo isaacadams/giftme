@@ -9,12 +9,14 @@ export type FirebaseAuthState = {
   user?: firebase.User | null;
   userModel: UserModel;
   error?: firebase.auth.Error;
+  failedToLoad: boolean;
 };
 
 export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
   let [user, setUser] = useState<firebase.User>(null);
   let [userModel, setUserModel] = useState<UserModel>(null);
   let [loadingUser, setLoadingUser] = useState<boolean>(true);
+  let [failedToLoadUser, setFailedToLoaderUser] = useState<boolean>(false);
   let [loadingUserModel, setLoadingUserModel] = useState<boolean>(true);
   let [error, setError] = useState<firebase.auth.Error>(null);
 
@@ -22,12 +24,9 @@ export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
 
   useEffect(() => {
     let unsubscribe = auth.onAuthStateChanged((u) => {
-      if (!u) {
-        setUser(null);
-      } else {
-        setUser(u);
-      }
+      setUser(u);
       setLoadingUser(false);
+      setFailedToLoaderUser(!u);
     }, setError);
 
     return () => {
@@ -59,5 +58,6 @@ export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
     loading,
     isAuthenticated: !loading && !!user,
     error,
+    failedToLoad: failedToLoadUser,
   };
 }

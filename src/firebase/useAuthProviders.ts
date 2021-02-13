@@ -27,7 +27,7 @@ export type AuthProviders = {
   githubProvider?: firebase.auth.GithubAuthProvider;
 };
 
-export default function useAuthProviders(
+export function useAuthProviders(
   auth: firebase.auth.Auth,
   providers: AuthProviders
 ): FirebaseAuthProviders {
