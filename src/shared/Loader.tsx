@@ -1,4 +1,6 @@
-import styled, {keyframes} from 'styled-components';
+export {Loader} from '@isaacadams/components';
+
+/* import styled, {keyframes} from 'styled-components';
 
 const spin = keyframes`
     0% {
@@ -16,7 +18,7 @@ export const Loader = styled.div`
   width: ${(props) => props.size ?? 2.28571429}rem;
   height: ${(props) => props.size ?? 2.28571429}rem;
   animation: ${spin} 0.6s linear infinite;
-`;
+`; */
 
 // CREDIT
 // https://dev.to/stephencweiss/create-a-spinner-add-a-loader-in-react-4ic2
