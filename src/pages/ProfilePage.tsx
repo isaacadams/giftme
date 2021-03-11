@@ -1,6 +1,6 @@
-import {FirebaseAppContext} from '@firebase';
-import {UserModel, GiftModel, useQuery} from '@database';
-import {Loader} from '@shared';
+import {FirebaseAppContext} from '#firebase';
+import {UserModel, GiftModel, useQuery} from '#database';
+import {Loader} from '#shared';
 import {Box, Heading, Text} from 'grommet';
 import React, {useContext} from 'react';
 import {Redirect, useHistory, useParams} from 'react-router-dom';

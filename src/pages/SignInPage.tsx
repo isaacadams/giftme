@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {Google} from 'grommet-icons';
 import {Box, Button, Grid, Heading} from 'grommet';
-import FirebaseApp from '@config';
-import {useAuthProviders} from '@firebase';
+import FirebaseApp from '#config';
+import {useAuthProviders} from '#firebase';
 import firebase from 'firebase';
 
 const auth = FirebaseApp.auth();

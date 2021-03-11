@@ -1,9 +1,9 @@
 import * as React from 'react';
 import '@isaacadams/extensions';
 import {Box, List, Text} from 'grommet';
-import {GiftModel, Table, UserModel, useSelect} from '@database';
+import {GiftModel, Table, UserModel, useSelect} from '#database';
 import {useParams} from 'react-router-dom';
-import {Loader} from '@shared';
+import {Loader} from '#shared';
 import {Gift} from 'grommet-icons';
 
 interface IUrlParams {

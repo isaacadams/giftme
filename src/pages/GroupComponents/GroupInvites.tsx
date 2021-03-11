@@ -4,7 +4,7 @@ import {
   GroupModel,
   TableKeyWithItem,
   useQuery,
-} from '@database';
+} from '#database';
 import {Box, Text} from 'grommet';
 import {FormCheckmark, FormClose} from 'grommet-icons';
 import React, {useEffect, useState} from 'react';

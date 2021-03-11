@@ -1,19 +1,17 @@
 {
-    "compilerOptions": {
-        "module": "CommonJS",
-        "target": "ES3",
-        "declaration": true,
-        "lib": [ "DOM", "ES6" ],
-        "jsx": "react",
-        "sourceMap": true,
-        "esModuleInterop": true,
-        "resolveJsonModule": true,
-        "baseUrl": ".",
-        "paths": {
-            "@*": ["./src/*"],
-        }
-    },
-    "exclude": [
-        "node_modules"
-    ]
-} 
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ES3",
+    "declaration": true,
+    "lib": ["DOM", "ES6"],
+    "jsx": "react",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "#*": ["./src/*"]
+    }
+  },
+  "exclude": ["node_modules"]
+}

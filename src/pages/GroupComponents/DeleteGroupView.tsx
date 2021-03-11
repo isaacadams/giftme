@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Box, TextInput, Text, Button} from 'grommet';
-import {CustomForm} from '@shared';
+import {CustomForm} from '#shared';
 import {FormClose} from 'grommet-icons';
 
 interface IDeleteForm {

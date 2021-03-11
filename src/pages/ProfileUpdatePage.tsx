@@ -1,10 +1,10 @@
-import {FirebaseAppContext} from '@firebase';
-import {UserNameValidation} from '@database';
-import {Loader} from '@shared';
+import {FirebaseAppContext} from '#firebase';
+import {UserNameValidation} from '#database';
+import {Loader} from '#shared';
 import {Box, FormField, TextInput, Text} from 'grommet';
 import React, {useContext} from 'react';
 import {useHistory} from 'react-router-dom';
-import {CustomForm} from '@shared';
+import {CustomForm} from '#shared';
 
 interface IUserRequiredFieldsForm {
   username: string;

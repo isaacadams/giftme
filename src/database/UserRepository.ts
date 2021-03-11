@@ -1,8 +1,8 @@
 import firebase from 'firebase';
-import FirebaseApp from '@config';
+import FirebaseApp from '#config';
 import {UserNameValidation} from './validation';
-import {Table} from '@database';
-import {EmailLike} from '@shared';
+import {Table} from '#database';
+import {EmailLike} from '#shared';
 
 const rootRef = FirebaseApp.database();
 

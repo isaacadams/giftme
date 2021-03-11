@@ -1,7 +1,7 @@
 import firebase from 'firebase';
 import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {UserModel, UserRepository} from '@database';
+import {UserModel, UserRepository} from '#database';
 
 export type FirebaseAuthState = {
   loading: boolean;

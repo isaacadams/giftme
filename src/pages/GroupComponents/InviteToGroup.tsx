@@ -4,8 +4,8 @@ import {
   TableKeyWithItem,
   UserModel,
   GroupInviteHelper,
-} from '@database';
-import {Loader, useDebounce, UserItemView} from '@shared';
+} from '#database';
+import {Loader, useDebounce, UserItemView} from '#shared';
 import {Box, Button, Heading, Stack, TextInput, Text} from 'grommet';
 import {FormClose, Search} from 'grommet-icons';
 import React, {useEffect, useState} from 'react';

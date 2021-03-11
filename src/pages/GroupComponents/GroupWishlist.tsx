@@ -1,10 +1,10 @@
-import {deleteGroup} from '@database';
+import {deleteGroup} from '#database';
 import {Wishlist} from '../WishlistPage';
 import {Box, Heading, Text} from 'grommet';
 import * as React from 'react';
 import {EditGroupPage} from './EditGroupPage';
-import {IGroupHomePageState} from '@pages';
-import {FirebaseAppContext} from '@firebase';
+import {IGroupHomePageState} from '#pages';
+import {FirebaseAppContext} from '#firebase';
 import {GroupAdminControls} from './GroupAdminControls';
 
 export function GroupWishlistPage({

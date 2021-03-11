@@ -1,5 +1,5 @@
-import FirebaseApp from '@config';
-import {GetTableType} from '@database';
+import FirebaseApp from '#config';
+import {GetTableType} from '#database';
 
 const rootRef = FirebaseApp.database();
 

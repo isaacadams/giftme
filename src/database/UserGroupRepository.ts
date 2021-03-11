@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import FirebaseApp from '@config';
+import FirebaseApp from '#config';
 import {TableKeyWithItem} from './schema';
 
 const rootRef = FirebaseApp.database();

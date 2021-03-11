@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Switch, Route, Redirect, RouteProps} from 'react-router-dom';
-import {FirebaseAppContext} from '@firebase';
+import {FirebaseAppContext} from '#firebase';
 import {useContext} from 'react';
 import {
   WishlistPage,
@@ -11,7 +11,7 @@ import {
   ProfilePage,
   ProfileUpdatePage,
   GroupHomePage,
-} from '@pages';
+} from '#pages';
 
 function RouterContent(props) {
   let {isAuthenticated} = useContext(FirebaseAppContext).authState;

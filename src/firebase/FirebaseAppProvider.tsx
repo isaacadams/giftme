@@ -1,13 +1,13 @@
 import firebase from 'firebase/app';
 import {FirebaseAuthState, useAuthState} from './useAuthState';
 import {FirebaseAuthProviders, useAuthProviders} from './useAuthProviders';
-import FirebaseApp from '@config';
+import FirebaseApp from '#config';
 import React from 'react';
-import {Loader} from '@shared';
+import {Loader} from '#shared';
 import {Box} from 'grommet';
-import {getRepositories, Repositories} from '@database';
+import {getRepositories, Repositories} from '#database';
 import {IUsernamesHook, useUsernames} from './useUsernames';
-import {SignInPage} from '@pages';
+import {SignInPage} from '#pages';
 import {Sign} from 'grommet-icons';
 
 export type FirebaseAppModel = {

@@ -1,7 +1,7 @@
 import {Text} from 'grommet';
 import * as React from 'react';
 import {Edit, Trash} from 'grommet-icons';
-import {BaseList, useModal} from '@shared';
+import {BaseList, useModal} from '#shared';
 import {DeleteGroupView} from './DeleteGroupView';
 import {useHistory} from 'react-router-dom';
 
