@@ -1,13 +1,23 @@
 import {FirebaseAppContext} from '#firebase';
 import {UserNameValidation} from '#database';
 import {Loader} from '#shared';
-import {Box, FormField, TextInput, Text, Form, Button} from 'grommet';
+import {
+  Box,
+  FormField,
+  TextInput,
+  Text,
+  Form,
+  TypedForm,
+  Button,
+} from 'grommet';
 import React, {useContext} from 'react';
 import {useHistory} from 'react-router-dom';
 
 interface IUserRequiredFieldsForm {
   username: string;
 }
+
+const LocalForm = Form as TypedForm<IUserRequiredFieldsForm>;
 
 const defaultFormValue: IUserRequiredFieldsForm = {username: ''};
 
@@ -24,7 +34,7 @@ export function ProfileUpdatePage(props) {
 
   return (
     <Box pad="medium" fill="vertical" justify="start" margin={{top: 'medium'}}>
-      <Form
+      <LocalForm
         value={value}
         validate="blur"
         onChange={(v) => setValue({...v})}
@@ -63,7 +73,7 @@ export function ProfileUpdatePage(props) {
         <Box direction="row" justify="between">
           <Button type="submit" primary label="Submit" />
         </Box>
-      </Form>
+      </LocalForm>
     </Box>
   );
 }
