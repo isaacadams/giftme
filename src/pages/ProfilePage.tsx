@@ -57,14 +57,27 @@ export function ProfileView({user, gifts}: IProfile) {
     return <Loader />;
   }
   return (
-    <Box direction="row" fill justify="center" gap="medium">
-      <Box responsive align="start" gap="small" margin={{bottom: 'medium'}}>
+    <Box
+      width={{max: '1280px'}}
+      fill="horizontal"
+      direction="row-responsive"
+      justify="center"
+      pad="medium"
+      gap="large"
+    >
+      <Box
+        width="20rem"
+        height={{min: 'auto'}}
+        align="start"
+        gap="small"
+        margin={{bottom: 'medium'}}
+      >
         <Heading size={'30'} margin={'0'}>
           {user.displayName}
         </Heading>
         <Text>@{user.username}</Text>
       </Box>
-      <Box margin={{top: 'medium'}}>
+      <Box responsive fill="horizontal" justify="start">
         <WishlistView gifts={gifts} name="My" />
       </Box>
     </Box>
