@@ -1,15 +1,16 @@
 import * as React from 'react';
 import {Google} from 'grommet-icons';
 import {Box, Button, Grid, Heading} from 'grommet';
-import {Loader} from '@shared';
-import {useContext} from 'react';
-import {FirebaseAppContext} from '../firebase';
+import FirebaseApp from '#config';
+import {useAuthProviders} from '#firebase';
+import firebase from 'firebase';
+
+const auth = FirebaseApp.auth();
 
 export function SignInPage(props) {
-  let {signInWithGoogle, loading} = useContext(
-    FirebaseAppContext
-  ).authProviders;
-  if (loading) return <Loader />;
+  let {signInWithGoogle, loading} = useAuthProviders(auth, {
+    googleProvider: new firebase.auth.GoogleAuthProvider(),
+  });
 
   return (
     <Grid align="center" alignContent="around" fill="vertical">

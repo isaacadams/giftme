@@ -13,3 +13,20 @@ export function cleanName(name: string): string {
   name = name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
   return name;
 }
+
+export class UserNameValidation {
+  length(name: string): string {
+    if (!name) return undefined;
+
+    if (name.length > 16) return 'must be <=16 characters';
+    if (name.length < 4) return 'must be >=4 characters';
+
+    return undefined;
+  }
+
+  urlSafe(name: string) {
+    if (isUrlSafe(name)) return undefined;
+
+    return 'invalid name';
+  }
+}

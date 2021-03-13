@@ -1,10 +1,9 @@
 import * as React from 'react';
-import {useState} from 'react';
 import '@isaacadams/extensions';
 import {Box, List, Text} from 'grommet';
-import {GiftModel, useData} from '@firebase';
+import {GiftModel, Table, UserModel, useSelect} from '#database';
 import {useParams} from 'react-router-dom';
-import {Loader} from '@shared';
+import {Loader} from '#shared';
 import {Gift} from 'grommet-icons';
 
 interface IUrlParams {
@@ -18,8 +17,12 @@ export function WishlistPage(props) {
 
 export function Wishlist({uid}) {
   if (!uid) return <Loader />;
-  let api = useData<GiftModel>(`gifts/${uid}`);
-  return <WishlistView name={'My'} gifts={api?.items.map((i) => i.value)} />;
+  let gifts = useSelect<Table<GiftModel>>(`gifts/${uid}`);
+  let user = useSelect<UserModel>(`users/${uid}`);
+
+  return (
+    <WishlistView name={user?.displayName} gifts={Object.values(gifts ?? {})} />
+  );
 }
 
 interface IProps {

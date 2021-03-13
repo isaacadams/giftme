@@ -1,3 +1,5 @@
+import firebase from 'firebase';
+
 export interface IRepository<T> {
   getAll(): firebase.database.Reference;
   getOne(key: string): firebase.database.Reference;

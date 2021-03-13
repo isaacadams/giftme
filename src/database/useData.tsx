@@ -1,4 +1,4 @@
-import FirebaseApp from '../FirebaseApp';
+import FirebaseApp from '#config';
 import React, {useEffect} from 'react';
 
 export interface IDataWithKey<T> {

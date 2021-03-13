@@ -1,6 +1,6 @@
 import {Repository} from './Repository';
 import '@isaacadams/extensions';
-import FirebaseApp from '../FirebaseApp';
+import FirebaseApp from '#config';
 const rootRef = FirebaseApp.database();
 
 export class GiftModel {
