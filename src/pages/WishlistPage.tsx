@@ -32,7 +32,7 @@ interface IProps {
 
 export function WishlistView({name, gifts}: IProps) {
   return (
-    <Box gap="small">
+    <Box gap="small" width={{max: '40rem'}}>
       <Box direction="row" justify="center">
         <Text>{name} Wishlist</Text>
       </Box>
