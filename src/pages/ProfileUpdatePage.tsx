@@ -1,10 +1,9 @@
 import {FirebaseAppContext} from '#firebase';
 import {UserNameValidation} from '#database';
 import {Loader} from '#shared';
-import {Box, FormField, TextInput, Text} from 'grommet';
+import {Box, FormField, TextInput, Text, Form, Button} from 'grommet';
 import React, {useContext} from 'react';
 import {useHistory} from 'react-router-dom';
-import {CustomForm} from '#shared';
 
 interface IUserRequiredFieldsForm {
   username: string;
@@ -15,6 +14,9 @@ const defaultFormValue: IUserRequiredFieldsForm = {username: ''};
 export function ProfileUpdatePage(props) {
   let history = useHistory();
   let {repos, usernamesHook} = useContext(FirebaseAppContext);
+  let [value, setValue] = React.useState<IUserRequiredFieldsForm>(
+    defaultFormValue
+  );
   let {userRepo} = repos;
   let {usernames, loading} = usernamesHook;
   if (loading) return <Loader />;
@@ -22,46 +24,46 @@ export function ProfileUpdatePage(props) {
 
   return (
     <Box pad="medium" fill="vertical" justify="start" margin={{top: 'medium'}}>
-      <CustomForm
-        showTray
-        defaultValue={defaultFormValue}
-        formProps={(update) => ({
-          onSubmit: ({value}) => {
-            try {
-              userRepo.addUsername(value.username).then(() => {
-                history.push('/');
-              });
-            } catch (e) {
-              update(defaultFormValue);
-              console.error(e);
-            }
-          },
-          validate: 'blur',
-        })}
+      <Form
+        value={value}
+        validate="blur"
+        onChange={(v) => setValue({...v})}
+        onSubmit={({value}) => {
+          console.log('submitting...');
+          try {
+            userRepo.addUsername(value.username).then(() => {
+              history.push('/');
+            });
+          } catch (e) {
+            setValue(defaultFormValue);
+            console.error(e);
+          }
+        }}
       >
-        {({formData, FieldComponent}) => (
-          <FormField
-            label="create a username"
-            required
-            validate={[
-              validation.length,
-              validation.urlSafe,
-              (name) => {
-                name = name.trim().toLowerCase();
-                if (!usernames.includes(name)) return undefined;
-                return `@${name} is taken`;
-              },
-            ]}
+        <FormField
+          label="create a username"
+          required
+          validate={[
+            validation.length,
+            validation.urlSafe,
+            (name) => {
+              name = name.trim().toLowerCase();
+              if (!usernames.includes(name)) return undefined;
+              return `@${name} is taken`;
+            },
+          ]}
+          name="username"
+        >
+          <TextInput
+            icon={<Text>@</Text>}
             name="username"
-          >
-            <TextInput
-              icon={<Text>@</Text>}
-              name="username"
-              value={formData.username}
-            />
-          </FormField>
-        )}
-      </CustomForm>
+            value={value.username}
+          />
+        </FormField>
+        <Box direction="row" justify="between">
+          <Button type="submit" primary label="Submit" />
+        </Box>
+      </Form>
     </Box>
   );
 }
