@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@isaacadams/components": "^1.0.0-rc.3",
-    "grommet": "^2.16.2",
+    "grommet": "^2.16.3",
     "grommet-icons": "^4.5.0",
     "react-is": "^17.0.1",
     "rimraf": "^3.0.2",
