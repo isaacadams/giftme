@@ -28,8 +28,8 @@ export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
     googleProvider: new firebase.auth.GoogleAuthProvider(),
   });
   let authState = useAuthState(auth);
-  let {user, loading, failedToLoad} = authState;
-  let usernamesHook = useUsernames();
+  let {user, loading, failedToLoad, isAuthenticated} = authState;
+  let usernamesHook = useUsernames({isAuthenticated});
 
   return (
     <FirebaseAppContext.Provider

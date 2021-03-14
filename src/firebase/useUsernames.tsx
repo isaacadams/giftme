@@ -9,23 +9,40 @@ export interface IUsernamesHook {
   uids: string[];
 }
 
-export function useUsernames(): IUsernamesHook {
+export function useUsernames({isAuthenticated}): IUsernamesHook {
   let [usernamesTable, setUsernames] = useState<DatabaseModel['usernames']>({});
   let [loading, setLoading] = useState<boolean>(true);
+  console.log('usernames hook rendering.');
 
   useEffect(() => {
+    console.log('usernames loading.');
+    if (!isAuthenticated) return;
     let unsub = databaseListener(
       FirebaseApp.database().ref('usernames'),
       'value',
       (s) => {
-        setUsernames(s.val());
+        setUsernames({...s.val()});
+      },
+      console.error,
+      () => {
+        console.log('usernames completed.');
         setLoading(false);
       }
     );
     return () => {
       unsub();
     };
-  }, []);
+  }, [isAuthenticated]);
+
+  if (!isAuthenticated) {
+    console.info('cannot access usernames unless authenticated');
+    return {
+      loading: false,
+      usernamesTable: {},
+      usernames: [],
+      uids: [],
+    };
+  }
 
   return {
     loading,
