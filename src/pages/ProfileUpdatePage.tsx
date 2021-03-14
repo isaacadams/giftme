@@ -29,7 +29,10 @@ export function ProfileUpdatePage(props) {
   );
   let {userRepo} = repos;
   let {usernames, loading} = usernamesHook;
-  if (loading) return <Loader />;
+  if (loading) {
+    console.info('attempting to load profile update page ');
+    return <Loader />;
+  }
   let validation = new UserNameValidation();
 
   return (

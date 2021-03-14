@@ -40,7 +40,10 @@ export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
       (valid, userModel) => {
         setUserModel(userModel);
         setLoadingUserModel(false);
-        if (!valid) history.push('/profile/update');
+
+        if (user && !valid) {
+          history.push('/profile/update');
+        }
       }
     );
 
