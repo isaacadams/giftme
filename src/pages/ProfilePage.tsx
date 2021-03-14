@@ -17,10 +17,10 @@ interface IProfile {
 
 export function ProfilePage(props) {
   let {username} = useParams<IUrlParams>();
-  let {usernamesTable, loading} = useUsernames({});
+  let {getUid, loading} = useUsernames({});
   if (loading) return <Loader />;
 
-  let uid: string = usernamesTable[username];
+  let uid: string = getUid(username);
 
   if (!uid) {
     console.log(`no userid for @${username}`);

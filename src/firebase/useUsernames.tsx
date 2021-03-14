@@ -4,10 +4,10 @@ import {databaseListener, DatabaseModel} from '#database';
 import {FirebaseAppContext} from './FirebaseAppProvider';
 
 export interface IUsernamesHook {
-  usernamesTable: DatabaseModel['usernames'];
   loading: boolean;
   usernames: string[];
   uids: string[];
+  getUid(username: string): string;
 }
 
 export function useUsernames({}): IUsernamesHook {
@@ -40,16 +40,20 @@ export function useUsernames({}): IUsernamesHook {
     console.info('cannot access usernames unless authenticated');
     return {
       loading: false,
-      usernamesTable: {},
       usernames: [],
       uids: [],
+      getUid,
     };
   }
 
   return {
     loading,
-    usernamesTable: usernamesTable.current,
     usernames: Object.keys(usernamesTable.current),
     uids: Object.values(usernamesTable.current),
+    getUid,
   };
+
+  function getUid(username: string): string {
+    return usernamesTable.current[username];
+  }
 }
