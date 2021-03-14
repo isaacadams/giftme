@@ -1,4 +1,4 @@
-import {FirebaseAppContext} from '#firebase';
+import {FirebaseAppContext, useUsernames} from '#firebase';
 import {UserModel, GiftModel, useQuery} from '#database';
 import {Loader} from '#shared';
 import {Box, Heading, Text} from 'grommet';
@@ -17,7 +17,8 @@ interface IProfile {
 
 export function ProfilePage(props) {
   let {username} = useParams<IUrlParams>();
-  let {usernamesTable, loading} = useContext(FirebaseAppContext).usernamesHook;
+  let {isAuthenticated} = useContext(FirebaseAppContext).authState;
+  let {usernamesTable, loading} = useUsernames({isAuthenticated});
   if (loading) return <Loader />;
 
   let uid: string = usernamesTable[username];

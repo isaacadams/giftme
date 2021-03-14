@@ -1,4 +1,4 @@
-import {FirebaseAppContext} from '#firebase';
+import {FirebaseAppContext, useUsernames} from '#firebase';
 import {UserNameValidation} from '#database';
 import {Loader} from '#shared';
 import {
@@ -23,12 +23,13 @@ const defaultFormValue: IUserRequiredFieldsForm = {username: ''};
 
 export function ProfileUpdatePage(props) {
   let history = useHistory();
-  let {repos, usernamesHook} = useContext(FirebaseAppContext);
+  let {repos, authState} = useContext(FirebaseAppContext);
   let [value, setValue] = React.useState<IUserRequiredFieldsForm>(
     defaultFormValue
   );
+  let {isAuthenticated} = authState;
   let {userRepo} = repos;
-  let {usernames, loading} = usernamesHook;
+  let {usernames, loading} = useUsernames({isAuthenticated});
   if (loading) {
     console.info('attempting to load profile update page ');
     return <Loader />;
