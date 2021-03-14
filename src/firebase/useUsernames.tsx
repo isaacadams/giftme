@@ -1,17 +1,19 @@
 import FirebaseApp from '#config';
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useRef, useState} from 'react';
 import {databaseListener, DatabaseModel} from '#database';
+import {FirebaseAppContext} from './FirebaseAppProvider';
 
 export interface IUsernamesHook {
-  usernamesTable: DatabaseModel['usernames'];
   loading: boolean;
   usernames: string[];
   uids: string[];
+  getUid(username: string): string;
 }
 
-export function useUsernames({isAuthenticated}): IUsernamesHook {
-  let [usernamesTable, setUsernames] = useState<DatabaseModel['usernames']>({});
+export function useUsernames({}): IUsernamesHook {
+  let usernamesTable = useRef<DatabaseModel['usernames']>({});
   let [loading, setLoading] = useState<boolean>(true);
+  let {isAuthenticated} = useContext(FirebaseAppContext).authState;
   console.log('usernames hook rendering.');
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export function useUsernames({isAuthenticated}): IUsernamesHook {
       FirebaseApp.database().ref('usernames'),
       'value',
       (s) => {
-        setUsernames({...s.val()});
+        usernamesTable.current = s.val();
       },
       console.error,
       () => {
@@ -38,16 +40,20 @@ export function useUsernames({isAuthenticated}): IUsernamesHook {
     console.info('cannot access usernames unless authenticated');
     return {
       loading: false,
-      usernamesTable: {},
       usernames: [],
       uids: [],
+      getUid,
     };
   }
 
   return {
     loading,
-    usernamesTable,
-    usernames: Object.keys(usernamesTable),
-    uids: Object.values(usernamesTable),
+    usernames: Object.keys(usernamesTable.current),
+    uids: Object.values(usernamesTable.current),
+    getUid,
   };
+
+  function getUid(username: string): string {
+    return usernamesTable.current[username];
+  }
 }
