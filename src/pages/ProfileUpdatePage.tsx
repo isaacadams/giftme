@@ -23,13 +23,12 @@ const defaultFormValue: IUserRequiredFieldsForm = {username: ''};
 
 export function ProfileUpdatePage(props) {
   let history = useHistory();
-  let {repos, authState} = useContext(FirebaseAppContext);
+  let {repos} = useContext(FirebaseAppContext);
   let [value, setValue] = React.useState<IUserRequiredFieldsForm>(
     defaultFormValue
   );
-  let {isAuthenticated} = authState;
   let {userRepo} = repos;
-  let {usernames, loading} = useUsernames({isAuthenticated});
+  let {usernames, loading} = useUsernames({});
   if (loading) {
     console.info('attempting to load profile update page ');
     return <Loader />;
