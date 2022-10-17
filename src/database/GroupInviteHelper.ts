@@ -1,7 +1,6 @@
-import FirebaseApp from '#config';
-import {GetTableType} from '#database';
-
-const rootRef = FirebaseApp.database();
+import {FirebaseApp, FirebaseDatabase} from '#/config';
+import {GetTableType} from '#/database';
+import {ref, update, remove} from 'firebase/database';
 
 export const groupInviteTables = (id: string, groupid: string) => [
   `${GetTableType('groups')}/${groupid}/invites/${id}`,
@@ -30,23 +29,23 @@ export class GroupInviteHelper {
       return p;
     }, {});
 
-    rootRef.ref().update(updates);
+    update(ref(FirebaseDatabase), updates);
   }
 
   confirmInviteToGroup() {
     let {groupid, id} = this;
-    rootRef.ref().update({
+    update(ref(FirebaseDatabase), {
       [`${GetTableType('groups')}/${groupid}/members/${id}`]: true,
       [`${GetTableType('users')}/${id}/groups/${groupid}`]: true,
     });
 
-    rootRef.ref(`groups/${groupid}/invites/${id}`).remove();
-    rootRef.ref(`invites/${id}/${groupid}`).remove();
+    remove(ref(FirebaseDatabase, `groups/${groupid}/invites/${id}`));
+    remove(ref(FirebaseDatabase, `invites/${id}/${groupid}`));
   }
 
   denyInviteToGroup() {
     let {groupid, id} = this;
-    rootRef.ref(`groups/${groupid}/invites/${id}`).remove();
-    rootRef.ref(`invites/${id}/${groupid}`).remove();
+    remove(ref(FirebaseDatabase, `groups/${groupid}/invites/${id}`));
+    remove(ref(FirebaseDatabase, `invites/${id}/${groupid}`));
   }
 }

@@ -4,11 +4,11 @@ import {
   GroupModel,
   TableKeyWithItem,
   UserModel,
-} from '#database';
+} from '#/database';
 import {Box, Button, Heading} from 'grommet';
 import {Trash} from 'grommet-icons';
 import React, {useEffect, useState} from 'react';
-import {CustomList, useModal, UserItemView} from '#shared';
+import {CustomList, useModal, UserItemView} from '#/shared';
 import {InviteToGroup} from './InviteToGroup';
 import {IGroupHomePageState} from './GroupHomePage';
 

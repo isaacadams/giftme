@@ -1,24 +1,24 @@
-import firebase from 'firebase';
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {UserModel, UserRepository} from '#database';
+import {UserModel, UserRepository} from '#/database';
+import {Auth, User} from 'firebase/auth';
 
 export type FirebaseAuthState = {
   loading: boolean;
   isAuthenticated: boolean;
-  user?: firebase.User | null;
+  user?: User | null;
   userModel: UserModel;
-  error?: firebase.auth.Error;
+  error?: Error;
   failedToLoad: boolean;
 };
 
-export function useAuthState(auth: firebase.auth.Auth): FirebaseAuthState {
-  let [user, setUser] = useState<firebase.User>(null);
+export function useAuthState(auth: Auth): FirebaseAuthState {
+  let [user, setUser] = useState<User>(null);
   let [userModel, setUserModel] = useState<UserModel>(null);
   let [loadingUser, setLoadingUser] = useState<boolean>(true);
   let [failedToLoadUser, setFailedToLoaderUser] = useState<boolean>(false);
   let [loadingUserModel, setLoadingUserModel] = useState<boolean>(true);
-  let [error, setError] = useState<firebase.auth.Error>(null);
+  let [error, setError] = useState<Error>(null);
 
   let history = useHistory();
 

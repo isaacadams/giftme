@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import {User} from 'firebase/auth';
 import {GiftRepository} from './GiftRepository';
 import {UserRepository} from './UserRepository';
 
@@ -8,7 +8,7 @@ export type Repositories = {
   userRepo?: UserRepository;
 };
 
-export function getRepositories(user: firebase.User): Repositories {
+export function getRepositories(user: User): Repositories {
   let repos = user && {
     giftRepo: new GiftRepository(user.uid),
     userRepo: new UserRepository(user),

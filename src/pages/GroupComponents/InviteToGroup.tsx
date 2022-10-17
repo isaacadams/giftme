@@ -4,8 +4,8 @@ import {
   TableKeyWithItem,
   UserModel,
   GroupInviteHelper,
-} from '#database';
-import {Loader, useDebounce, UserItemView} from '#shared';
+} from '#/database';
+import {Loader, useDebounce, UserItemView} from '#/shared';
 import {Box, Button, Heading, Stack, TextInput, Text} from 'grommet';
 import {FormClose, Search} from 'grommet-icons';
 import React, {useEffect, useState} from 'react';
@@ -17,9 +17,8 @@ import React, {useEffect, useState} from 'react';
 // auth.sendSignInLinkToEmail('some@email.com', {url: 'https://giftme-8e917.web.app/', handleCodeInApp: true});
 
 export function InviteToGroup({controls, groupkey}) {
-  let [selectedUser, setSelectedUser] = useState<TableKeyWithItem<UserModel>>(
-    null
-  );
+  let [selectedUser, setSelectedUser] =
+    useState<TableKeyWithItem<UserModel>>(null);
   let [delayedQuery, query, setQuery] = useDebounce('', 500);
   let [loading, setLoading] = useState<boolean>(false);
   let [users, setUsers] = useState<Table<UserModel>>({});

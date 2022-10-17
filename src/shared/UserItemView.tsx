@@ -1,6 +1,6 @@
 import {Box, BoxProps} from 'grommet';
 import React from 'react';
-import {ShowAvatar} from '#shared';
+import {ShowAvatar} from '#/shared';
 
 interface IProps extends BoxProps {
   top?: string | React.ReactNode;

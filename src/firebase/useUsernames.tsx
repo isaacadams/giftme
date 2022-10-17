@@ -1,7 +1,8 @@
-import FirebaseApp from '#config';
+import {FirebaseApp, FirebaseDatabase} from '#/config';
 import {useContext, useEffect, useRef, useState} from 'react';
-import {databaseListener, DatabaseModel} from '#database';
+import {databaseListener, DatabaseModel} from '#/database';
 import {FirebaseAppContext} from './FirebaseAppProvider';
+import {ref} from 'firebase/database';
 
 export interface IUsernamesHook {
   loading: boolean;
@@ -20,7 +21,7 @@ export function useUsernames({}): IUsernamesHook {
     console.log('usernames loading.');
     if (!isAuthenticated) return;
     let unsub = databaseListener(
-      FirebaseApp.database().ref('usernames'),
+      ref(FirebaseDatabase, 'usernames'),
       'value',
       (s) => {
         usernamesTable.current = s.val();

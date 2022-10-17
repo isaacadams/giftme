@@ -1,15 +1,25 @@
-import firebase from 'firebase';
-import FirebaseApp from '#config';
+import {FirebaseApp, FirebaseDatabase} from '#/config';
 import {UserNameValidation} from './validation';
-import {Table} from '#database';
-import {EmailLike} from '#shared';
+import {Table} from '#/database';
+import {EmailLike} from '#/shared';
+import {
+  ref,
+  query as fbQuery,
+  get,
+  orderByChild,
+  startAt,
+  endAt,
+  onValue,
+  update,
+  remove,
+  child,
+} from 'firebase/database';
+import {User} from 'firebase/auth';
 
-const rootRef = FirebaseApp.database();
+const rootRef = () => FirebaseDatabase;
 
 export function getUser(userid: string, cb: (d: UserModel) => void): void {
-  rootRef.ref(`users/${userid}`).once('value', (s) => {
-    cb(s.val());
-  });
+  get(ref(FirebaseDatabase, `users/${userid}`)).then((s) => cb(s.val()));
 }
 
 export function searchUsers(
@@ -22,14 +32,16 @@ export function searchUsers(
 
   let childKey: string = queryingOnUsername ? 'username' : 'displayName';
 
-  rootRef
-    .ref('users')
-    .orderByChild(childKey)
-    .startAt(query.toUpperCase())
-    .endAt(query.toLowerCase() + '\uf8ff')
-    .once('value', (s) => {
-      cb(s.val());
-    });
+  const usersRef = ref(FirebaseDatabase, 'users');
+
+  get(
+    fbQuery(
+      usersRef,
+      orderByChild(childKey),
+      startAt(query.toUpperCase()),
+      endAt(query.toLowerCase() + '\uf8ff')
+    )
+  ).then((s) => cb(s.val()));
 }
 
 export class UserModel {
@@ -41,9 +53,9 @@ export class UserModel {
 }
 
 export class UserRepository {
-  user: firebase.User;
+  user: User;
   usernames: string[];
-  constructor(user: firebase.User) {
+  constructor(user: User) {
     this.user = user;
   }
 
@@ -54,13 +66,15 @@ export class UserRepository {
       console.error('user was null');
       return () => {};
     }
-    let usersRef = rootRef.ref(`users/${this.user.uid}`);
-    let unsub = usersRef.on('value', (s) => {
+    let usersRef = ref(FirebaseDatabase, `users/${this.user.uid}`);
+
+    let unsub = onValue(usersRef, (s) => {
       let user = s.val();
       if (!user) {
         let {displayName, email, phoneNumber} = this.user;
-        s.ref.update({displayName, email, phoneNumber});
+        update(s.ref, {displayName, email, phoneNumber});
       }
+
       //if user exists but does not have a username then user will be redirected to a form to make one
       /* {
           valid: !!user?.username,
@@ -70,19 +84,17 @@ export class UserRepository {
     });
 
     return () => {
-      usersRef.off('value', unsub);
+      unsub();
     };
   }
 
   getUser(cb: (d: UserModel) => void): () => void {
-    let usersRef = rootRef.ref(`users/${this.user.uid}`);
+    let usersRef = ref(FirebaseDatabase, `users/${this.user.uid}`);
 
-    usersRef.on('value', (s) => {
-      cb(s.val());
-    });
+    let unsub = onValue(usersRef, (s) => cb(s.val()));
 
     return () => {
-      usersRef.off();
+      unsub();
     };
   }
 
@@ -98,36 +110,31 @@ export class UserRepository {
     }
 
     let userid = this.user.uid;
-    let usernamesRef = rootRef.ref('usernames');
+    let usernamesRef = ref(FirebaseDatabase, 'usernames');
 
-    return rootRef
-      .ref(`users/${userid}/username`)
-      .get()
+    return get(ref(FirebaseDatabase, `users/${userid}/username`))
       .then((s) => {
         let oldUsername = s.val();
         return () => {
           if (oldUsername) {
             console.log(`removing old username: ${oldUsername}`);
-            usernamesRef.child(oldUsername).remove();
+            remove(child(usernamesRef, oldUsername));
           }
         };
       })
       .then((removeOldUsername) => {
-        return rootRef
-          .ref()
-          .update({
-            [`users/${userid}/username`]: name,
-            [`usernames/${name}`]: userid,
-          })
-          .then((v) => {
-            removeOldUsername();
-            /* usernamesRef.transaction(usernames => {
+        return update(ref(FirebaseDatabase), {
+          [`users/${userid}/username`]: name,
+          [`usernames/${name}`]: userid,
+        }).then((v) => {
+          removeOldUsername();
+          /* usernamesRef.transaction(usernames => {
               Object.keys(usernames).filter(k => k !== name && usernames[k] === userid).forEach(k => delete usernames[k]);
               console.log("updating valid usernames");
               console.log(usernames);
               return usernames;
             }); */
-          });
+        });
       });
   }
 }

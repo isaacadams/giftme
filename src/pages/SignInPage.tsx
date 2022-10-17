@@ -1,15 +1,14 @@
 import * as React from 'react';
 import {Google} from 'grommet-icons';
 import {Box, Button, Grid, Heading} from 'grommet';
-import FirebaseApp from '#config';
-import {useAuthProviders} from '#firebase';
-import firebase from 'firebase';
-
-const auth = FirebaseApp.auth();
+import {FirebaseApp, FirebaseAuth} from '#/config';
+import {useAuthProviders} from '#/firebase';
+import {GoogleAuthProvider} from 'firebase/auth';
 
 export function SignInPage(props) {
+  const auth = FirebaseAuth;
   let {signInWithGoogle, loading} = useAuthProviders(auth, {
-    googleProvider: new firebase.auth.GoogleAuthProvider(),
+    googleProvider: new GoogleAuthProvider(),
   });
 
   return (

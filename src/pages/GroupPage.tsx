@@ -6,11 +6,11 @@ import {
   GroupModel,
   GroupNamesModel,
   TableKeyWithItem,
-} from '#database';
-import {FirebaseAppContext} from '#firebase';
+} from '#/database';
+import {FirebaseAppContext} from '#/firebase';
 import {Anchor, Box, Grid, InfiniteScroll, Text} from 'grommet';
 import {Group} from 'grommet-icons';
-import {Loader} from '#shared';
+import {Loader} from '#/shared';
 import {CreateGroupButton} from './GroupComponents/CreateGroupButton';
 import {Link, useHistory} from 'react-router-dom';
 import {GroupInvites} from './GroupComponents/GroupInvites';

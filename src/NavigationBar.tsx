@@ -1,7 +1,7 @@
 import {Anchor, Box, Header, Menu, ResponsiveContext, Text} from 'grommet';
 import React, {useContext} from 'react';
 import {Edit, Home, Logout, Group} from 'grommet-icons';
-import {FirebaseAppContext} from '#firebase';
+import {FirebaseAppContext} from '#/firebase';
 import {Link, useHistory} from 'react-router-dom';
 import {ShowAvatar} from './shared';
 
@@ -91,3 +91,4 @@ function NavigationBar(props) {
 }
 
 export default NavigationBar;
+

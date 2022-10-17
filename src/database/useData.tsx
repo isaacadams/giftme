@@ -1,5 +1,14 @@
-import FirebaseApp from '#config';
-import React, {useEffect} from 'react';
+import {FirebaseApp, FirebaseDatabase} from '#/config';
+import {useEffect, useState} from 'react';
+import {
+  ref,
+  onValue,
+  off,
+  child,
+  push,
+  update,
+  remove,
+} from 'firebase/database';
 
 export interface IDataWithKey<T> {
   primaryKey: string;
@@ -20,62 +29,46 @@ export interface IDataService<T> {
   add: (d: T) => Promise<string>;
 }
 
-const rootRef = FirebaseApp.database();
+export function useData<T extends object>(key: string): IDataService<T> {
+  let [error, setError] = useState<Error>(null);
+  let [loading, setLoading] = useState(true);
+  let [feed, setFeed] = useState<any>(null);
 
-export function useData<T>(key: string): IDataService<T> {
-  let [error, setError] = React.useState<Error>(null);
-  let [loading, setLoading] = React.useState(true);
-  let [feed, setFeed] = React.useState<any>(null);
-
-  let ref = rootRef.ref(key);
+  let dref = ref(FirebaseDatabase, key);
 
   useEffect(() => {
-    ref.on('value', (s) => {
+    const unsub = onValue(dref, (s) => {
       setFeed(s.val());
       setLoading(false);
     });
 
     return () => {
-      ref.off();
+      unsub();
+      //off(valueQuery, 'value');
     };
   }, [ref]);
 
   return {
     error,
     loading,
-    items: transformToList<T>(feed).map(({primaryKey, value}) => ({
-      primaryKey,
-      value,
-      update: (d: T) => {
-        return new Promise<void>((res, rej) => {
-          ref.child(primaryKey).update(d, (e) => {
-            if (e) rej(e);
-            res();
-          });
-        });
-      },
-      remove: () => {
-        return new Promise<void>((res, rej) => {
-          ref.child(primaryKey).remove((e) => {
-            if (e) rej(e);
-            res();
-          });
-        });
-      },
-    })),
+    items: transformToList<T>(feed).map(({primaryKey, value}) => {
+      const table = child(ref(FirebaseDatabase), primaryKey);
+
+      return {
+        primaryKey,
+        value,
+        update: (d: T) => {
+          return update(table, d);
+        },
+        remove: () => {
+          return remove(table);
+        },
+      };
+    }),
     add: (d: T) => {
-      return ref
-        .push(
-          d,
-          (e) =>
-            new Promise<void>((res, rej) => {
-              if (e) rej(e);
-              res();
-            })
-        )
-        .then((r) => {
-          return r.key;
-        });
+      return push(dref, d).then((r) => {
+        return r.key;
+      });
     },
   };
 }

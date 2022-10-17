@@ -10,8 +10,8 @@ import {
   Heading,
   Layer,
 } from 'grommet';
-import {FirebaseAppContext} from '#firebase';
-import {GiftModel, IDataItems, useData} from '#database';
+import {FirebaseAppContext} from '#/firebase';
+import {GiftModel, IDataItems, useData} from '#/database';
 import {Trash} from 'grommet-icons';
 
 export function WishlistEditPage(props) {

@@ -1,13 +1,25 @@
-import firebase from 'firebase';
-import FirebaseApp from '#config';
+import {
+  child,
+  DatabaseReference,
+  DataSnapshot,
+  EventType,
+  ref,
+  onChildAdded,
+  onChildChanged,
+  onChildMoved,
+  onChildRemoved,
+  onValue,
+  query,
+} from 'firebase/database';
+import {FirebaseApp, FirebaseDatabase} from '#/config';
 import {useState, useEffect} from 'react';
 
-const rootRef = FirebaseApp.database();
+const rootRef = () => FirebaseDatabase;
 
 export function useQuery<T>(
   config: {
     key: string;
-    event: firebase.database.EventType;
+    event: EventType;
     cb: firebaseOnCallback<any>;
   }[],
   construct: (parts: any[]) => T
@@ -19,7 +31,7 @@ export function useQuery<T>(
   useEffect(() => {
     let unsubscriptions = config.map(({key, event, cb}, i) =>
       databaseListener(
-        rootRef.ref(key),
+        child(ref(FirebaseDatabase), key),
         event,
         (s, b) => {
           setFeed((v) => {
@@ -58,10 +70,7 @@ export function useQuery<T>(
   };
 }
 
-export type firebaseOnCallback<T> = (
-  a: firebase.database.DataSnapshot,
-  b?: string | null
-) => T;
+export type firebaseOnCallback<T> = (a: DataSnapshot, b?: string | null) => T;
 
 /**
  * wrapper for attaching listeners to the firebase database
@@ -73,16 +82,24 @@ export type firebaseOnCallback<T> = (
  * @returns unsubcribe handler
  */
 export function databaseListener(
-  ref: firebase.database.Reference,
-  event: firebase.database.EventType,
+  ref: DatabaseReference,
+  event: EventType,
   cb: firebaseOnCallback<any>,
   onError?: (error: Error) => void,
   onComplete?: () => void
 ): () => void {
-  let callbackReference = ref.on(
-    event,
-    (s, b) => {
-      cb(s, b);
+  //'value' | 'child_added' | 'child_changed' | 'child_moved' | 'child_removed'
+  const eventcb = {
+    ['value']: onValue,
+    ['child_added']: onChildAdded,
+    ['child_changed']: onChildChanged,
+    ['child_moved']: onChildMoved,
+    ['child_removed']: onChildRemoved,
+  }[event];
+  let unsub = eventcb(
+    ref,
+    (s) => {
+      cb(s);
       if (onComplete) onComplete();
     },
     (e) => {
@@ -90,12 +107,12 @@ export function databaseListener(
     }
   );
 
-  return () => ref.off(event, callbackReference);
+  return () => unsub();
 }
 
 export function databaseListenify<T>(
-  ref: firebase.database.Reference,
-  event: firebase.database.EventType,
+  ref: DatabaseReference,
+  event: EventType,
   cb: firebaseOnCallback<T>
 ): Promise<T> {
   return new Promise<T>((res, rej) => {

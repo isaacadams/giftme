@@ -1,6 +1,6 @@
-import {useUsernames} from '#firebase';
-import {UserModel, GiftModel, useQuery} from '#database';
-import {Loader} from '#shared';
+import {useUsernames} from '#/firebase';
+import {UserModel, GiftModel, useQuery} from '#/database';
+import {Loader} from '#/shared';
 import {Box, Heading, Text} from 'grommet';
 import React from 'react';
 import {Redirect, useParams} from 'react-router-dom';

@@ -3,7 +3,7 @@
     "module": "CommonJS",
     "target": "ES3",
     "declaration": true,
-    "lib": ["DOM", "ES6"],
+    "lib": ["DOM", "ES2022"],
     "jsx": "react",
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
@@ -11,8 +11,9 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "#*": ["./src/*"]
+      "#/*": ["./src/*"]
     }
   },
   "exclude": ["node_modules"]
 }
+
