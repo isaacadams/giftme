@@ -78,8 +78,9 @@ function NavigationBar(props) {
                 label="Logout"
                 color="dark-2"
                 onClick={(e) => {
-                  navigate('/login');
-                  signOut();
+                  signOut().then(() => {
+                    navigate('/login');
+                  });
                 }}
               />
             ),

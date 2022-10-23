@@ -57,7 +57,7 @@ export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
           <Loader />
         </Box>
       )}
-      {!loading && children}
+      {user && children}
     </FirebaseAppContext.Provider>
   );
 }

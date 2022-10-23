@@ -3,7 +3,7 @@ import {UserModel, GiftModel, useQuery} from '#/database';
 import {Loader} from '#/shared';
 import {Box, Heading, Text} from 'grommet';
 import React from 'react';
-import {Redirect, useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {WishlistView} from './WishlistPage';
 
 interface IUrlParams {
@@ -16,15 +16,17 @@ interface IProfile {
 }
 
 export function ProfilePage(props) {
-  let {username} = useParams<IUrlParams>();
+  let {username} = useParams();
   let {getUid, loading} = useUsernames({});
+  let navigate = useNavigate();
+
   if (loading) return <Loader />;
 
   let uid: string = getUid(username);
 
   if (!uid) {
     console.log(`no userid for @${username}`);
-    return <Redirect to="/" />;
+    navigate('/');
   }
 
   return <Profile uid={uid} />;

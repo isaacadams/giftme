@@ -29,7 +29,7 @@ export type FirebaseAuthProviders = {
     phoneNumber: string,
     applicationVerifier: ApplicationVerifier
   ) => void;
-  signOut: () => void;
+  signOut: () => Promise<void>;
   createUserWithEmailAndPassword: (email: string, password: string) => void;
   error?: string;
   loading: boolean;
@@ -80,7 +80,8 @@ export function useAuthProviders(
       );
     },
     signOut: () => {
-      tryTo<void>(() => auth.signOut());
+      //tryTo<void>(() => auth.signOut());
+      return auth.signOut();
     },
     createUserWithEmailAndPassword: (email: string, password: string) => {
       tryTo<UserCredential>(() =>

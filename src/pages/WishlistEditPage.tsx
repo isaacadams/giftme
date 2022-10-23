@@ -10,14 +10,14 @@ import {
   Heading,
   Layer,
 } from 'grommet';
-import {FirebaseAppContext} from '#/firebase';
+import {AuthStateContext} from '#/firebase';
 import {GiftModel, IDataItems, useData} from '#/database';
 import {Trash} from 'grommet-icons';
 
 export function WishlistEditPage(props) {
   let [newGift, setNewGift] = useState<string>('');
-  let {user} = React.useContext(FirebaseAppContext).authState;
-  let api = user && useData<GiftModel>(`gifts/${user.uid}`);
+  let {user} = React.useContext(AuthStateContext);
+  let api = useData<GiftModel>(`gifts/${user.uid}`);
 
   return (
     <Box gap="medium" margin={{top: 'small'}} pad="small">
