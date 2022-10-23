@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useContext} from 'react';
 import {
   addGroup,
   getIsGroupnameValid,
@@ -7,7 +7,7 @@ import {
   GroupNamesModel,
   TableKeyWithItem,
 } from '#/database';
-import {FirebaseAppContext} from '#/firebase';
+import {AuthStateContext} from '#/firebase';
 import {Anchor, Box, Grid, InfiniteScroll, Text} from 'grommet';
 import {Group} from 'grommet-icons';
 import {Loader} from '#/shared';
@@ -16,7 +16,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {GroupInvites} from './GroupComponents/GroupInvites';
 
 export function GroupPage(props) {
-  let {user} = React.useContext(FirebaseAppContext).authState;
+  let {user} = useContext(AuthStateContext);
 
   return (
     <Box margin="small">

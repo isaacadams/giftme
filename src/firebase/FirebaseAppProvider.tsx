@@ -5,8 +5,6 @@ import * as React from 'react';
 import {Loader} from '#/shared';
 import {Box} from 'grommet';
 import {getRepositories, Repositories} from '#/database';
-import {SignInPage} from '#/pages';
-import {Sign} from 'grommet-icons';
 import {GoogleAuthProvider} from 'firebase/auth';
 import {useNavigate} from 'react-router-dom';
 
