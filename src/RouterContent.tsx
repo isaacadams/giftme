@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Switch, Route, Redirect, RouteProps} from 'react-router-dom';
+import {Routes, Route, RouteProps} from 'react-router-dom';
 import {FirebaseAppContext} from '#/firebase';
 import {useContext} from 'react';
 import {
@@ -17,8 +17,8 @@ function RouterContent(props) {
   let {isAuthenticated} = useContext(FirebaseAppContext).authState;
   console.log('router content');
   return (
-    <Switch>
-      <Route
+    <Routes>
+      {/* <Route
         path="/login"
         render={({location}) =>
           !isAuthenticated ? (
@@ -32,21 +32,18 @@ function RouterContent(props) {
             />
           )
         }
-      />
-      {!isAuthenticated && <Redirect to="/login" />}
-      <AuthenticatedRoute path="/groups" exact component={GroupPage} />
-      <AuthenticatedRoute path="/" exact component={WishlistEditPage} />
-      <AuthenticatedRoute path="/groups/:groupname" component={GroupHomePage} />
-      <AuthenticatedRoute path="/:username" exact component={ProfilePage} />
-      <AuthenticatedRoute
-        path="/profile/update"
-        exact
-        component={ProfileUpdatePage}
-      />
-    </Switch>
+      /> */}
+      {/* <Route path="/login" element={<SignInPage />} /> */}
+      {/* {!isAuthenticated && <Redirect to="/login" />} */}
+      <Route path="/groups" element={<GroupPage />} />
+      <Route path="/" element={<WishlistEditPage />} />
+      <Route path="/groups/:groupname" element={<GroupHomePage />} />
+      <Route path="/:username" element={<ProfilePage />} />
+      <Route path="/profile/update" element={<ProfileUpdatePage />} />
+    </Routes>
   );
 
-  function AuthenticatedRoute({children, ...route}: RouteProps) {
+  /* function AuthenticatedRoute({children, ...route}: RouteProps) {
     return (
       <Route
         {...route}
@@ -64,7 +61,7 @@ function RouterContent(props) {
         }
       />
     );
-  }
+  } */
 }
 
 export default RouterContent;

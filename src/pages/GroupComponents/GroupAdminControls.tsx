@@ -3,14 +3,14 @@ import * as React from 'react';
 import {Edit, Trash} from 'grommet-icons';
 import {BaseList, useModal} from '#/shared';
 import {DeleteGroupView} from './DeleteGroupView';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 export function GroupAdminControls({
   groupname,
   deleteTheGroup,
   onEditButtonClick,
 }) {
-  let history = useHistory();
+  let navigate = useNavigate();
   let [modalControl, DeleteModal] = useModal({
     children: ({close, open}) => (
       <DeleteGroupView
@@ -19,7 +19,7 @@ export function GroupAdminControls({
           close,
           deleteGroup: () => {
             deleteTheGroup();
-            history.push('/groups');
+            navigate('/groups');
           },
         }}
       />

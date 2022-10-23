@@ -16,11 +16,13 @@ import {
 } from 'firebase/auth';
 import {useState} from 'react';
 
+type SignInPromise = Promise<UserCredential | AuthError>;
+
 export type FirebaseAuthProviders = {
-  signInWithGoogle: () => void;
-  signInWithFacebook: () => void;
-  signInWithGithub: () => void;
-  signInWithTwitter: () => void;
+  signInWithGoogle: () => SignInPromise;
+  signInWithFacebook: () => SignInPromise;
+  signInWithGithub: () => SignInPromise;
+  signInWithTwitter: () => SignInPromise;
   signInAnonymously: () => void;
   signInWithEmailAndPassword: (email: string, password: string) => void;
   signInWithPhoneNumber: (
@@ -50,16 +52,16 @@ export function useAuthProviders(
   let [error, setError] = useState<string>(null);
   return {
     signInWithGithub: () => {
-      tryToSignInWithProvider('githubProvider');
+      return tryToSignInWithProvider('githubProvider');
     },
     signInWithTwitter: () => {
-      tryToSignInWithProvider('twitterProvider');
+      return tryToSignInWithProvider('twitterProvider');
     },
     signInWithGoogle: () => {
-      tryToSignInWithProvider('googleProvider');
+      return tryToSignInWithProvider('googleProvider');
     },
     signInWithFacebook: () => {
-      tryToSignInWithProvider('facebookProvider');
+      return tryToSignInWithProvider('facebookProvider');
     },
     signInAnonymously: () => {
       tryTo<UserCredential>(() => signInAnonymously(auth));

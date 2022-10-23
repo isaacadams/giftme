@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {UserModel, UserRepository} from '#/database';
 import {Auth, User} from 'firebase/auth';
 
@@ -20,7 +20,7 @@ export function useAuthState(auth: Auth): FirebaseAuthState {
   let [loadingUserModel, setLoadingUserModel] = useState<boolean>(true);
   let [error, setError] = useState<Error>(null);
 
-  let history = useHistory();
+  let navigate = useNavigate();
 
   useEffect(() => {
     let unsubscribe = auth.onAuthStateChanged((u) => {
@@ -42,7 +42,7 @@ export function useAuthState(auth: Auth): FirebaseAuthState {
         setLoadingUserModel(false);
 
         if (user && !valid) {
-          history.push('/profile/update');
+          navigate('/profile/update');
         }
       }
     );

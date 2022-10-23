@@ -8,6 +8,7 @@ import {getRepositories, Repositories} from '#/database';
 import {SignInPage} from '#/pages';
 import {Sign} from 'grommet-icons';
 import {GoogleAuthProvider} from 'firebase/auth';
+import {useNavigate} from 'react-router-dom';
 
 export type FirebaseAppModel = {
   authProviders: FirebaseAuthProviders;
@@ -24,7 +25,15 @@ export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
     googleProvider: new GoogleAuthProvider(),
   });
   let {user, loading, failedToLoad, isAuthenticated, userModel, error} =
-    useAuthState(FirebaseAuth);
+    React.useContext(AuthStateContext);
+
+  let navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (failedToLoad) {
+      navigate('/login');
+    }
+  }, [failedToLoad]);
 
   return (
     <FirebaseAppContext.Provider
@@ -43,11 +52,27 @@ export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
     >
       {loading && (
         <Box fill align="center" justify="center">
-          {!failedToLoad && <Loader />}
-          {failedToLoad && <SignInPage />}
+          {/* {!failedToLoad && <Loader />}
+          {failedToLoad && <SignInPage />} */}
+          <Loader />
         </Box>
       )}
       {!loading && children}
     </FirebaseAppContext.Provider>
+  );
+}
+
+export const AuthStateContext = React.createContext<FirebaseAuthState>(null);
+
+export function AuthStateProvider({children}) {
+  let {user, loading, failedToLoad, isAuthenticated, userModel, error} =
+    useAuthState(FirebaseAuth);
+
+  return (
+    <AuthStateContext.Provider
+      value={{user, loading, failedToLoad, isAuthenticated, userModel, error}}
+    >
+      {children}
+    </AuthStateContext.Provider>
   );
 }

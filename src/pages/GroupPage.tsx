@@ -12,7 +12,7 @@ import {Anchor, Box, Grid, InfiniteScroll, Text} from 'grommet';
 import {Group} from 'grommet-icons';
 import {Loader} from '#/shared';
 import {CreateGroupButton} from './GroupComponents/CreateGroupButton';
-import {Link, useHistory} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {GroupInvites} from './GroupComponents/GroupInvites';
 
 export function GroupPage(props) {
@@ -31,7 +31,7 @@ interface IGroupsListProps {
 }
 
 function GroupsList({userid}: IGroupsListProps) {
-  let history = useHistory();
+  let navigate = useNavigate();
   let [groupnames, setGroupnames] = React.useState<GroupNamesModel>(null);
   let [loading, setLoading] = React.useState(true);
   let [userGroups, setUserGroups] = React.useState<GroupModel[]>([]);
@@ -79,7 +79,7 @@ function GroupsList({userid}: IGroupsListProps) {
             justify="center"
             hoverIndicator
             onClick={() => {
-              history.push(`/groups/${item.name}`);
+              navigate(`/groups/${item.name}`);
             }}
           >
             <Box fill="horizontal" pad="small" align="center">
