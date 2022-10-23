@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Grommet} from 'grommet';
 import {grommet} from 'grommet/themes';
-import {FirebaseAppProvider} from '#firebase';
+import {FirebaseAppProvider} from '#/firebase';
 import {BrowserRouter as Router} from 'react-router-dom';
 import {Body} from './Body';
 import {deepMerge} from 'grommet/utils';

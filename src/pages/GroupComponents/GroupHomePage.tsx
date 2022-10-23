@@ -1,7 +1,7 @@
-import {getGroupByName, GroupModel} from '#database';
+import {getGroupByName, GroupModel} from '#/database';
 import * as React from 'react';
 import {useParams} from 'react-router-dom';
-import {Loader} from '#shared';
+import {Loader} from '#/shared';
 import {GroupWishlistPage} from './GroupWishlist';
 import {Box} from 'grommet';
 

@@ -1,8 +1,17 @@
-import firebase from 'firebase';
-import FirebaseApp from '#config';
+import {FirebaseApp, FirebaseDatabase} from '#/config';
+import {
+  child,
+  DatabaseReference,
+  get,
+  onValue,
+  push,
+  ref,
+  remove,
+  update,
+} from 'firebase/database';
 import {TableKeyWithItem} from './schema';
 
-const rootRef = FirebaseApp.database();
+const rootRef = () => ref(FirebaseDatabase);
 
 export type GroupNamesModel = {
   groupnames: string[];
@@ -24,24 +33,19 @@ export function getGroupByName(
   name: string,
   cb: (group: GroupModel, groupKey: string) => void
 ): () => void {
-  let refs: firebase.database.Reference[] = [];
-  let groupsnamesRef = rootRef.ref(`groupnames/${name}`);
-  refs.push(groupsnamesRef);
+  let groupsnamesRef = ref(FirebaseDatabase, `groupnames/${name}`);
 
-  groupsnamesRef.once('value').then((s) => {
+  get(groupsnamesRef).then((s) => {
     let groupKey = s.val();
-    let groupsRef = rootRef.ref(`groups/${groupKey}`);
-    refs.push(groupsRef);
+    let groupsRef = ref(FirebaseDatabase, `groups/${groupKey}`);
 
-    groupsRef.on('value', (s) => {
+    get(groupsRef).then((s) => {
       let group: GroupModel = s.val();
       cb(group, groupKey);
     });
   });
 
-  return () => {
-    refs.forEach((r) => r.off());
-  };
+  return () => {};
 }
 
 export function deleteGroup(
@@ -49,19 +53,20 @@ export function deleteGroup(
   groupname: string,
   group: GroupModel
 ) {
-  rootRef.ref(`groupnames/${groupname}`).remove();
-  rootRef.ref(`groups/${groupkey}`).remove();
-  let usersRef = rootRef.ref('users');
+  remove(ref(FirebaseDatabase, `groupnames/${groupname}`));
+  remove(ref(FirebaseDatabase, `groups/${groupkey}`));
+
+  let usersRef = ref(FirebaseDatabase, 'users');
   Object.keys(group.members).forEach((k) => {
-    usersRef.child(k).child(`groups/${groupkey}`).remove();
+    remove(child(child(usersRef, k), `groups/${groupkey}`));
   });
 }
 
 export function getIsGroupnameValid(
   cb: (groupnames: GroupNamesModel) => void
 ): () => void {
-  let groupNamesRef = rootRef.ref(`groupnames`);
-  let cbOff = groupNamesRef.on('value', (s) => {
+  let groupNamesRef = ref(FirebaseDatabase, 'groupnames');
+  let unsub = onValue(groupNamesRef, (s) => {
     let groupnames = Object.keys(s.val() ?? {});
     cb({
       groupnames,
@@ -70,20 +75,20 @@ export function getIsGroupnameValid(
   });
 
   return () => {
-    groupNamesRef.off('value', cbOff);
+    unsub();
   };
 }
 
 export function addUserToGroup(userid: string, groupid: string) {
-  rootRef.ref().update({
+  update(ref(FirebaseDatabase), {
     [`groups/${groupid}/members/${userid}`]: true,
     [`users/${userid}/groups/${groupid}`]: true,
   });
 }
 
 export function deleteUserFromGroup(userid: string, groupid: string) {
-  rootRef.ref(`groups/${groupid}/members/${userid}`).remove();
-  rootRef.ref(`users/${userid}/groups/${groupid}`).remove();
+  remove(ref(FirebaseDatabase, `groups/${groupid}/members/${userid}`));
+  remove(ref(FirebaseDatabase, `users/${userid}/groups/${groupid}`));
 }
 
 export function addGroup(
@@ -102,9 +107,7 @@ export function addGroup(
   let data: GroupModel = {name, owner: userid};
   if (displayName) data.displayName = displayName;
 
-  rootRef
-    .ref(`groups`)
-    .push(data)
+  push(ref(FirebaseDatabase, `groups`), data)
     .then(({key, root}) => {
       let routes = [userid, ...members].reduce((p, uid) => {
         p[`groups/${key}/members/${uid}`] = true;
@@ -112,7 +115,8 @@ export function addGroup(
         return p;
       }, {});
       routes[`groupnames/${name}`] = key;
-      return root.update(routes);
+
+      return update(root, routes);
     })
     .catch(console.error);
 }
@@ -127,29 +131,26 @@ export function getUserGroups(
     console.error('no userid');
     return;
   }
-  let usersRef = rootRef.ref(`users/${userid}/groups`);
+  let usersRef = ref(FirebaseDatabase, `users/${userid}/groups`);
 
-  let usersRefCb = usersRef.on('value', (s) => {
+  let unsub = onValue(usersRef, (s) => {
     let userGroups: string[] = Object.keys(s.val() ?? {});
     Promise.all(userGroups.map(getGroup))
       .then((d) => shouldContinue && cb(d))
-      .finally(() => shouldContinue && complete())
-      .catch((e) => shouldContinue && console.error(e));
+      .catch((e) => shouldContinue && console.error(e))
+      .finally(() => shouldContinue && complete());
 
     console.log('adding another group');
   });
 
   return () => {
-    usersRef.off('value', usersRefCb);
+    unsub();
   };
 }
 
 export function getGroup(gKey: string): Promise<TableKeyWithItem<GroupModel>> {
-  return rootRef
-    .ref(`groups/${gKey}`)
-    .once('value')
-    .then((s) => ({
-      key: gKey,
-      ...s.val(),
-    }));
+  return get(ref(FirebaseDatabase, `groups/${gKey}`)).then((s) => ({
+    key: gKey,
+    ...s.val(),
+  }));
 }

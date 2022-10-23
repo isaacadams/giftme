@@ -1,20 +1,17 @@
-import firebase from 'firebase';
-import FirebaseApp from '#config';
+import {FirebaseApp, FirebaseDatabase} from '#/config';
 import {useState, useEffect} from 'react';
+import {ref, get} from 'firebase/database';
 
-const rootRef = FirebaseApp.database();
 export function useSelect<T>(refName: string) {
   let [data, setData] = useState<T>(null);
 
   useEffect(() => {
-    let ref = rootRef.ref(refName);
+    let tableRef = ref(FirebaseDatabase, refName);
     let cb = (s) => {
       setData(s.val());
     };
-    ref.once('value', cb);
-    return () => {
-      ref.off('value', cb);
-    };
+    get(tableRef).then(cb);
+    return () => {};
   }, []);
 
   return data;

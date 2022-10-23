@@ -1,6 +1,6 @@
-import {FirebaseAppContext, useUsernames} from '#firebase';
-import {UserNameValidation} from '#database';
-import {Loader} from '#shared';
+import {FirebaseAppContext, useUsernames} from '#/firebase';
+import {UserNameValidation} from '#/database';
+import {Loader} from '#/shared';
 import {
   Box,
   FormField,
@@ -24,9 +24,8 @@ const defaultFormValue: IUserRequiredFieldsForm = {username: ''};
 export function ProfileUpdatePage(props) {
   let history = useHistory();
   let {repos} = useContext(FirebaseAppContext);
-  let [value, setValue] = React.useState<IUserRequiredFieldsForm>(
-    defaultFormValue
-  );
+  let [value, setValue] =
+    React.useState<IUserRequiredFieldsForm>(defaultFormValue);
   let {userRepo} = repos;
   let {usernames, loading} = useUsernames({});
   if (loading) {
