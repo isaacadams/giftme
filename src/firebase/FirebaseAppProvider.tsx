@@ -10,7 +10,6 @@ import {useNavigate} from 'react-router-dom';
 
 export type FirebaseAppModel = {
   authProviders: FirebaseAuthProviders;
-  authState: FirebaseAuthState;
   repos: Repositories;
 };
 
@@ -22,8 +21,7 @@ export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
   let authProviders = useAuthProviders(FirebaseAuth, {
     googleProvider: new GoogleAuthProvider(),
   });
-  let {user, loading, failedToLoad, isAuthenticated, userModel, error} =
-    React.useContext(AuthStateContext);
+  let {user, loading, failedToLoad} = React.useContext(AuthStateContext);
 
   let navigate = useNavigate();
 
@@ -37,21 +35,11 @@ export function FirebaseAppProvider({children}: React.PropsWithChildren<any>) {
     <FirebaseAppContext.Provider
       value={{
         authProviders,
-        authState: {
-          user,
-          loading,
-          failedToLoad,
-          isAuthenticated,
-          userModel,
-          error,
-        },
         repos: getRepositories(user),
       }}
     >
       {loading && (
         <Box fill align="center" justify="center">
-          {/* {!failedToLoad && <Loader />}
-          {failedToLoad && <SignInPage />} */}
           <Loader />
         </Box>
       )}
