@@ -37,14 +37,13 @@ export function useData<T extends object>(key: string): IDataService<T> {
   let dref = ref(FirebaseDatabase, key);
 
   useEffect(() => {
-    const unsub = onValue(dref, (s) => {
+    const unsubscribe = onValue(dref, (s) => {
       setFeed(s.val());
       setLoading(false);
     });
 
     return () => {
-      unsub();
-      //off(valueQuery, 'value');
+      unsubscribe();
     };
   }, [ref]);
 
