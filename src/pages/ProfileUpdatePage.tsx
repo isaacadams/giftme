@@ -11,7 +11,7 @@ import {
   Button,
 } from 'grommet';
 import React, {useContext} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 interface IUserRequiredFieldsForm {
   username: string;
@@ -22,7 +22,7 @@ const LocalForm = Form as TypedForm<IUserRequiredFieldsForm>;
 const defaultFormValue: IUserRequiredFieldsForm = {username: ''};
 
 export function ProfileUpdatePage(props) {
-  let history = useHistory();
+  let navigate = useNavigate();
   let {repos} = useContext(FirebaseAppContext);
   let [value, setValue] =
     React.useState<IUserRequiredFieldsForm>(defaultFormValue);
@@ -44,7 +44,7 @@ export function ProfileUpdatePage(props) {
           console.log('submitting...');
           try {
             userRepo.addUsername(value.username).then(() => {
-              history.push('/');
+              navigate('/');
             });
           } catch (e) {
             setValue(defaultFormValue);

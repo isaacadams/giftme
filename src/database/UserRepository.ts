@@ -68,7 +68,7 @@ export class UserRepository {
     }
     let usersRef = ref(FirebaseDatabase, `users/${this.user.uid}`);
 
-    let unsub = onValue(usersRef, (s) => {
+    let unsubscribe = onValue(usersRef, (s) => {
       let user = s.val();
       if (!user) {
         let {displayName, email, phoneNumber} = this.user;
@@ -84,7 +84,7 @@ export class UserRepository {
     });
 
     return () => {
-      unsub();
+      unsubscribe();
     };
   }
 

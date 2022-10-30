@@ -1,6 +1,6 @@
 import {getGroupByName, GroupModel} from '#/database';
 import * as React from 'react';
-import {useParams} from 'react-router-dom';
+import {Params, useParams} from 'react-router-dom';
 import {Loader} from '#/shared';
 import {GroupWishlistPage} from './GroupWishlist';
 import {Box} from 'grommet';
@@ -18,7 +18,7 @@ export interface IGroupHomePageState {
 export function GroupHomePage() {
   let [loading, setLoading] = React.useState<boolean>(true);
   let [groupHome, setGroupHome] = React.useState<IGroupHomePageState>(null);
-  let {groupname} = useParams<IUrlParams>();
+  let {groupname} = useParams();
 
   React.useEffect(() => {
     let unsub = getGroupByName(groupname, (group, groupkey) => {

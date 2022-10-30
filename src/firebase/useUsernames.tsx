@@ -1,7 +1,7 @@
 import {FirebaseApp, FirebaseDatabase} from '#/config';
 import {useContext, useEffect, useRef, useState} from 'react';
 import {databaseListener, DatabaseModel} from '#/database';
-import {FirebaseAppContext} from './FirebaseAppProvider';
+import {AuthStateContext} from './FirebaseAppProvider';
 import {ref} from 'firebase/database';
 
 export interface IUsernamesHook {
@@ -14,7 +14,7 @@ export interface IUsernamesHook {
 export function useUsernames({}): IUsernamesHook {
   let usernamesTable = useRef<DatabaseModel['usernames']>({});
   let [loading, setLoading] = useState<boolean>(true);
-  let {isAuthenticated} = useContext(FirebaseAppContext).authState;
+  let {isAuthenticated} = useContext(AuthStateContext);
   console.log('usernames hook rendering.');
 
   useEffect(() => {

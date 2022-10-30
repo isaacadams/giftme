@@ -1,15 +1,15 @@
 import {Anchor, Box, Header, Menu, ResponsiveContext, Text} from 'grommet';
 import React, {useContext} from 'react';
 import {Edit, Home, Logout, Group} from 'grommet-icons';
-import {FirebaseAppContext} from '#/firebase';
-import {Link, useHistory} from 'react-router-dom';
+import {AuthStateContext, FirebaseAppContext} from '#/firebase';
+import {Link, useNavigate} from 'react-router-dom';
 import {ShowAvatar} from './shared';
 
 function NavigationBar(props) {
   let context = useContext(FirebaseAppContext);
   let {signOut} = context.authProviders;
-  let {user, userModel} = context.authState;
-  let history = useHistory();
+  let {user, userModel} = useContext(AuthStateContext);
+  let navigate = useNavigate();
   const size = React.useContext(ResponsiveContext);
 
   let responsiveMenuProps = {
@@ -44,7 +44,7 @@ function NavigationBar(props) {
         }}
         items={[
           {
-            onClick: () => history.push(`/${userModel.username}`),
+            onClick: () => navigate(`/${userModel.username}`),
             label: (
               <Anchor
                 icon={<Home />}
@@ -55,13 +55,13 @@ function NavigationBar(props) {
             ),
           },
           {
-            onClick: () => history.push(`/groups`),
+            onClick: () => navigate(`/groups`),
             label: (
               <Anchor icon={<Group />} label="Groups" color="dark-2" as="div" />
             ),
           },
           {
-            onClick: () => history.push(`/`),
+            onClick: () => navigate(`/`),
             label: (
               <Anchor
                 icon={<Edit />}
@@ -78,8 +78,9 @@ function NavigationBar(props) {
                 label="Logout"
                 color="dark-2"
                 onClick={(e) => {
-                  history.push('/login');
-                  signOut();
+                  signOut().then(() => {
+                    navigate('/login');
+                  });
                 }}
               />
             ),

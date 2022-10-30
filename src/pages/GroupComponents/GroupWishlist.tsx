@@ -4,7 +4,7 @@ import {Box, Heading, Text} from 'grommet';
 import * as React from 'react';
 import {EditGroupPage} from './EditGroupPage';
 import {IGroupHomePageState} from '#/pages';
-import {FirebaseAppContext} from '#/firebase';
+import {AuthStateContext} from '#/firebase';
 import {GroupAdminControls} from './GroupAdminControls';
 
 export function GroupWishlistPage({
@@ -12,7 +12,7 @@ export function GroupWishlistPage({
   groupname,
   groupkey,
 }: IGroupHomePageState) {
-  let {user} = React.useContext(FirebaseAppContext).authState;
+  let {user} = React.useContext(AuthStateContext);
   let [editing, setEditing] = React.useState(false);
 
   let isOwner = user.uid === group.owner;

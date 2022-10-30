@@ -10,14 +10,14 @@ import {
   Heading,
   Layer,
 } from 'grommet';
-import {FirebaseAppContext} from '#/firebase';
+import {AuthStateContext} from '#/firebase';
 import {GiftModel, IDataItems, useData} from '#/database';
 import {Trash} from 'grommet-icons';
 
 export function WishlistEditPage(props) {
   let [newGift, setNewGift] = useState<string>('');
-  let {user} = React.useContext(FirebaseAppContext).authState;
-  let api = user && useData<GiftModel>(`gifts/${user.uid}`);
+  let {user} = React.useContext(AuthStateContext);
+  let api = useData<GiftModel>(`gifts/${user.uid}`);
 
   return (
     <Box gap="medium" margin={{top: 'small'}} pad="small">
@@ -42,11 +42,11 @@ export function WishlistEditPage(props) {
 }
 
 export function EditGiftItem({value, remove, update}: IDataItems<GiftModel>) {
-  let [gift, setGift] = useState<GiftModel>(value);
-
   let {setShow, Modal} = useModal({
-    prompt: `Are you sure about deleting '${gift.name}'?`,
-    confirmation: remove,
+    prompt: `Are you sure about deleting '${value.name}'?`,
+    confirmation: () => {
+      remove().catch((e) => console.error(e));
+    },
   });
   return (
     <>
@@ -58,12 +58,15 @@ export function EditGiftItem({value, remove, update}: IDataItems<GiftModel>) {
         gap="small"
       >
         <Box fill="horizontal">
-          <Form onSubmit={onSubmit} onBlur={onSubmit}>
-            <TextInput
-              value={gift.name}
-              onChange={(e) => setGift({name: e.currentTarget.value})}
-            />
-          </Form>
+          <TextInput
+            value={value.name}
+            onChange={(e) =>
+              update({
+                ...value,
+                name: e.currentTarget.value,
+              })
+            }
+          />
         </Box>
         <Button
           icon={<Trash />}
@@ -76,10 +79,6 @@ export function EditGiftItem({value, remove, update}: IDataItems<GiftModel>) {
       {Modal}
     </>
   );
-
-  function onSubmit() {
-    update(gift);
-  }
 }
 
 interface IModalProps {

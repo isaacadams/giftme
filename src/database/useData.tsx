@@ -19,7 +19,7 @@ export interface IDataItems<T> {
   primaryKey: string;
   value: T;
   update: (data: T) => void;
-  remove: () => void;
+  remove: () => Promise<void>;
 }
 
 export interface IDataService<T> {
@@ -37,14 +37,13 @@ export function useData<T extends object>(key: string): IDataService<T> {
   let dref = ref(FirebaseDatabase, key);
 
   useEffect(() => {
-    const unsub = onValue(dref, (s) => {
+    const unsubscribe = onValue(dref, (s) => {
       setFeed(s.val());
       setLoading(false);
     });
 
     return () => {
-      unsub();
-      //off(valueQuery, 'value');
+      unsubscribe();
     };
   }, [ref]);
 
@@ -52,7 +51,7 @@ export function useData<T extends object>(key: string): IDataService<T> {
     error,
     loading,
     items: transformToList<T>(feed).map(({primaryKey, value}) => {
-      const table = child(ref(FirebaseDatabase), primaryKey);
+      const table = child(dref, primaryKey);
 
       return {
         primaryKey,
