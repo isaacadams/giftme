@@ -46,7 +46,9 @@ export function EditGiftItem({value, remove, update}: IDataItems<GiftModel>) {
 
   let {setShow, Modal} = useModal({
     prompt: `Are you sure about deleting '${gift.name}'?`,
-    confirmation: remove,
+    confirmation: () => {
+      remove().catch((e) => console.error(e));
+    },
   });
   return (
     <>
